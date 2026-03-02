@@ -4,6 +4,7 @@ const MAX_MARKDOWN_BYTES = 512_000; // 500 KB
 
 const ALLOWED_IMAGE_TYPES = new Set([
   'image/jpeg',
+  'image/jpg',
   'image/png',
   'image/gif',
   'image/webp',
@@ -39,7 +40,9 @@ export function validateMarkdown(markdown: string): Result<string> {
  * Pure check on type and size — no DOM dependency.
  */
 export function validateImageFile(file: { type: string; size: number }): Result<void> {
-  if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
+  const normalizedType = file.type.trim().toLowerCase();
+
+  if (!ALLOWED_IMAGE_TYPES.has(normalizedType)) {
     return err(
       PublishErrorCode.VALIDATION_FAILED,
       `Unsupported image type: ${file.type}. Allowed: ${[...ALLOWED_IMAGE_TYPES].join(', ')}.`,

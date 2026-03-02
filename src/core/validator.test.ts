@@ -61,6 +61,16 @@ describe('validateImageFile', () => {
     expect(result.ok).toBe(true);
   });
 
+  it('accepts image/jpg alias', () => {
+    const result = validateImageFile({ type: 'image/jpg', size: 1024 });
+    expect(result.ok).toBe(true);
+  });
+
+  it('accepts uppercase MIME values after normalization', () => {
+    const result = validateImageFile({ type: ' IMAGE/PNG ', size: 1024 });
+    expect(result.ok).toBe(true);
+  });
+
   it('accepts image/png', () => {
     const result = validateImageFile({ type: 'image/png', size: 1024 });
     expect(result.ok).toBe(true);
