@@ -12,27 +12,27 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
   return (
     <section className="panel" aria-labelledby="theme-gallery-heading">
       <header className="panel-header">
-        <h2 id="theme-gallery-heading">Theme Gallery</h2>
+        <h2 id="theme-gallery-heading">主题库</h2>
         <p aria-live="polite" aria-atomic="true">
           {themes.length === 0
-            ? 'No themes match this query.'
+            ? '没有找到匹配的主题。'
             : themes.length === 1
-              ? '1 theme'
-              : `${themes.length} themes`}
+              ? '1 个主题'
+              : `${themes.length} 个主题`}
         </p>
       </header>
       {onThemeQueryChange ? (
         <input
           className="theme-search"
           type="text"
-          placeholder="Search themes…"
+          placeholder="搜索主题..."
           aria-label="Search themes"
           value={themeQuery ?? ''}
           onChange={(e) => onThemeQueryChange(e.target.value)}
         />
       ) : null}
       {themes.length === 0 ? (
-        <p className="theme-empty">No themes match this query.</p>
+        <p className="theme-empty">没有找到匹配的主题。</p>
       ) : (
         <div className="theme-grid">
           {themes.map((theme) => {

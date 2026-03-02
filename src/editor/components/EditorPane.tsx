@@ -61,7 +61,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
       const snippet = `\n![${escapeMarkdownAltText(file.name)}](${base64})\n`;
       handleInsert(snippet);
     } catch {
-      setUploadError('Image processing failed. Try another image.');
+      setUploadError('图片处理失败，请尝试其他图片。');
     } finally {
       setIsUploading(false);
     }
@@ -151,8 +151,8 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
   return (
     <section className="panel editor-panel">
       <header className="panel-header">
-        <h2>Markdown Editor</h2>
-        <p>{wordCount} words {isUploading && '· Processing image...'}</p>
+        <h2>Markdown 编辑器</h2>
+        <p>{wordCount} 字 {isUploading && '· 处理图片中...'}</p>
         {uploadError ? <p className="error-text" role="alert">{uploadError}</p> : null}
       </header>
       <div className="toolbar" role="toolbar" aria-label="Editor snippets">
@@ -165,10 +165,10 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
           type="button" 
           onClick={() => fileInputRef.current?.click()} 
           disabled={isUploading}
-          title="Upload or paste image"
+          title="上传或粘贴图片"
           className="upload-btn"
         >
-          {isUploading ? 'Uploading...' : 'Image'}
+          {isUploading ? '上传中...' : '图片'}
         </button>
         <input 
           type="file" 
@@ -182,14 +182,14 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
         {isUploading && (
           <div className="loading-overlay">
             <span className="loading-spinner"></span>
-            <p>Processing image...</p>
+            <p>处理图片中...</p>
           </div>
         )}
         <textarea
           ref={textareaRef}
           className={`editor-textarea ${markdown.length === 0 ? 'empty-state' : ''}`}
           aria-label="Markdown editor"
-          placeholder="Type or paste your Markdown here..."
+          placeholder="在此输入或粘贴 Markdown 内容..."
           value={markdown}
           onChange={(event) => onMarkdownChange(event.target.value)}
           onPaste={handlePaste}

@@ -15,9 +15,9 @@ export function ArticlePreview({ markdown, theme }: ArticlePreviewProps) {
   let content = null;
   if (!htmlResult.ok) {
     if (htmlResult.error.code !== PublishErrorCode.EMPTY_INPUT) {
-      content = <div className="error-text">Preview error: {htmlResult.error.message}</div>;
+      content = <div className="error-text">预览错误: {htmlResult.error.message}</div>;
     } else {
-      content = <div className="preview-empty">No content to preview</div>;
+      content = <div className="preview-empty">暂无内容可预览</div>;
     }
   } else {
     content = <div dangerouslySetInnerHTML={{ __html: htmlResult.value.html }} />;
@@ -26,7 +26,7 @@ export function ArticlePreview({ markdown, theme }: ArticlePreviewProps) {
   return (
     <section className="panel preview-panel" aria-labelledby="preview-heading">
       <header className="panel-header">
-        <h2 id="preview-heading">Live Preview</h2>
+        <h2 id="preview-heading">实时预览</h2>
         <p>{theme.name}</p>
       </header>
       <article className="article-preview" style={toThemeCssVariables(theme)}>

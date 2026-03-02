@@ -81,13 +81,13 @@ function App() {
     try {
       const wechatHtml = toWechatHtml(editorState.markdown, selectedTheme);
       if (!wechatHtml) {
-        setTimedStatus('Nothing to copy.');
+        setTimedStatus('没有内容可复制。');
         return;
       }
       await copyWechatHtmlToClipboard(wechatHtml);
-      setTimedStatus('Copied WeChat-ready HTML to clipboard.');
+      setTimedStatus('已复制公众号兼容的 HTML 到剪贴板。');
     } catch {
-      setTimedStatus('Copy failed. Check clipboard permissions and try again.');
+      setTimedStatus('复制失败。请检查剪贴板权限后重试。');
     }
   }
 
@@ -95,13 +95,13 @@ function App() {
     try {
       const htmlDocument = toThemedHtml(editorState.markdown, selectedTheme);
       if (!htmlDocument) {
-        setTimedStatus('Nothing to export.');
+        setTimedStatus('没有内容可导出。');
         return;
       }
       downloadHtmlFile(`lobster-${selectedTheme.id}.html`, htmlDocument);
-      setTimedStatus('Downloaded themed HTML file.');
+      setTimedStatus('已下载带主题的 HTML 文件。');
     } catch {
-      setTimedStatus('Export failed.');
+      setTimedStatus('导出失败。');
     }
   }
 
@@ -109,13 +109,13 @@ function App() {
     try {
       const htmlDocument = toThemedHtml(editorState.markdown, selectedTheme);
       if (!htmlDocument) {
-        setTimedStatus('Nothing to print.');
+        setTimedStatus('没有内容可打印。');
         return;
       }
       printThemedArticle(htmlDocument);
-      setTimedStatus('Opened print dialog for PDF export.');
+      setTimedStatus('已打开打印对话框以导出 PDF。');
     } catch {
-      setTimedStatus('PDF export failed.');
+      setTimedStatus('PDF 导出失败。');
     }
   }, [editorState.markdown, selectedTheme]);
 
@@ -125,7 +125,7 @@ function App() {
         <div className="hero-content">
           <h1>Lobster Publisher Pro</h1>
           <p>
-            {stats.wordCount} words · {stats.readingTimeMinutes} min read · {stats.lineCount} lines
+            {stats.wordCount} 字 · {stats.readingTimeMinutes} 分钟阅读 · {stats.lineCount} 行
           </p>
         </div>
         <div className="action-row">
@@ -135,7 +135,7 @@ function App() {
             onClick={handleCopyWechatHtml}
             aria-label="Copy WeChat HTML to clipboard"
           >
-            Copy WeChat HTML
+            复制公众号 HTML
           </button>
           <button
             className="btn-secondary"
@@ -143,7 +143,7 @@ function App() {
             onClick={handleDownloadHtml}
             aria-label="Export themed HTML file"
           >
-            Export HTML
+            导出 HTML
           </button>
           <button
             className="btn-secondary"
@@ -151,7 +151,7 @@ function App() {
             onClick={handlePrintPdf}
             aria-label="Open print dialog to save PDF"
           >
-            Print / Save PDF
+            打印 / 导出 PDF
           </button>
         </div>
       </header>
