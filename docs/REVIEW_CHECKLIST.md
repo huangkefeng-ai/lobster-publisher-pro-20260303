@@ -106,9 +106,9 @@ Use this checklist when reviewing PRs and before merging to `main`.
 - [x] `themeFilter.test.ts` — theme search/filter (6 tests)
 - [x] `pdfExporter.test.ts` — PDF print function (7 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
-- [x] All tests pass locally (`npm test` — 93 tests, 18 suites)
+- [x] All tests pass locally (`npm test` — 94 tests, 18 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
-- [x] Coverage target ≥ 80% — _measured on 2026-03-03 (`npm run test:coverage`): lines 90.90%, statements 90.76%_
+- [x] Coverage target ≥ 80% — _measured on 2026-03-03 (`npm run test:coverage`): lines 90.99%, statements 90.84%_
 - [ ] E2E tests (Playwright) — _not yet implemented_
 
 ---
@@ -125,7 +125,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 ## 11. Performance
 
-- [x] Bundle size: 91.63 KB gzipped (well under 500 KB target)
+- [x] Bundle size: 91.67 KB gzipped (well under 500 KB target)
 - [x] EditorPane word count memoized via `useMemo`
 - [x] Preview debounced (100ms) via `createDebouncedFunction`
 - [x] Draft persistence debounced (250ms) via `createDebouncedFunction`
