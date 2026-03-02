@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { renderMarkdownToHtml } from '../../core';
-import type { ThemeDefinition } from '../../theme/themeTypes';
-import { toThemeCssVariables } from '../../theme/themeCss';
+import type { ThemeDefinition } from '../../theme';
+import { toThemeCssVariables } from '../../theme';
 
 interface ArticlePreviewProps {
   markdown: string;

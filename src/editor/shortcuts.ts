@@ -59,13 +59,14 @@ export function handleEditorShortcut(
 
   if (mod && !event.shiftKey && key === 'k') {
     const selected = value.slice(selectionStart, selectionEnd);
+    const linkText = selected.length > 0 ? selected : 'link text';
     const before = value.slice(0, selectionStart);
     const after = value.slice(selectionEnd);
-    const link = `[${selected}](url)`;
+    const link = `[${linkText}](url)`;
     return {
       value: before + link + after,
-      selectionStart: selectionStart + selected.length + 3,
-      selectionEnd: selectionStart + selected.length + 6,
+      selectionStart: selectionStart + linkText.length + 3,
+      selectionEnd: selectionStart + linkText.length + 6,
     };
   }
 

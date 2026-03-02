@@ -1,4 +1,4 @@
-import type { ThemeDefinition } from '../theme/themeTypes';
+import type { ThemeDefinition } from '../theme';
 
 function parseStyleAttribute(styleText: string): Record<string, string> {
   const declarations = styleText
@@ -91,7 +91,8 @@ export function applyWechatInlineStyles(html: string, theme: ThemeDefinition): s
 
   mergeInlineStyle(container, baseStyle);
 
-  for (const element of Array.from(container.querySelectorAll('*'))) {
+  const tagSelector = Object.keys(tagStyleMap).join(',');
+  for (const element of Array.from(container.querySelectorAll(tagSelector))) {
     const style = tagStyleMap[element.tagName.toLowerCase()];
     if (style) {
       mergeInlineStyle(element, style);

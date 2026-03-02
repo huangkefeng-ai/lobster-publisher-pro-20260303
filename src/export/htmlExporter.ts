@@ -1,5 +1,5 @@
 import { renderMarkdownToHtml } from '../core';
-import type { ThemeDefinition } from '../theme/themeTypes';
+import type { ThemeDefinition } from '../theme';
 import { applyWechatInlineStyles, sanitizeWechatHtml } from '../wechat';
 
 export function toThemedHtml(markdown: string, theme: ThemeDefinition): string {
@@ -36,6 +36,10 @@ export function downloadHtmlFile(filename: string, html: string): void {
   const anchor = document.createElement('a');
   anchor.href = url;
   anchor.download = filename;
+  document.body.appendChild(anchor);
   anchor.click();
-  URL.revokeObjectURL(url);
+  setTimeout(() => {
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(url);
+  }, 0);
 }

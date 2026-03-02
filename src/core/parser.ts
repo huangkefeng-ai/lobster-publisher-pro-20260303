@@ -132,11 +132,17 @@ function renderNode(node: Node, depth = 0): string {
       if (!href) {
         return text ?? '';
       }
+      if (/^(javascript|data|vbscript):/i.test(href)) {
+        return text ?? '';
+      }
       return `[${text}](${href})`;
     }
     case 'img': {
       const src = element.getAttribute('src')?.trim();
       if (!src) {
+        return '';
+      }
+      if (/^(javascript|data|vbscript):/i.test(src)) {
         return '';
       }
       const alt = element.getAttribute('alt')?.trim() ?? '';
@@ -145,10 +151,11 @@ function renderNode(node: Node, depth = 0): string {
     case 'table': {
       const rows = Array.from(element.querySelectorAll('tr'));
       if (rows.length === 0) return '';
+      const escPipe = (s: string) => s.replace(/\|/g, '\\|');
       const toRow = (row: Element) =>
         Array.from(row.children)
           .filter((c) => c.tagName.toLowerCase() === 'td' || c.tagName.toLowerCase() === 'th')
-          .map((c) => renderChildren(c, depth).trim())
+          .map((c) => escPipe(renderChildren(c, depth).trim()))
           .join(' | ');
       const header = toRow(rows[0]);
       const separator = header

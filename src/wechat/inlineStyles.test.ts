@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { THEME_REGISTRY } from '../theme/themeRegistry';
+import { THEME_REGISTRY } from '../theme';
 import { applyWechatInlineStyles } from './inlineStyles';
 
 describe('applyWechatInlineStyles', () => {

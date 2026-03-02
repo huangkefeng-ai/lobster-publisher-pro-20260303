@@ -17,18 +17,25 @@ export function printThemedArticle(html: string): void {
   let hasPrinted = false;
   let fallbackTimer = 0;
 
+  const removeIframe = () => {
+    if (iframe.parentNode) {
+      document.body.removeChild(iframe);
+    }
+  };
+
   const printOnce = () => {
     if (hasPrinted) {
       return;
     }
     hasPrinted = true;
     window.clearTimeout(fallbackTimer);
-    iframe.contentWindow?.print();
-    setTimeout(() => {
-      if (iframe.parentNode) {
-        document.body.removeChild(iframe);
-      }
-    }, 1000);
+    const win = iframe.contentWindow;
+    if (!win) {
+      removeIframe();
+      return;
+    }
+    win.addEventListener('afterprint', removeIframe);
+    win.print();
   };
 
   iframe.onload = () => {

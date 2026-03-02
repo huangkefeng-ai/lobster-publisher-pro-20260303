@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { filterThemes } from './themeFilter';
-import { THEME_REGISTRY } from './themeRegistry';
+import { THEME_REGISTRY } from './index';
 
 describe('filterThemes', () => {
   it('returns all themes for an empty query', () => {

@@ -17,7 +17,7 @@ export function computeDocumentStats(markdown: string): DocumentStats {
   }
 
   const charCount = trimmed.length;
-  const lineCount = trimmed.split('\n').length;
+  const lineCount = markdown.split('\n').length;
 
   const cjkMatches = trimmed.match(CJK_RANGE);
   const cjkCount = cjkMatches ? cjkMatches.length : 0;
