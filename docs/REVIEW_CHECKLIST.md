@@ -107,9 +107,9 @@ Use this checklist when reviewing PRs and before merging to `main`.
 - [x] `pdfExporter.test.ts` — PDF print function (7 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
 - [x] `processor.test.ts` — image processing and transparency (8 tests)
-- [x] All tests pass locally (`npm test` — 159 tests, 21 suites)
+- [x] All tests pass locally (`npm test` — 184 tests, 23 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
-- [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 89.08%, statements 88.66%_
+- [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 89.75%, statements 89.33%_
 - [x] E2E tests (Playwright) — `tests/e2e.spec.ts` (3 scenarios)
 
 ---
@@ -120,13 +120,13 @@ Use this checklist when reviewing PRs and before merging to `main`.
 - [x] `dangerouslySetInnerHTML` only used with DOMPurify-sanitized content
 - [x] WeChat sanitizer uses strict allow-list for tags and attributes
 - [x] No secrets or API keys in committed code
-- [x] `npm audit` (high) passes locally on 2026-03-03
+- [x] `npm audit` (high) passes locally on 2026-03-02
 
 ---
 
 ## 11. Performance
 
-- [x] Bundle size: 91.78 KB gzipped (well under 500 KB target)
+- [x] Bundle size: 131.82 KB JS + 3.18 KB CSS gzipped (well under 500 KB target)
 - [x] WeChat HTML computed lazily on copy, not on every keystroke
 - [x] EditorPane word count memoized via `useMemo`
 - [x] Preview debounced (100ms) via `createDebouncedFunction`
@@ -253,10 +253,10 @@ Use this checklist when reviewing PRs and before merging to `main`.
 | Check | Status | Notes |
 |------|--------|-------|
 | Lint (`npm run lint`) | PASS | ESLint clean |
-| Tests (`npm test`) | PASS | 159 tests across 21 suites |
+| Tests (`npm test`) | PASS | 184 tests across 23 suites |
 | E2E (`npm run test:e2e`) | PASS | 3 Playwright scenarios passing |
-| Coverage (`npm run test:coverage`) | PASS | lines 89.08%, statements 88.66% |
-| Build (`npm run build`) | PASS | JS bundle 95.27 KB gzip, built in 847ms |
+| Coverage (`npm run test:coverage`) | PASS | lines 89.75%, statements 89.33% |
+| Build (`npm run build`) | PASS | JS bundle 131.82 KB gzip, built in 989ms |
 | Audit (`npm audit --audit-level=high`) | PASS | 0 vulnerabilities |
 
 ---
