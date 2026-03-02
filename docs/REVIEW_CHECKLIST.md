@@ -110,7 +110,7 @@ _Module not yet implemented. Planned for phase 3._
 - [x] `debounce.test.ts` — debounce utility (3 tests)
 - [x] All tests pass locally (`npm test` — 55 tests, 13 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
-- [ ] Coverage target ≥ 80% — _not yet measured_
+- [x] Coverage target ≥ 80% — _measured on 2026-03-03 (`npm run test:coverage`): lines 80.66%, statements 80.47%_
 - [ ] E2E tests (Playwright) — _not yet implemented_
 
 ---
