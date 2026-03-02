@@ -84,6 +84,17 @@ describe('richTextToMarkdown', () => {
     );
   });
 
+  it('sanitizes markdown link and image destinations with control chars and parentheses', () => {
+    const html = `
+      <p><a href="https://example.com/foo)bar?q=1 2">docs</a></p>
+      <p><img alt="chart" src="https://img.test/a)(b).png" /></p>
+    `;
+
+    expect(richTextToMarkdown(html)).toBe(
+      '[docs](https://example.com/foo%29bar?q=1%202)\n\n![chart](https://img.test/a%29%28b%29.png)',
+    );
+  });
+
   it('processes large 10k+ word clipboard html without freezing', () => {
     const wordsPerParagraph = 250;
     const paragraphCount = 40;

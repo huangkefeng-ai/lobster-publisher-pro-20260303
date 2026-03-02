@@ -24,6 +24,24 @@ function hasAllowedProtocol(url: string, allowedProtocols: readonly string[]): b
   return allowedProtocols.some((protocol) => url.toLowerCase().startsWith(`${protocol}:`));
 }
 
+function sanitizeMarkdownDestination(url: string): string {
+  const stripped = url
+    .split('')
+    .filter((char) => {
+      const code = char.charCodeAt(0);
+      return code >= 0x20 && code !== 0x7f;
+    })
+    .join('')
+    .trim();
+  if (stripped.length === 0) {
+    return '';
+  }
+
+  return encodeURI(stripped).replace(/[()]/g, (char) =>
+    `%${char.charCodeAt(0).toString(16).toUpperCase()}`,
+  );
+}
+
 function renderList(node: Element, depth = 0): string {
   const isOrdered = node.tagName.toLowerCase() === 'ol';
   const items = Array.from(node.children).filter((child) => child.tagName.toLowerCase() === 'li');
@@ -139,9 +157,13 @@ function renderNode(node: Node, depth = 0): string {
       if (!hasAllowedProtocol(href, ['http', 'https', 'mailto', 'tel'])) {
         return textContent;
       }
+      const destination = sanitizeMarkdownDestination(href);
+      if (destination.length === 0) {
+        return textContent;
+      }
       const text = textContent || href;
       const safeText = (text ?? '').replace(/\]/g, '\\]');
-      return `[${safeText}](${href})`;
+      return `[${safeText}](${destination})`;
     }
     case 'img': {
       const src = element.getAttribute('src')?.trim();
@@ -151,8 +173,12 @@ function renderNode(node: Node, depth = 0): string {
       if (!hasAllowedProtocol(src, ['http', 'https'])) {
         return '';
       }
+      const destination = sanitizeMarkdownDestination(src);
+      if (destination.length === 0) {
+        return '';
+      }
       const alt = (element.getAttribute('alt')?.trim() ?? '').replace(/\]/g, '\\]');
-      return `![${alt}](${src})`;
+      return `![${alt}](${destination})`;
     }
     case 'table': {
       const rows = Array.from(element.querySelectorAll('tr'));
