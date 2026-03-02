@@ -104,4 +104,60 @@ describe('App', () => {
 
     cleanupRender(rendered);
   });
+
+  it('switches device preview modes correctly', async () => {
+    const rendered = renderApp();
+    const workspaceGrid = rendered.container.querySelector('.workspace-grid');
+    expect(workspaceGrid?.classList.contains('device-desktop')).toBe(true);
+
+    // Find by text to be robust
+    const buttons = Array.from(rendered.container.querySelectorAll('button'));
+    const btnMobile = buttons.find(b => b.textContent === '手机');
+    const btnTablet = buttons.find(b => b.textContent === '平板');
+    const btnPC = buttons.find(b => b.textContent === 'PC');
+
+    await act(async () => {
+      btnMobile?.click();
+    });
+    expect(workspaceGrid?.classList.contains('device-mobile')).toBe(true);
+
+    await act(async () => {
+      btnTablet?.click();
+    });
+    expect(workspaceGrid?.classList.contains('device-tablet')).toBe(true);
+
+    // Rapid toggle
+    await act(async () => {
+      btnMobile?.click();
+      btnTablet?.click();
+      btnPC?.click();
+    });
+    expect(workspaceGrid?.classList.contains('device-desktop')).toBe(true);
+
+    cleanupRender(rendered);
+  });
+
+  it('renders multi-image grid when adjacent images are present', async () => {
+    const rendered = renderApp();
+    const textarea = rendered.container.querySelector('textarea') as HTMLTextAreaElement;
+    
+    await act(async () => {
+      const newValue = '![img1](url1) ![img2](url2)';
+      // Trigger React's synthetic event system correctly
+      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, "value")?.set;
+      nativeInputValueSetter?.call(textarea, newValue);
+      textarea.dispatchEvent(new Event('input', { bubbles: true }));
+      textarea.dispatchEvent(new Event('change', { bubbles: true }));
+      
+      // Wait for debounced update (100ms)
+      vi.advanceTimersByTime(200);
+    });
+
+    const imageGroup = rendered.container.querySelector('[data-image-group="true"]');
+    expect(imageGroup).toBeTruthy();
+    expect(imageGroup?.getAttribute('data-image-count')).toBe('2');
+    expect(imageGroup?.querySelectorAll('img').length).toBe(2);
+
+    cleanupRender(rendered);
+  });
 });

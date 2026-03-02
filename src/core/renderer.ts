@@ -20,14 +20,21 @@ const codeRenderer: RendererObject = {
   },
   paragraph({ tokens }: Tokens.Paragraph): string | false {
     if (tokens && tokens.length > 1) {
-      const isMultiImage = tokens.every(t => t.type === 'image' || (t.type === 'text' && !t.raw.trim()) || t.type === 'space');
-      if (isMultiImage) {
+      // Check if the paragraph consists ONLY of images and whitespace/space
+      const isOnlyImagesAndSpace = tokens.every(t => 
+        t.type === 'image' || 
+        (t.type === 'text' && !t.raw.trim()) || 
+        t.type === 'space' ||
+        t.type === 'br'
+      );
+      
+      if (isOnlyImagesAndSpace) {
         const images = tokens.filter(t => t.type === 'image') as Tokens.Image[];
         if (images.length > 1) {
           const gridHtml = images.map(img => 
-             `<div style="flex: 1; min-width: 0; padding: 2px;"><img src="${escapeAttr(img.href)}" alt="${escapeAttr(img.text)}" title="${escapeAttr(img.title || '')}" style="width: 100%; height: auto; display: block;" /></div>`
+             `<div><img src="${escapeAttr(img.href)}" alt="${escapeAttr(img.text)}" title="${escapeAttr(img.title || '')}" /></div>`
           ).join('');
-          return `<div data-image-group="true" style="display: flex; flex-wrap: wrap; justify-content: space-between; margin: 1em 0;">${gridHtml}</div>\n`;
+          return `<div data-image-group="true" data-image-count="${images.length}">${gridHtml}</div>\n`;
         }
       }
     }
@@ -41,6 +48,6 @@ export function renderMarkdownToHtml(markdown: string): string {
   const html = marked.parse(markdown, { async: false }) as string;
   return DOMPurify.sanitize(html, {
     ADD_TAGS: ['span', 'div', 'section'],
-    ADD_ATTR: ['style', 'data-lang', 'data-image-group'],
+    ADD_ATTR: ['style', 'data-lang', 'data-image-group', 'data-image-count'],
   });
 }

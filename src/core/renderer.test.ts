@@ -63,8 +63,22 @@ describe('renderMarkdownToHtml multi-image and table', () => {
     const md = '![img1](url1) ![img2](url2)';
     const html = renderMarkdownToHtml(md);
     expect(html).toContain('data-image-group="true"');
-    expect(html).toContain('<div style="flex: 1; min-width: 0; padding: 2px;"><img src="url1"');
-    expect(html).toContain('<div style="flex: 1; min-width: 0; padding: 2px;"><img src="url2"');
+    expect(html).toContain('data-image-count="2"');
+    expect(html).toContain('<div><img src="url1"');
+    expect(html).toContain('<div><img src="url2"');
+  });
+
+  it('groups images separated by newlines in the same paragraph', () => {
+    const md = '![img1](url1)\n![img2](url2)';
+    const html = renderMarkdownToHtml(md);
+    expect(html).toContain('data-image-group="true"');
+    expect(html).toContain('data-image-count="2"');
+  });
+
+  it('does not group images in different paragraphs', () => {
+    const md = '![img1](url1)\n\n![img2](url2)';
+    const html = renderMarkdownToHtml(md);
+    expect(html).not.toContain('data-image-group="true"');
   });
 
   it('renders standard markdown tables', () => {
