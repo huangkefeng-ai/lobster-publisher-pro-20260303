@@ -87,9 +87,9 @@ export function applyWechatInlineStyles(html: string, theme: ThemeDefinition): s
     strike: { 'text-decoration': 'line-through' },
     img: { display: 'block', 'max-width': '100%', height: 'auto', margin: '1em auto' },
     hr: { border: 'none', 'border-top': `1px solid ${theme.tokens.border}`, margin: '1.2em 0' },
-    table: { width: '100%', 'border-collapse': 'collapse', margin: '1em 0' },
-    th: { border: `1px solid ${theme.tokens.border}`, padding: '0.45em 0.5em', 'text-align': 'left', 'background-color': theme.tokens.surface },
-    td: { border: `1px solid ${theme.tokens.border}`, padding: '0.45em 0.5em' },
+    table: { width: '100%', 'border-collapse': 'collapse', margin: '1em 0', 'word-break': 'break-word', 'box-sizing': 'border-box' },
+    th: { border: `1px solid ${theme.tokens.border}`, padding: '0.45em 0.5em', 'text-align': 'left', 'background-color': theme.tokens.surface, 'box-sizing': 'border-box', 'min-width': '50px' },
+    td: { border: `1px solid ${theme.tokens.border}`, padding: '0.45em 0.5em', 'box-sizing': 'border-box', 'min-width': '50px' },
   };
 
   mergeInlineStyle(container, baseStyle);
