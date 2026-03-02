@@ -109,7 +109,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 - [x] `processor.test.ts` — image processing and transparency (8 tests)
 - [x] All tests pass locally (`npm test` — 159 tests, 21 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
-- [x] Coverage target ≥ 80% — _measured on 2026-03-03 (`npm run test:coverage`): lines 89.46%, statements 88.97%_
+- [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 89.08%, statements 88.66%_
 - [x] E2E tests (Playwright) — `tests/e2e.spec.ts` (3 scenarios)
 
 ---
@@ -228,7 +228,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 ---
 
-## Phase-5 Architecture Audit (2026-03-03)
+## Phase-5 Architecture Audit (2026-03-02)
 
 | Area | Status | Notes |
 |------|--------|-------|
@@ -254,8 +254,8 @@ Use this checklist when reviewing PRs and before merging to `main`.
 |------|--------|-------|
 | Lint (`npm run lint`) | PASS | ESLint clean |
 | Tests (`npm test`) | PASS | 159 tests across 21 suites |
-| Coverage (`npm run test:coverage`) | PASS | lines 89.46%, statements 88.97% |
-| Build (`npm run build`) | PASS | JS bundle 94.99 KB gzip, built in 782ms |
+| Coverage (`npm run test:coverage`) | PASS | lines 89.08%, statements 88.66% |
+| Build (`npm run build`) | PASS | JS bundle 95.27 KB gzip, built in 736ms |
 | Audit (`npm audit --audit-level=high`) | PASS | 0 vulnerabilities |
 
 ---
