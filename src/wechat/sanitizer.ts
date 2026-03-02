@@ -38,11 +38,14 @@ const WECHAT_ALLOWED_TAGS = [
 
 const WECHAT_ALLOWED_ATTR = ['alt', 'colspan', 'href', 'rowspan', 'src', 'style', 'title'] as const;
 
+const WECHAT_ALLOWED_URI_REGEXP =
+  /^(?:(?:https?|mailto|tel):|data:image\/(?:png|jpe?g|gif|webp|svg\+xml);base64,)/i;
+
 export function sanitizeWechatHtml(html: string): string {
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: [...WECHAT_ALLOWED_TAGS],
     ALLOWED_ATTR: [...WECHAT_ALLOWED_ATTR],
     FORBID_TAGS: ['script', 'style'],
-    ALLOWED_URI_REGEXP: /^(?:https?|mailto|tel):/i,
+    ALLOWED_URI_REGEXP: WECHAT_ALLOWED_URI_REGEXP,
   });
 }
