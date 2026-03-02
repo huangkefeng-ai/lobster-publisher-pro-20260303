@@ -36,7 +36,16 @@ const WECHAT_ALLOWED_TAGS = [
   'ul',
 ] as const;
 
-const WECHAT_ALLOWED_ATTR = ['alt', 'colspan', 'href', 'rowspan', 'src', 'style', 'title'] as const;
+const WECHAT_ALLOWED_ATTR = [
+  'alt',
+  'colspan',
+  'href',
+  'rowspan',
+  'src',
+  'style',
+  'title',
+  'data-image-group',
+] as const;
 
 const WECHAT_ALLOWED_URI_REGEXP =
   /^(?:(?:https?|mailto|tel):|data:image\/(?:png|jpe?g|gif|webp|svg\+xml);base64,)/i;

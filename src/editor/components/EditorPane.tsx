@@ -254,7 +254,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
           disabled={isUploading}
         />
         <div className="editor-hint" aria-hidden="true">
-          <span>💡 技巧：支持多图横向排版与标准 Markdown 表格。直接粘贴富文本可自动转换。</span>
+          <span>💡 技巧：同一行放置多个图片代码即成并排网格。支持标准 Markdown 表格。</span>
         </div>
       </div>
     </section>

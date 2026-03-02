@@ -87,9 +87,31 @@ export function applyWechatInlineStyles(html: string, theme: ThemeDefinition): s
     strike: { 'text-decoration': 'line-through' },
     img: { display: 'block', 'max-width': '100%', height: 'auto', margin: '1em auto' },
     hr: { border: 'none', 'border-top': `1px solid ${theme.tokens.border}`, margin: '1.2em 0' },
-    table: { width: '100%', 'border-collapse': 'collapse', margin: '1em 0', 'word-break': 'break-word', 'box-sizing': 'border-box' },
-    th: { border: `1px solid ${theme.tokens.border}`, padding: '0.45em 0.5em', 'text-align': 'left', 'background-color': theme.tokens.surface, 'box-sizing': 'border-box', 'min-width': '50px' },
-    td: { border: `1px solid ${theme.tokens.border}`, padding: '0.45em 0.5em', 'box-sizing': 'border-box', 'min-width': '50px' },
+    table: { 
+      width: '100%', 
+      'border-collapse': 'collapse', 
+      margin: '1.5em 0', 
+      'word-break': 'break-word', 
+      'box-sizing': 'border-box',
+      'border': `1px solid ${theme.tokens.border}`,
+      'font-size': '15px'
+    },
+    th: { 
+      border: `1px solid ${theme.tokens.border}`, 
+      padding: '0.6em 0.8em', 
+      'text-align': 'left', 
+      'background-color': theme.tokens.quoteBackground || '#f8fafc', 
+      'box-sizing': 'border-box', 
+      'min-width': '60px',
+      'font-weight': '600'
+    },
+    td: { 
+      border: `1px solid ${theme.tokens.border}`, 
+      padding: '0.6em 0.8em', 
+      'box-sizing': 'border-box', 
+      'min-width': '60px',
+      'line-height': '1.5'
+    },
   };
 
   mergeInlineStyle(container, baseStyle);
@@ -99,6 +121,37 @@ export function applyWechatInlineStyles(html: string, theme: ThemeDefinition): s
     const style = tagStyleMap[element.tagName.toLowerCase()];
     if (style) {
       mergeInlineStyle(element, style);
+    }
+  }
+
+  // Handle multi-image grid
+  const imageGroups = container.querySelectorAll('div[data-image-group="true"]');
+  for (const group of Array.from(imageGroups)) {
+    mergeInlineStyle(group as Element, {
+      display: 'flex',
+      'flex-direction': 'row',
+      'flex-wrap': 'nowrap',
+      'justify-content': 'center',
+      gap: '4px',
+      margin: '1.2em 0'
+    });
+    
+    // We expect the direct children to be the containers created in renderer.ts
+    const children = group.children;
+    for (const child of Array.from(children)) {
+      mergeInlineStyle(child as Element, {
+        flex: '1',
+        'min-width': '0'
+      });
+      const innerImg = child.querySelector('img');
+      if (innerImg) {
+        mergeInlineStyle(innerImg, {
+          width: '100%',
+          height: 'auto',
+          margin: '0',
+          display: 'block'
+        });
+      }
     }
   }
 
