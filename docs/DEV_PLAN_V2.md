@@ -126,6 +126,36 @@ Pipeline wraps these into composable `PipelineStep` objects with `Result<T>` flo
 
 ---
 
+## Raphael-Publish Reference Alignment
+
+Cross-referenced against raphael-publish (WeChat article layout tool) to identify feature gaps.
+
+### Adopted (this round)
+
+| Feature | raphael-publish | lobster-publisher-pro | Notes |
+|---------|----------------|----------------------|-------|
+| Span-based bold/italic/strike (Feishu, Notion, Word) | Inline style detection | `renderSpanWithStyles()` in `parser.ts` | Detects `font-weight`, `font-style`, `text-decoration` on `<span>` |
+| `<strike>` tag support | Handled | Added to `renderNode` switch + sanitizer whitelist | Alongside `<del>` and `<s>` |
+| Checkbox task lists (Notion paste) | Checkbox → `- [x]`/`- [ ]` | `extractCheckbox()` in `renderList` | Reads `<input type="checkbox" checked>` inside `<li>` |
+| Code block language hint | `<pre><code class="language-X">` | Language extracted from class, emitted as ` ```X ` | Feishu and Notion paste this format |
+| `<figure>` / `<figcaption>` | Image + caption | `<figure>` passes through, `<figcaption>` → `*caption*` | Common in Notion exports |
+| Ordered list `start` attribute | Respected | `ol[start]` → correct numbering | Word and Feishu paste use `start="N"` |
+| Table `colspan` expansion | Repeated cell | Cell duplicated for each spanned column | Word/Feishu paste merged cells |
+| `<mark>`, `<u>`, `<ins>`, `<sub>`, `<sup>`, `<abbr>` | Pass-through text | Pass-through (no markdown equivalent) | Prevents silent content loss |
+| Word `<head>` / `<meta>` / `<style>` stripping | Suppressed | Added to ignore list in `renderNode` | Word pastes full HTML documents |
+
+### Deferred (future rounds)
+
+| Feature | Reason |
+|---------|--------|
+| Footnote conversion (`<sup>` → `[^N]`) | Requires multi-pass: collect footnotes, then append definitions |
+| Custom highlight syntax (`<mark>` → `==text==`) | Not standard GFM; would break standard renderers |
+| Image proxy / upload to WeChat CDN | Requires server-side component; out of client-only scope |
+| Table alignment detection (`text-align` → `:---:`) | Low priority; WeChat editor ignores alignment anyway |
+| Nested blockquote depth (`> > >`) | raphael-publish doesn't handle this either; rare in paste |
+
+---
+
 ## Risks & Mitigations
 
 | Risk | Impact | Mitigation |

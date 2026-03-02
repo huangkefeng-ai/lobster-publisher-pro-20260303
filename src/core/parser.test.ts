@@ -132,6 +132,84 @@ describe('richTextToMarkdown', () => {
     );
   });
 
+  // ── Feishu / Notion / Word paste edge-cases ─────────────────
+
+  it('converts Feishu-style span bold via inline font-weight style', () => {
+    const html = '<p><span style="font-weight: bold">Important</span> text</p>';
+    expect(richTextToMarkdown(html)).toBe('**Important** text');
+  });
+
+  it('converts Notion-style span italic via inline font-style style', () => {
+    const html = '<p><span style="font-style: italic">Emphasis</span> here</p>';
+    expect(richTextToMarkdown(html)).toBe('*Emphasis* here');
+  });
+
+  it('converts span strikethrough via inline text-decoration style', () => {
+    const html = '<p><span style="text-decoration: line-through">removed</span> kept</p>';
+    expect(richTextToMarkdown(html)).toBe('~~removed~~ kept');
+  });
+
+  it('combines span bold+italic+strikethrough styles', () => {
+    const html = '<p><span style="font-weight: 700; font-style: italic; text-decoration: line-through">combo</span></p>';
+    expect(richTextToMarkdown(html)).toBe('***~~combo~~***');
+  });
+
+  it('converts Notion checkbox list items', () => {
+    const html = `
+      <ul>
+        <li><input type="checkbox" checked />Done task</li>
+        <li><input type="checkbox" />Todo task</li>
+      </ul>
+    `;
+    const md = richTextToMarkdown(html);
+    expect(md).toContain('- [x] Done task');
+    expect(md).toContain('- [ ] Todo task');
+  });
+
+  it('converts <strike> tag to GFM tildes', () => {
+    const html = '<p><strike>old text</strike></p>';
+    expect(richTextToMarkdown(html)).toBe('~~old text~~');
+  });
+
+  it('extracts language from <pre><code class="language-js"> (Notion/Feishu paste)', () => {
+    const html = '<pre><code class="language-js">const x = 1;</code></pre>';
+    expect(richTextToMarkdown(html)).toBe('```js\nconst x = 1;\n```');
+  });
+
+  it('handles <figure> with <img> and <figcaption>', () => {
+    const html = '<figure><img src="https://img.test/photo.jpg" alt="photo" /><figcaption>A nice photo</figcaption></figure>';
+    const md = richTextToMarkdown(html);
+    expect(md).toContain('![photo](https://img.test/photo.jpg)');
+    expect(md).toContain('*A nice photo*');
+  });
+
+  it('expands colspan in table cells', () => {
+    const html = `
+      <table>
+        <tr><th colspan="2">Header spanning two</th></tr>
+        <tr><td>A</td><td>B</td></tr>
+      </table>
+    `;
+    const md = richTextToMarkdown(html);
+    expect(md).toContain('| Header spanning two | Header spanning two |');
+    expect(md).toContain('| A | B |');
+  });
+
+  it('passes through <mark>, <u>, <ins> text without crashing', () => {
+    const html = '<p><mark>highlighted</mark> and <u>underlined</u> and <ins>inserted</ins></p>';
+    expect(richTextToMarkdown(html)).toBe('highlighted and underlined and inserted');
+  });
+
+  it('suppresses <meta>, <link>, <title>, <head> tags from Word paste', () => {
+    const html = '<html><head><meta charset="utf-8"><title>Doc</title><style>body{}</style></head><body><p>Content</p></body></html>';
+    expect(richTextToMarkdown(html)).toBe('Content');
+  });
+
+  it('handles Word-style numeric font-weight values (700, 800, 900)', () => {
+    const html = '<p><span style="font-weight: 900">heavy</span></p>';
+    expect(richTextToMarkdown(html)).toBe('**heavy**');
+  });
+
   it('processes large 10k+ word clipboard html without freezing', () => {
     const wordsPerParagraph = 250;
     const paragraphCount = 40;
