@@ -98,6 +98,47 @@ describe('EditorPane', () => {
     cleanupRender(rendered);
   });
 
+  it('keeps latest paste status visible for full timeout after consecutive pastes', () => {
+    vi.useFakeTimers();
+    vi.mocked(markdownFromClipboard).mockReturnValue('**converted**');
+
+    const rendered = renderEditor('abcd');
+    const textarea = rendered.container.querySelector('textarea') as HTMLTextAreaElement;
+    textarea.setSelectionRange(1, 2);
+
+    act(() => {
+      dispatchPaste(textarea, {
+        files: [],
+        getData: (type) => (type === 'text/html' ? '<p>value</p>' : 'value'),
+      });
+    });
+    expect(rendered.container.textContent).toContain('魔法粘贴成功，已转换为 Markdown');
+
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+
+    act(() => {
+      dispatchPaste(textarea, {
+        files: [],
+        getData: (type) => (type === 'text/html' ? '<p>value</p>' : 'value'),
+      });
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(1500);
+    });
+    expect(rendered.container.textContent).toContain('魔法粘贴成功，已转换为 Markdown');
+
+    act(() => {
+      vi.advanceTimersByTime(1500);
+    });
+    expect(rendered.container.textContent).not.toContain('魔法粘贴成功，已转换为 Markdown');
+
+    cleanupRender(rendered);
+    vi.useRealTimers();
+  });
+
   it('handles keyboard shortcuts and applies wrapped markdown', () => {
     const rendered = renderEditor('hello');
     const textarea = rendered.container.querySelector('textarea') as HTMLTextAreaElement;

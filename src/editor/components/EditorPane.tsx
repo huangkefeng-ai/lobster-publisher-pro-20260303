@@ -1,4 +1,13 @@
-import { useMemo, useRef, useState, type ChangeEvent, type ClipboardEvent, type DragEvent, type KeyboardEvent } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type ClipboardEvent,
+  type DragEvent,
+  type KeyboardEvent,
+} from 'react';
 import { markdownFromClipboard, computeDocumentStats } from '../../core';
 import { handleEditorShortcut } from '../shortcuts';
 import { processImageFile } from '../../images';
@@ -26,13 +35,29 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const wordCount = useMemo(() => computeDocumentStats(markdown).wordCount, [markdown]);
+  const pasteStatusTimerRef = useRef<number | null>(null);
 
   const [pasteStatus, setPasteStatus] = useState<{ status: 'success' | 'error', message: string } | null>(null);
 
   function showPasteStatus(status: 'success' | 'error', message: string) {
+    if (pasteStatusTimerRef.current !== null) {
+      window.clearTimeout(pasteStatusTimerRef.current);
+    }
     setPasteStatus({ status, message });
-    setTimeout(() => setPasteStatus(null), 3000);
+    pasteStatusTimerRef.current = window.setTimeout(() => {
+      setPasteStatus(null);
+      pasteStatusTimerRef.current = null;
+    }, 3000);
   }
+
+  useEffect(
+    () => () => {
+      if (pasteStatusTimerRef.current !== null) {
+        window.clearTimeout(pasteStatusTimerRef.current);
+      }
+    },
+    [],
+  );
 
   function handleInsert(snippet: string) {
     const textarea = textareaRef.current;
