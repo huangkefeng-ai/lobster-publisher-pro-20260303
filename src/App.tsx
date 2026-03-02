@@ -112,23 +112,36 @@ function App() {
           </p>
         </div>
         <div className="action-row">
-          <button className="btn-primary" type="button" onClick={handleCopyWechatHtml}>
+          <button
+            className="btn-primary"
+            type="button"
+            onClick={handleCopyWechatHtml}
+            aria-label="Copy WeChat HTML to clipboard"
+          >
             Copy WeChat HTML
           </button>
-          <button className="btn-secondary" type="button" onClick={handleDownloadHtml}>
+          <button
+            className="btn-secondary"
+            type="button"
+            onClick={handleDownloadHtml}
+            aria-label="Export themed HTML file"
+          >
             Export HTML
           </button>
-          <button className="btn-secondary" type="button" onClick={handlePrintPdf}>
+          <button
+            className="btn-secondary"
+            type="button"
+            onClick={handlePrintPdf}
+            aria-label="Open print dialog to save PDF"
+          >
             Print / Save PDF
           </button>
         </div>
       </header>
-      
-      {actionStatus && (
-        <div className="status-toast" role="status" aria-live="polite">
-          {actionStatus}
-        </div>
-      )}
+
+      <p className="status-toast" role="status" aria-live="polite" aria-atomic="true">
+        {actionStatus ?? ''}
+      </p>
 
       <div className="app-body">
         <aside className="app-sidebar">

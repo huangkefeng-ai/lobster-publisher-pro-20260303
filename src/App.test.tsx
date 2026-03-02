@@ -78,4 +78,30 @@ describe('App', () => {
 
     expect(clearTimeoutSpy).toHaveBeenCalledWith(statusTimerId);
   });
+
+  it('keeps a persistent status live region and clears message after timeout', async () => {
+    const rendered = renderApp();
+
+    const status = rendered.container.querySelector('[role="status"]');
+    expect(status).toBeTruthy();
+    expect(status?.textContent).toBe('');
+
+    const copyButton = rendered.container.querySelector('button[aria-label="Copy WeChat HTML to clipboard"]');
+    expect(copyButton).toBeTruthy();
+
+    await act(async () => {
+      copyButton?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      await Promise.resolve();
+    });
+
+    expect(status?.textContent).toContain('Copied WeChat-ready HTML to clipboard.');
+
+    await act(async () => {
+      vi.advanceTimersByTime(4000);
+    });
+
+    expect(status?.textContent).toBe('');
+
+    cleanupRender(rendered);
+  });
 });
