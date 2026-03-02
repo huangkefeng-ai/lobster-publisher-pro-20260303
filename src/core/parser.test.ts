@@ -95,6 +95,11 @@ describe('richTextToMarkdown', () => {
     );
   });
 
+  it('converts strikethrough tags to GFM tildes', () => {
+    const html = '<p>This is <del>removed</del> and <s>also struck</s> text.</p>';
+    expect(richTextToMarkdown(html)).toBe('This is ~~removed~~ and ~~also struck~~ text.');
+  });
+
   it('converts tables while ignoring empty rows and escaping pipe characters in cells', () => {
     const html = `
       <table>

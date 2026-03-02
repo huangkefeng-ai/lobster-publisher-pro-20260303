@@ -120,6 +120,11 @@ function renderNode(node: Node, depth = 0): string {
       const content = renderChildren(element, depth).trim();
       return content.length > 0 ? `*${content}*` : '';
     }
+    case 'del':
+    case 's': {
+      const content = renderChildren(element, depth).trim();
+      return content.length > 0 ? `~~${content}~~` : '';
+    }
     case 'code': {
       const content = element.textContent?.trim() ?? '';
       return content.length > 0 ? wrapWithBacktickFence(content) : '';

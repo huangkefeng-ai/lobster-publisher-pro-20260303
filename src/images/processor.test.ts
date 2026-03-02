@@ -219,6 +219,49 @@ describe('images/processor', () => {
     }
   });
 
+  it('should preserve transparency by outputting png for webp and gif inputs', async () => {
+    const createObjectURL = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url');
+    const revokeObjectURL = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+    const originalImage = globalThis.Image;
+
+    class MockImage {
+      width = 400;
+      height = 300;
+      onload: ((event: Event) => unknown) | null = null;
+      onerror: ((event: string | Event) => unknown) | null = null;
+
+      set src(_value: string) {
+        setTimeout(() => {
+          this.onload?.(new Event('load'));
+        }, 0);
+      }
+    }
+
+    globalThis.Image = MockImage as unknown as typeof Image;
+    const getContextSpy = vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
+      drawImage: vi.fn(),
+    } as unknown as CanvasRenderingContext2D);
+    const toDataURLSpy = vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL').mockReturnValue('data:image/png;base64,mocked');
+
+    try {
+      const webpFile = new File(['mock-data'], 'icon.webp', { type: 'image/webp' });
+      await processImageFile(webpFile);
+      expect(toDataURLSpy).toHaveBeenCalledWith('image/png', undefined);
+
+      toDataURLSpy.mockClear();
+
+      const gifFile = new File(['mock-data'], 'anim.gif', { type: 'image/gif' });
+      await processImageFile(gifFile);
+      expect(toDataURLSpy).toHaveBeenCalledWith('image/png', undefined);
+    } finally {
+      globalThis.Image = originalImage;
+      getContextSpy.mockRestore();
+      toDataURLSpy.mockRestore();
+      createObjectURL.mockRestore();
+      revokeObjectURL.mockRestore();
+    }
+  });
+
   it('should reject when serialization throws during processing', async () => {
     const createObjectURL = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url');
     const revokeObjectURL = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});

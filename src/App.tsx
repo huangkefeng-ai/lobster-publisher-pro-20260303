@@ -47,10 +47,6 @@ function App() {
     () => createDebouncedFunction((markdown: string) => setPreviewMarkdown(markdown), 100),
     [],
   );
-  const wechatHtml = useMemo(
-    () => toWechatHtml(editorState.markdown, selectedTheme),
-    [editorState.markdown, selectedTheme],
-  );
   const stats = useMemo(
     () => computeDocumentStats(editorState.markdown),
     [editorState.markdown],
@@ -83,6 +79,7 @@ function App() {
 
   async function handleCopyWechatHtml() {
     try {
+      const wechatHtml = toWechatHtml(editorState.markdown, selectedTheme);
       await copyWechatHtmlToClipboard(wechatHtml);
       setTimedStatus('Copied WeChat-ready HTML to clipboard.');
     } catch {
