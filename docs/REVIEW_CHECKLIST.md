@@ -120,7 +120,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 - [x] `dangerouslySetInnerHTML` only used with DOMPurify-sanitized content
 - [x] WeChat sanitizer uses strict allow-list for tags and attributes
 - [x] No secrets or API keys in committed code
-- [x] `npm audit` (high) passes locally on 2026-03-02
+- [x] `npm audit` (high) passes locally on 2026-03-03
 
 ---
 
@@ -254,7 +254,9 @@ Use this checklist when reviewing PRs and before merging to `main`.
 |------|--------|-------|
 | Lint (`npm run lint`) | PASS | ESLint clean |
 | Tests (`npm test`) | PASS | 100 tests across 18 suites |
-| Build (`npm run build`) | PASS | 91.78 KB gzip, built in 800ms |
+| Coverage (`npm run test:coverage`) | PASS | lines 92.14%, statements 91.95% |
+| Build (`npm run build`) | PASS | 91.90 KB gzip, built in 876ms |
+| Audit (`npm audit --audit-level=high`) | PASS | 0 vulnerabilities |
 
 ---
 
