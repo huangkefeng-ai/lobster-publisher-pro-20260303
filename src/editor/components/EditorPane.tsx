@@ -106,6 +106,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
       <textarea
         ref={textareaRef}
         className="editor-textarea"
+        aria-label="Markdown editor"
         value={markdown}
         onChange={(event) => onMarkdownChange(event.target.value)}
         onPaste={handlePaste}
