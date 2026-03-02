@@ -603,8 +603,20 @@ body {
 .editor-container {
   position: relative;
   display: flex;
+  flex-direction: column;
   flex: 1;
   overflow: hidden;
+}
+
+.editor-hint {
+  padding: 0.4rem 1rem;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.75rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .editor-textarea {

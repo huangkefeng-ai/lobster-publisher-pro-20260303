@@ -253,6 +253,9 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
           spellCheck
           disabled={isUploading}
         />
+        <div className="editor-hint" aria-hidden="true">
+          <span>💡 技巧：支持多图横向排版与标准 Markdown 表格。直接粘贴富文本可自动转换。</span>
+        </div>
       </div>
     </section>
   );
