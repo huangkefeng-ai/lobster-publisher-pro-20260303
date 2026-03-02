@@ -1,6 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { THEME_REGISTRY } from '../theme';
-import { toThemedHtml, toWechatHtml } from './htmlExporter';
+import { downloadHtmlFile, toThemedHtml, toWechatHtml } from './htmlExporter';
+
+afterEach(() => {
+  vi.useRealTimers();
+  vi.restoreAllMocks();
+});
 
 describe('htmlExporter', () => {
   it('builds a full themed html document', () => {
@@ -15,5 +20,44 @@ describe('htmlExporter', () => {
     expect(html).toContain('<h1 style=');
     expect(html).not.toContain('<style');
     expect(html).not.toContain('class=');
+  });
+
+  it('downloads html and cleans up blob url', () => {
+    vi.useFakeTimers();
+    const createObjectURLSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url');
+    const revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+    const appendChildSpy = vi.spyOn(document.body, 'appendChild');
+    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+
+    downloadHtmlFile('article.html', '<h1>Export</h1>');
+
+    expect(createObjectURLSpy).toHaveBeenCalledOnce();
+    expect(appendChildSpy).toHaveBeenCalledOnce();
+    const anchor = appendChildSpy.mock.calls[0][0] as HTMLAnchorElement;
+    expect(anchor.download).toBe('article.html');
+    expect(anchor.href).toBe('blob:mock-url');
+    expect(clickSpy).toHaveBeenCalledOnce();
+    expect(document.body.contains(anchor)).toBe(true);
+
+    vi.runAllTimers();
+
+    expect(document.body.contains(anchor)).toBe(false);
+    expect(revokeObjectURLSpy).toHaveBeenCalledWith('blob:mock-url');
+  });
+
+  it('does not fail cleanup when anchor was detached early', () => {
+    vi.useFakeTimers();
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url');
+    const revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+    const appendChildSpy = vi.spyOn(document.body, 'appendChild');
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+
+    downloadHtmlFile('article.html', '<h1>Export</h1>');
+
+    const anchor = appendChildSpy.mock.calls[0][0] as HTMLAnchorElement;
+    anchor.remove();
+
+    expect(() => vi.runAllTimers()).not.toThrow();
+    expect(revokeObjectURLSpy).toHaveBeenCalledWith('blob:mock-url');
   });
 });

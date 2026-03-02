@@ -39,7 +39,7 @@ export function downloadHtmlFile(filename: string, html: string): void {
   document.body.appendChild(anchor);
   anchor.click();
   setTimeout(() => {
-    document.body.removeChild(anchor);
+    anchor.remove();
     URL.revokeObjectURL(url);
   }, 0);
 }
