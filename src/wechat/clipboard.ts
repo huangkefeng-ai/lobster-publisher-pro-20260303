@@ -37,9 +37,10 @@ function htmlToPlainText(html: string): string {
     }
   };
 
-  const walk = (node: Node) => {
+  const walk = (node: Node, inPre = false) => {
     if (node.nodeType === Node.TEXT_NODE) {
-      const value = (node.textContent ?? '').replace(/\s+/g, ' ');
+      const raw = node.textContent ?? '';
+      const value = inPre ? raw : raw.replace(/\s+/g, ' ');
       if (value.length > 0) {
         chunks.push(value);
       }
@@ -63,8 +64,9 @@ function htmlToPlainText(html: string): string {
       pushLineBreak();
     }
 
+    const nextInPre = inPre || tag === 'pre';
     for (const child of Array.from(element.childNodes)) {
-      walk(child);
+      walk(child, nextInPre);
     }
 
     if (isBlock) {

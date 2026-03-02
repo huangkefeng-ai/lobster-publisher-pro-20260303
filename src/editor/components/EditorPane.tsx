@@ -76,17 +76,18 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
     }
 
     event.preventDefault();
-    const textarea = event.currentTarget;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
+    const start = event.currentTarget.selectionStart;
+    const end = event.currentTarget.selectionEnd;
     const nextValue = markdown.slice(0, start) + converted + markdown.slice(end);
     onMarkdownChange(nextValue);
 
     requestAnimationFrame(() => {
+      const ta = textareaRef.current;
+      if (!ta) return;
       const cursor = start + converted.length;
-      textarea.focus();
-      textarea.selectionStart = cursor;
-      textarea.selectionEnd = cursor;
+      ta.focus();
+      ta.selectionStart = cursor;
+      ta.selectionEnd = cursor;
     });
   }
 

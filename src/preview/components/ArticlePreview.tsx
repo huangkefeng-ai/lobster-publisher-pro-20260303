@@ -12,9 +12,9 @@ export function ArticlePreview({ markdown, theme }: ArticlePreviewProps) {
   const html = useMemo(() => renderMarkdownToHtml(markdown), [markdown]);
 
   return (
-    <section className="panel preview-panel">
+    <section className="panel preview-panel" aria-labelledby="preview-heading">
       <header className="panel-header">
-        <h2>Live Preview</h2>
+        <h2 id="preview-heading">Live Preview</h2>
         <p>{theme.name}</p>
       </header>
       <article className="article-preview" style={toThemeCssVariables(theme)}>
