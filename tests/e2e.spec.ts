@@ -22,9 +22,6 @@ test.describe('Lobster Publisher Pro E2E', () => {
     const md = `# Hello E2E Test\n\nThis is a paragraph.`;
     await textarea.fill(md);
 
-    // Wait for debounce and preview to update
-    await page.waitForTimeout(500);
-
     // Verify preview renders the h1 and paragraph
     const preview = page.locator('.article-preview');
     await expect(preview.locator('h1')).toHaveText('Hello E2E Test');
@@ -53,7 +50,6 @@ test.describe('Lobster Publisher Pro E2E', () => {
     await expect(textarea).toHaveValue(/!\[test\.png\]\(data:image\/png;base64,/);
 
     // Also the preview should eventually render the image
-    await page.waitForTimeout(500);
     const imgInPreview = page.locator('.article-preview img');
     await expect(imgInPreview).toBeVisible();
     await expect(imgInPreview).toHaveAttribute('src', /data:image\/png;base64,/);
