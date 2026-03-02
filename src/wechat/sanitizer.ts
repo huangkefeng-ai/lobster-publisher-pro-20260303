@@ -6,6 +6,7 @@ const WECHAT_ALLOWED_TAGS = [
   'blockquote',
   'br',
   'code',
+  'del',
   'em',
   'figcaption',
   'figure',
@@ -21,7 +22,10 @@ const WECHAT_ALLOWED_TAGS = [
   'ol',
   'p',
   'pre',
+  's',
   'section',
+  'span',
+  'strike',
   'strong',
   'table',
   'tbody',
@@ -32,7 +36,7 @@ const WECHAT_ALLOWED_TAGS = [
   'ul',
 ] as const;
 
-const WECHAT_ALLOWED_ATTR = ['alt', 'colspan', 'href', 'rowspan', 'src', 'title'] as const;
+const WECHAT_ALLOWED_ATTR = ['alt', 'colspan', 'href', 'rowspan', 'src', 'style', 'title'] as const;
 
 export function sanitizeWechatHtml(html: string): string {
   return DOMPurify.sanitize(html, {

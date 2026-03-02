@@ -1,9 +1,12 @@
 export { DEFAULT_MARKDOWN, DEFAULT_THEME_ID } from './constants';
 export { createDebouncedFunction } from './debounce';
 export type { DebouncedFunction } from './debounce';
+export { PublishError, PublishErrorCode, ok, err } from './errors';
+export type { Result } from './errors';
 export { richTextToMarkdown, markdownFromClipboard } from './parser';
 export { renderMarkdownToHtml } from './renderer';
 export { computeDocumentStats } from './statistics';
 export type { DocumentStats } from './statistics';
 export { saveEditorDraft, loadEditorDraft, clearEditorDraft } from './storage';
 export type { EditorDraft } from './storage';
+export { validateMarkdown, validateImageFile } from './validator';
