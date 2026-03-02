@@ -8,7 +8,7 @@ import {
   type DragEvent,
   type KeyboardEvent,
 } from 'react';
-import { markdownFromClipboard, computeDocumentStats } from '../../core';
+import { markdownFromClipboard, computeDocumentStats, validateImageFile } from '../../core';
 import { handleEditorShortcut } from '../shortcuts';
 import { processImageFile } from '../../images';
 
@@ -86,8 +86,15 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
   async function handleImageFiles(files: FileList | File[] | null) {
     if (!files || files.length === 0) return;
 
-    const file = Array.from(files).find(f => f.type.startsWith('image/'));
+    const file = Array.from(files).find((f) => f.type.trim().toLowerCase().startsWith('image/'));
     if (!file) return;
+
+    const validation = validateImageFile({ type: file.type, size: file.size });
+    if (!validation.ok) {
+      setUploadError(validation.error.message);
+      showPasteStatus('error', '图片格式或大小不符合要求');
+      return;
+    }
 
     setIsUploading(true);
     setUploadError(null);

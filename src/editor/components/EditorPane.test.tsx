@@ -240,4 +240,25 @@ describe('EditorPane', () => {
     expect(textarea.disabled).toBe(false);
     cleanupRender(rendered);
   });
+
+  it('rejects unsupported image MIME types before processing', async () => {
+    vi.mocked(processImageFile).mockClear();
+    const rendered = renderEditor('Text');
+    const textarea = rendered.container.querySelector('textarea') as HTMLTextAreaElement;
+    const image = new File(['data'], 'bad.bmp', { type: 'image/bmp' });
+
+    await act(async () => {
+      dispatchPaste(textarea, {
+        files: [image],
+        getData: () => '',
+      });
+      await Promise.resolve();
+    });
+
+    expect(processImageFile).not.toHaveBeenCalled();
+    expect(rendered.onMarkdownChange).not.toHaveBeenCalled();
+    expect(rendered.container.textContent).toContain('Unsupported image type: image/bmp');
+    expect(rendered.container.textContent).toContain('图片格式或大小不符合要求');
+    cleanupRender(rendered);
+  });
 });
