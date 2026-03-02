@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { renderMarkdownToHtml } from '../../core';
+import { htmlExportPipeline } from '../../pipeline';
+import { PublishErrorCode } from '../../core';
 import type { ThemeDefinition } from '../../theme';
 import { toThemeCssVariables } from '../../theme';
 
@@ -9,7 +10,18 @@ interface ArticlePreviewProps {
 }
 
 export function ArticlePreview({ markdown, theme }: ArticlePreviewProps) {
-  const html = useMemo(() => renderMarkdownToHtml(markdown), [markdown]);
+  const htmlResult = useMemo(() => htmlExportPipeline(markdown, theme), [markdown, theme]);
+
+  let content = null;
+  if (!htmlResult.ok) {
+    if (htmlResult.error.code !== PublishErrorCode.EMPTY_INPUT) {
+      content = <div className="error-text">Preview error: {htmlResult.error.message}</div>;
+    } else {
+      content = <div className="preview-empty">No content to preview</div>;
+    }
+  } else {
+    content = <div dangerouslySetInnerHTML={{ __html: htmlResult.value.html }} />;
+  }
 
   return (
     <section className="panel preview-panel" aria-labelledby="preview-heading">
@@ -18,11 +30,7 @@ export function ArticlePreview({ markdown, theme }: ArticlePreviewProps) {
         <p>{theme.name}</p>
       </header>
       <article className="article-preview" style={toThemeCssVariables(theme)}>
-        {html.trim() ? (
-          <div dangerouslySetInnerHTML={{ __html: html }} />
-        ) : (
-          <div className="preview-empty">No content to preview</div>
-        )}
+        {content}
       </article>
     </section>
   );

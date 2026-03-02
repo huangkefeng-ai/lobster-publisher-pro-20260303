@@ -80,6 +80,10 @@ function App() {
   async function handleCopyWechatHtml() {
     try {
       const wechatHtml = toWechatHtml(editorState.markdown, selectedTheme);
+      if (!wechatHtml) {
+        setTimedStatus('Nothing to copy.');
+        return;
+      }
       await copyWechatHtmlToClipboard(wechatHtml);
       setTimedStatus('Copied WeChat-ready HTML to clipboard.');
     } catch {
@@ -88,15 +92,31 @@ function App() {
   }
 
   function handleDownloadHtml() {
-    const htmlDocument = toThemedHtml(editorState.markdown, selectedTheme);
-    downloadHtmlFile(`lobster-${selectedTheme.id}.html`, htmlDocument);
-    setTimedStatus('Downloaded themed HTML file.');
+    try {
+      const htmlDocument = toThemedHtml(editorState.markdown, selectedTheme);
+      if (!htmlDocument) {
+        setTimedStatus('Nothing to export.');
+        return;
+      }
+      downloadHtmlFile(`lobster-${selectedTheme.id}.html`, htmlDocument);
+      setTimedStatus('Downloaded themed HTML file.');
+    } catch {
+      setTimedStatus('Export failed.');
+    }
   }
 
   const handlePrintPdf = useCallback(() => {
-    const htmlDocument = toThemedHtml(editorState.markdown, selectedTheme);
-    printThemedArticle(htmlDocument);
-    setTimedStatus('Opened print dialog for PDF export.');
+    try {
+      const htmlDocument = toThemedHtml(editorState.markdown, selectedTheme);
+      if (!htmlDocument) {
+        setTimedStatus('Nothing to print.');
+        return;
+      }
+      printThemedArticle(htmlDocument);
+      setTimedStatus('Opened print dialog for PDF export.');
+    } catch {
+      setTimedStatus('PDF export failed.');
+    }
   }, [editorState.markdown, selectedTheme]);
 
   return (

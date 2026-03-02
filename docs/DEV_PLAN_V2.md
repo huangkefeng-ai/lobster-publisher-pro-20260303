@@ -137,6 +137,100 @@ Pipeline wraps these into composable `PipelineStep` objects with `Result<T>` flo
 
 ---
 
+## Handoff: Codex Gate-Check Checklist
+
+Codex is responsible for **code review and unit-test quality gates** on all V2 modules.
+Run these checks before approving any PR that touches core logic or pipeline code.
+
+### Must-verify (unit tests)
+
+| Module | What to gate-check |
+|--------|--------------------|
+| `src/core/errors.ts` | `PublishError` is a true `Error` subclass (`instanceof` works). `toJSON()` returns `{ name, code, message }`. `ok()` / `err()` produce correct discriminated unions. |
+| `src/core/validator.ts` | `validateMarkdown('')` → `EMPTY_INPUT`. Input at exactly 512 000 bytes passes; 512 001 fails with `VALIDATION_FAILED`. Multi-byte (CJK) byte counting is correct. `validateImageFile` rejects non-image MIME and files > 10 MB. |
+| `src/pipeline/runner.ts` | `runPipeline` short-circuits: second step must never execute after first fails. Empty step list returns `ok` with empty html. Context threads correctly across steps. |
+| `src/pipeline/steps.ts` | Each step (`validateStep`, `renderStep`, `sanitizeWechatStep`, `inlineStyleStep`) returns `err` when preconditions are missing (e.g. `ctx.html` undefined). `sanitizeWechatStep` strips `<script>` tags. `inlineStyleStep` sets `styledHtml` on context. |
+| `src/pipeline/pipelines.ts` | `wechatPipeline` returns `target: 'wechat'` with inline-styled HTML. `htmlExportPipeline` returns `target: 'html-export'`. `pdfPrintPipeline` returns `target: 'pdf-print'`. All three reject empty markdown without throwing. |
+
+### Code-review gates
+
+- No `any` types in new code.
+- All exported functions have JSDoc.
+- No circular imports (`import/no-cycle` rule enforced).
+- `Result<T>` is used instead of `throw` in pipeline paths.
+- Tests are deterministic — no `setTimeout`, no network, no filesystem.
+
+### Verification command
+
+```bash
+npm run lint && npm run test && npm run build
+```
+
+---
+
+## Handoff: Gemini E2E-Check Checklist
+
+Gemini is responsible for **browser-level E2E** using Playwright / browser-use.
+These checks verify the full user-facing flow, not individual functions.
+
+### Must-verify (E2E scenarios)
+
+| Scenario | Steps | Expected outcome |
+|----------|-------|------------------|
+| **WeChat copy** | Type markdown → click "Copy WeChat HTML" | Clipboard contains `<section>` with inline `style=` attributes. No `<script>` tags. Strikethrough text (`~~deleted~~`) has `text-decoration: line-through`. |
+| **HTML export** | Type markdown → click "Export HTML" | Browser downloads `.html` file. File contains `<!doctype html>`, theme CSS variables, rendered markdown. |
+| **PDF print** | Type markdown → click "Print / Save PDF" | Print dialog opens (or iframe is created and `window.print()` is called). |
+| **Empty editor guard** | Clear editor → click "Copy WeChat HTML" | Status toast shows error message (not a crash / unhandled exception). |
+| **Theme switch** | Select different theme → check preview | Preview background color and heading color update to match selected theme tokens. |
+| **Large paste** | Paste 10 000-word HTML into editor | Editor renders within 4 s. No freeze. Stats bar updates. |
+| **Strikethrough rendering** | Type `~~struck~~` in editor | Preview shows text with visible line-through decoration. |
+
+### UI files Gemini owns
+
+- `src/App.tsx` — pipeline integration point (currently uses direct exports; migrate to `wechatPipeline()` / `htmlExportPipeline()` / `pdfPrintPipeline()` when ready).
+- `src/editor/components/EditorPane.tsx`
+- `src/preview/components/ArticlePreview.tsx`
+- `src/theme/ThemePicker.tsx`
+- `src/App.css`, `src/index.css`
+
+### Verification command
+
+```bash
+npx playwright test          # E2E suite
+```
+
+---
+
+## API Surface Reference
+
+### `src/core` barrel (`src/core/index.ts`)
+
+| Export | Kind | Source |
+|--------|------|--------|
+| `DEFAULT_MARKDOWN`, `DEFAULT_THEME_ID` | const | `constants.ts` |
+| `createDebouncedFunction` | fn | `debounce.ts` |
+| `DebouncedFunction` | type | `debounce.ts` |
+| `PublishError`, `PublishErrorCode`, `ok`, `err` | class/const/fn | `errors.ts` |
+| `Result` | type | `errors.ts` |
+| `richTextToMarkdown`, `markdownFromClipboard` | fn | `parser.ts` |
+| `renderMarkdownToHtml` | fn | `renderer.ts` |
+| `computeDocumentStats` | fn | `statistics.ts` |
+| `DocumentStats` | type | `statistics.ts` |
+| `saveEditorDraft`, `loadEditorDraft`, `clearEditorDraft` | fn | `storage.ts` |
+| `EditorDraft` | type | `storage.ts` |
+| `validateMarkdown`, `validateImageFile` | fn | `validator.ts` |
+
+### `src/pipeline` barrel (`src/pipeline/index.ts`)
+
+| Export | Kind | Source |
+|--------|------|--------|
+| `PipelineContext`, `PipelineOutput`, `PipelineStep` | type | `types.ts` |
+| `runPipeline` | fn | `runner.ts` |
+| `validateStep`, `renderStep`, `sanitizeWechatStep`, `inlineStyleStep` | const | `steps.ts` |
+| `wechatPipeline`, `htmlExportPipeline`, `pdfPrintPipeline` | fn | `pipelines.ts` |
+
+---
+
 ## Verification Commands
 
 ```bash
