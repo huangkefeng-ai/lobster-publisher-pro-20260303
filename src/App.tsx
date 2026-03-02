@@ -105,46 +105,50 @@ function App() {
   return (
     <main className="app-shell">
       <header className="hero">
-        <h1>Lobster Publisher Pro</h1>
-        <p>
-          {stats.wordCount} words · {stats.readingTimeMinutes} min read · {stats.lineCount} lines
-        </p>
-      </header>
-
-      <section className="workspace-grid">
-        <EditorPane
-          markdown={editorState.markdown}
-          onMarkdownChange={(markdown) => dispatch({ type: 'set_markdown', markdown })}
-        />
-        <ArticlePreview markdown={previewMarkdown} theme={selectedTheme} />
-      </section>
-
-      <section className="panel actions-panel">
-        <header className="panel-header">
-          <h2>Publish Actions</h2>
-          <p>WeChat compatibility + export</p>
-        </header>
+        <div className="hero-content">
+          <h1>Lobster Publisher Pro</h1>
+          <p>
+            {stats.wordCount} words · {stats.readingTimeMinutes} min read · {stats.lineCount} lines
+          </p>
+        </div>
         <div className="action-row">
-          <button type="button" onClick={handleCopyWechatHtml}>
+          <button className="btn-primary" type="button" onClick={handleCopyWechatHtml}>
             Copy WeChat HTML
           </button>
-          <button type="button" onClick={handleDownloadHtml}>
-            Export HTML File
+          <button className="btn-secondary" type="button" onClick={handleDownloadHtml}>
+            Export HTML
           </button>
-          <button type="button" onClick={handlePrintPdf}>
+          <button className="btn-secondary" type="button" onClick={handlePrintPdf}>
             Print / Save PDF
           </button>
         </div>
-        <p className="action-status" role="status" aria-live="polite">{actionStatus ?? ''}</p>
-      </section>
+      </header>
+      
+      {actionStatus && (
+        <div className="status-toast" role="status" aria-live="polite">
+          {actionStatus}
+        </div>
+      )}
 
-      <ThemePicker
-        selectedThemeId={selectedTheme.id}
-        themes={filteredThemes}
-        onSelectTheme={setSelectedThemeId}
-        themeQuery={themeQuery}
-        onThemeQueryChange={setThemeQuery}
-      />
+      <div className="app-body">
+        <aside className="app-sidebar">
+          <ThemePicker
+            selectedThemeId={selectedTheme.id}
+            themes={filteredThemes}
+            onSelectTheme={setSelectedThemeId}
+            themeQuery={themeQuery}
+            onThemeQueryChange={setThemeQuery}
+          />
+        </aside>
+
+        <section className="workspace-grid">
+          <EditorPane
+            markdown={editorState.markdown}
+            onMarkdownChange={(markdown) => dispatch({ type: 'set_markdown', markdown })}
+          />
+          <ArticlePreview markdown={previewMarkdown} theme={selectedTheme} />
+        </section>
+      </div>
     </main>
   );
 }

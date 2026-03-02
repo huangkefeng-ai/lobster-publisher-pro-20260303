@@ -88,24 +88,65 @@ function htmlToPlainText(html: string): string {
 }
 
 export async function copyWechatHtmlToClipboard(html: string): Promise<void> {
-  if (typeof navigator === 'undefined' || !navigator.clipboard) {
-    throw new Error('Clipboard API is not available in this environment.');
-  }
-
   const plainText = htmlToPlainText(html);
+  const hasNavigator = typeof navigator !== 'undefined';
+  const clipboard = hasNavigator ? navigator.clipboard : undefined;
 
-  if (typeof ClipboardItem !== 'undefined' && typeof navigator.clipboard.write === 'function') {
-    const item = new ClipboardItem({
-      'text/html': new Blob([html], { type: 'text/html' }),
-      'text/plain': new Blob([plainText], { type: 'text/plain' }),
-    });
-    await navigator.clipboard.write([item]);
+  if (clipboard && typeof ClipboardItem !== 'undefined' && typeof clipboard.write === 'function') {
+    try {
+      const item = new ClipboardItem({
+        'text/html': new Blob([html], { type: 'text/html' }),
+        'text/plain': new Blob([plainText], { type: 'text/plain' }),
+      });
+      await clipboard.write([item]);
+      return;
+    } catch {
+      // Fallback
+    }
+  }
+
+  if (
+    typeof document !== 'undefined' &&
+    typeof window !== 'undefined' &&
+    document.body &&
+    typeof document.execCommand === 'function'
+  ) {
+    const container = document.createElement('div');
+    container.innerHTML = html;
+    container.style.position = 'fixed';
+    container.style.pointerEvents = 'none';
+    container.style.opacity = '0';
+    document.body.appendChild(container);
+
+    try {
+      const selection = window.getSelection();
+      if (selection) {
+        const range = document.createRange();
+        range.selectNodeContents(container);
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        const success = document.execCommand('copy');
+        selection.removeAllRanges();
+
+        if (success) {
+          return;
+        }
+      }
+    } catch {
+      // Ignore and fallback
+    } finally {
+      document.body.removeChild(container);
+    }
+  }
+
+  if (clipboard && typeof clipboard.writeText === 'function') {
+    await clipboard.writeText(plainText);
     return;
   }
 
-  if (typeof navigator.clipboard.writeText === 'function') {
-    await navigator.clipboard.writeText(plainText);
-    return;
+  if (!hasNavigator) {
+    throw new Error('Clipboard API is not available in this environment.');
   }
 
   throw new Error('Clipboard write methods are unavailable.');

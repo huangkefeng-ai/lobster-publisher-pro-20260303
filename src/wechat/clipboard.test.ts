@@ -4,6 +4,7 @@ import { copyWechatHtmlToClipboard } from './clipboard';
 describe('copyWechatHtmlToClipboard', () => {
   const originalClipboard = navigator.clipboard;
   const originalClipboardItem = globalThis.ClipboardItem;
+  const originalExecCommand = document.execCommand;
 
   afterEach(() => {
     Object.defineProperty(navigator, 'clipboard', {
@@ -12,6 +13,11 @@ describe('copyWechatHtmlToClipboard', () => {
     });
     Object.defineProperty(globalThis, 'ClipboardItem', {
       value: originalClipboardItem,
+      configurable: true,
+      writable: true,
+    });
+    Object.defineProperty(document, 'execCommand', {
+      value: originalExecCommand,
       configurable: true,
       writable: true,
     });
@@ -86,9 +92,14 @@ describe('copyWechatHtmlToClipboard', () => {
       value: undefined,
       configurable: true,
     });
+    Object.defineProperty(document, 'execCommand', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    });
 
     await expect(copyWechatHtmlToClipboard('<p>Hello</p>')).rejects.toThrow(
-      'Clipboard API is not available in this environment.',
+      'Clipboard write methods are unavailable.',
     );
   });
 
@@ -106,5 +117,40 @@ describe('copyWechatHtmlToClipboard', () => {
     await expect(copyWechatHtmlToClipboard('<p>Hello</p>')).rejects.toThrow(
       'Clipboard write methods are unavailable.',
     );
+  });
+
+  it('uses execCommand fallback when clipboard.write fails', async () => {
+    const write = vi.fn().mockRejectedValue(new Error('not allowed'));
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    const clipboardItemMock = vi.fn();
+    class ClipboardItemMock {
+      data: unknown;
+
+      constructor(data: unknown) {
+        clipboardItemMock(data);
+        this.data = data;
+      }
+    }
+
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { write, writeText },
+      configurable: true,
+    });
+    Object.defineProperty(globalThis, 'ClipboardItem', {
+      value: ClipboardItemMock,
+      configurable: true,
+      writable: true,
+    });
+    Object.defineProperty(document, 'execCommand', {
+      value: vi.fn().mockReturnValue(true),
+      configurable: true,
+      writable: true,
+    });
+
+    await copyWechatHtmlToClipboard('<p>Hello</p>');
+
+    expect(write).toHaveBeenCalledTimes(1);
+    expect(writeText).not.toHaveBeenCalled();
+    expect(document.execCommand).toHaveBeenCalledWith('copy');
   });
 });
