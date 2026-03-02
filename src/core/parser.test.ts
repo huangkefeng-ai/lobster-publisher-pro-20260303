@@ -22,6 +22,17 @@ describe('richTextToMarkdown', () => {
     );
   });
 
+  it('keeps only safe image protocols in markdown images', () => {
+    const html = `
+      <p><img alt="safe" src="https://img.test/safe.png" /></p>
+      <p><img alt="unsafe-data" src="data:image/png;base64,abcd" /></p>
+      <p><img alt="unsafe-js" src="javascript:alert(1)" /></p>
+      <p><img alt="relative" src="/images/x.png" /></p>
+    `;
+
+    expect(richTextToMarkdown(html)).toBe('![safe](https://img.test/safe.png)');
+  });
+
   it('escapes literal markdown control characters in plain text', () => {
     const html = '<p>Use *stars* and _underscores_ literally.</p>';
     expect(richTextToMarkdown(html)).toBe('Use \\*stars\\* and \\_underscores\\_ literally.');

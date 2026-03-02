@@ -10,10 +10,10 @@ interface ThemePickerProps {
 
 export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery, onThemeQueryChange }: ThemePickerProps) {
   return (
-    <section className="panel">
+    <section className="panel" aria-labelledby="theme-gallery-heading">
       <header className="panel-header">
-        <h2>Theme Gallery</h2>
-        <p>{themes.length} themes</p>
+        <h2 id="theme-gallery-heading">Theme Gallery</h2>
+        <p aria-live="polite" aria-atomic="true">{themes.length} themes</p>
       </header>
       {onThemeQueryChange ? (
         <input
@@ -37,8 +37,9 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
                 className={`theme-card${active ? ' active' : ''}`}
                 onClick={() => onSelectTheme(theme.id)}
                 type="button"
+                aria-pressed={active}
               >
-                <span className="theme-chip" style={{ backgroundColor: theme.tokens.accent }} />
+                <span className="theme-chip" style={{ backgroundColor: theme.tokens.accent }} aria-hidden="true" />
                 <span className="theme-name">{theme.name}</span>
                 <span className="theme-family">{theme.family}</span>
               </button>

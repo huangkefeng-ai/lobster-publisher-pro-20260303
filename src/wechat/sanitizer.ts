@@ -39,6 +39,6 @@ export function sanitizeWechatHtml(html: string): string {
     ALLOWED_TAGS: [...WECHAT_ALLOWED_TAGS],
     ALLOWED_ATTR: [...WECHAT_ALLOWED_ATTR],
     FORBID_TAGS: ['script', 'style'],
-    ALLOWED_URI_REGEXP: /^(?:https?|mailto):/i,
+    ALLOWED_URI_REGEXP: /^(?:https?|mailto|tel):/i,
   });
 }

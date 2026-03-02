@@ -20,4 +20,17 @@ describe('sanitizeWechatHtml', () => {
     expect(sanitized).toContain('<h2>Safe title</h2>');
     expect(sanitized).toContain('<a href="https://example.com">link</a>');
   });
+
+  it('keeps safe tel links and strips unsafe URI protocols', () => {
+    const html = `
+      <p><a href="tel:+15551234567">phone</a></p>
+      <p><a href="javascript:alert(1)">bad</a></p>
+    `;
+
+    const sanitized = sanitizeWechatHtml(html);
+
+    expect(sanitized).toContain('<a href="tel:+15551234567">phone</a>');
+    expect(sanitized).toContain('<a>bad</a>');
+    expect(sanitized).not.toContain('javascript:');
+  });
 });

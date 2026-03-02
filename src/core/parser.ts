@@ -20,6 +20,10 @@ function wrapWithBacktickFence(value: string): string {
   return `${fence}${value}${fence}`;
 }
 
+function hasAllowedProtocol(url: string, allowedProtocols: readonly string[]): boolean {
+  return allowedProtocols.some((protocol) => url.toLowerCase().startsWith(`${protocol}:`));
+}
+
 function renderList(node: Element, depth = 0): string {
   const isOrdered = node.tagName.toLowerCase() === 'ol';
   const items = Array.from(node.children).filter((child) => child.tagName.toLowerCase() === 'li');
@@ -132,7 +136,7 @@ function renderNode(node: Node, depth = 0): string {
       if (!href) {
         return text ?? '';
       }
-      if (!/^(https?|mailto|tel):/i.test(href)) {
+      if (!hasAllowedProtocol(href, ['http', 'https', 'mailto', 'tel'])) {
         return text ?? '';
       }
       return `[${text}](${href})`;
@@ -142,7 +146,7 @@ function renderNode(node: Node, depth = 0): string {
       if (!src) {
         return '';
       }
-      if (/^[a-z]+:/i.test(src) && !/^(https?|data:image\/)/i.test(src)) {
+      if (!hasAllowedProtocol(src, ['http', 'https'])) {
         return '';
       }
       const alt = element.getAttribute('alt')?.trim() ?? '';
