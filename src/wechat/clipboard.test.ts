@@ -77,6 +77,24 @@ describe('copyWechatHtmlToClipboard', () => {
     expect(writeText).toHaveBeenCalledWith('Left\nRight');
   });
 
+  it('preserves indentation in preformatted code for plain-text fallback', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText },
+      configurable: true,
+    });
+    Object.defineProperty(globalThis, 'ClipboardItem', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    });
+
+    await copyWechatHtmlToClipboard('<pre>if (x) {\n  return y;\n}</pre>');
+
+    expect(writeText).toHaveBeenCalledTimes(1);
+    expect(writeText).toHaveBeenCalledWith('if (x) {\n  return y;\n}');
+  });
+
   it('uses clipboard.write with html and plain text when ClipboardItem is available', async () => {
     const write = vi.fn().mockResolvedValue(undefined);
     const clipboardItemMock = vi.fn();

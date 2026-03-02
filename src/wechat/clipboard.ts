@@ -83,9 +83,7 @@ function htmlToPlainText(html: string): string {
   return chunks
     .join('')
     .replace(/[ \t]+\n/g, '\n')
-    .replace(/\n[ \t]+/g, '\n')
     .replace(/\n{3,}/g, '\n\n')
-    .replace(/[ \t]{2,}/g, ' ')
     .trim();
 }
 
