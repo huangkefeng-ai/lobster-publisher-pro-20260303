@@ -1,4 +1,5 @@
 export function printThemedArticle(html: string): void {
+  const PRINT_CLEANUP_TIMEOUT_MS = 15_000;
   const iframe = document.createElement('iframe');
   iframe.style.position = 'fixed';
   iframe.style.left = '-9999px';
@@ -16,8 +17,11 @@ export function printThemedArticle(html: string): void {
 
   let hasPrinted = false;
   let fallbackTimer = 0;
+  let cleanupTimer = 0;
 
   const removeIframe = () => {
+    window.clearTimeout(fallbackTimer);
+    window.clearTimeout(cleanupTimer);
     if (iframe.parentNode) {
       document.body.removeChild(iframe);
     }
@@ -34,8 +38,18 @@ export function printThemedArticle(html: string): void {
       removeIframe();
       return;
     }
-    win.addEventListener('afterprint', removeIframe);
-    win.print();
+    const handleAfterPrint = () => {
+      removeIframe();
+    };
+
+    win.addEventListener('afterprint', handleAfterPrint, { once: true });
+    cleanupTimer = window.setTimeout(handleAfterPrint, PRINT_CLEANUP_TIMEOUT_MS);
+
+    try {
+      win.print();
+    } catch {
+      handleAfterPrint();
+    }
   };
 
   iframe.onload = () => {

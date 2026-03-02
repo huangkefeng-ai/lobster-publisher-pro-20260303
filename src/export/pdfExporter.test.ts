@@ -71,4 +71,27 @@ describe('printThemedArticle', () => {
     }
     appendSpy.mockRestore();
   });
+
+  it('removes iframe after timeout when afterprint event does not fire', () => {
+    vi.useFakeTimers();
+    const appendSpy = vi.spyOn(document.body, 'appendChild');
+
+    printThemedArticle('<html><body><p>Article content</p></body></html>');
+
+    const iframe = appendSpy.mock.calls[0][0] as HTMLIFrameElement;
+    const contentWindow = iframe.contentWindow;
+    expect(contentWindow).toBeTruthy();
+
+    const printSpy = vi.spyOn(contentWindow as Window, 'print').mockImplementation(() => {});
+    iframe.onload?.(new Event('load'));
+
+    expect(iframe.parentNode).toBe(document.body);
+
+    vi.advanceTimersByTime(15_000);
+
+    expect(iframe.parentNode).toBeNull();
+
+    printSpy.mockRestore();
+    appendSpy.mockRestore();
+  });
 });
