@@ -108,7 +108,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 - [x] `debounce.test.ts` — debounce utility (3 tests)
 - [x] All tests pass locally (`npm test` — 97 tests, 18 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
-- [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 91.89%, statements 91.70%_
+- [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 91.90%, statements 91.72%_
 - [ ] E2E tests (Playwright) — _not yet implemented_
 
 ---
@@ -125,7 +125,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 ## 11. Performance
 
-- [x] Bundle size: 91.67 KB gzipped (well under 500 KB target)
+- [x] Bundle size: 91.69 KB gzipped (well under 500 KB target)
 - [x] EditorPane word count memoized via `useMemo`
 - [x] Preview debounced (100ms) via `createDebouncedFunction`
 - [x] Draft persistence debounced (250ms) via `createDebouncedFunction`
@@ -158,11 +158,11 @@ Use this checklist when reviewing PRs and before merging to `main`.
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
 | Tests | PASS | 97 tests across 18 suites |
-| Build | PASS | 91.67 KB gzip, < 1s build |
+| Build | PASS | 91.69 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | PASS | Barrel exports enforced |
 | Security | PASS | DOMPurify on all HTML paths |
-| Bundle size | PASS | 91.67 KB << 500 KB target |
+| Bundle size | PASS | 91.69 KB << 500 KB target |
 
 ### Issues Fixed in Phase-2 Review
 
@@ -180,7 +180,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
 | Tests | PASS | 97 tests across 18 suites |
-| Build | PASS | 91.67 KB gzip, < 1s build |
+| Build | PASS | 91.69 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | FIXED | 7 barrel-bypass imports corrected |
 | Security | FIXED | Parser sanitizes `javascript:` / `data:` URIs |
