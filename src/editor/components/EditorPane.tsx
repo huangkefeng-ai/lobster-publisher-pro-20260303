@@ -26,7 +26,10 @@ const TOOLBAR_SNIPPETS: Array<{ label: string; snippet: string }> = [
 ];
 
 function escapeMarkdownAltText(value: string): string {
-  return value.replace(/\]/g, '\\]');
+  return value
+    .replace(/\\/g, '\\\\')
+    .replace(/\[/g, '\\[')
+    .replace(/\]/g, '\\]');
 }
 
 export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
