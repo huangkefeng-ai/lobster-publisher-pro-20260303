@@ -147,7 +147,7 @@ _Module not yet implemented. Planned for phase 3._
 ## 13. Git & CI
 
 - [x] Commit messages follow conventional commits (`feat:`, `fix:`, `chore:`, etc.)
-- [ ] CI pipeline (GitHub Actions) — _not yet configured_
+- [x] CI pipeline (GitHub Actions)
 - [x] ESLint passes cleanly
 - [x] TypeScript build passes cleanly
 
