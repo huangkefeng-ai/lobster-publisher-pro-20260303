@@ -14,8 +14,29 @@ function renderList(node: Element, depth = 0): string {
     .map((item, index) => {
       const marker = isOrdered ? `${index + 1}.` : '-';
       const indent = '  '.repeat(depth);
-      const text = renderChildren(item, depth + 1).trim();
-      return `${indent}${marker} ${text}`;
+      const nestedLists: string[] = [];
+      const inlineContent = Array.from(item.childNodes)
+        .map((child) => {
+          if (child.nodeType === Node.ELEMENT_NODE) {
+            const tag = (child as Element).tagName.toLowerCase();
+            if (tag === 'ul' || tag === 'ol') {
+              const nested = renderList(child as Element, depth + 1).trimEnd();
+              if (nested.length > 0) {
+                nestedLists.push(nested);
+              }
+              return '';
+            }
+          }
+          return renderNode(child, depth + 1);
+        })
+        .join('')
+        .trim();
+
+      const line = `${indent}${marker}${inlineContent.length > 0 ? ` ${inlineContent}` : ''}`;
+      if (nestedLists.length === 0) {
+        return line;
+      }
+      return `${line}\n${nestedLists.join('\n')}`;
     })
     .join('\n');
 

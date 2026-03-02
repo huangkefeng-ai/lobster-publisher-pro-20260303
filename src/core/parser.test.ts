@@ -26,6 +26,11 @@ describe('richTextToMarkdown', () => {
     const html = '<p>Use *stars* and _underscores_ literally.</p>';
     expect(richTextToMarkdown(html)).toBe('Use \\*stars\\* and \\_underscores\\_ literally.');
   });
+
+  it('preserves nested list structure from rich text', () => {
+    const html = '<ul><li>Parent<ul><li>Child</li></ul></li></ul>';
+    expect(richTextToMarkdown(html)).toBe('- Parent\n  - Child');
+  });
 });
 
 describe('markdownFromClipboard', () => {
