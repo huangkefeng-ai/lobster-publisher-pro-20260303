@@ -135,4 +135,21 @@ describe('ThemePicker', () => {
 
     cleanupRender(rendered);
   });
+
+  it('displays the "常用（推荐）" category as the first group', () => {
+    const rendered = renderThemePicker(
+      <ThemePicker
+        selectedThemeId={THEME_REGISTRY[0].id}
+        themes={THEME_REGISTRY}
+        onSelectTheme={() => {}}
+      />,
+    );
+
+    openThemeDropdown(rendered.container);
+
+    const groupTitles = rendered.container.querySelectorAll('.theme-group-title');
+    expect(groupTitles[0].textContent).toBe('常用（推荐）');
+
+    cleanupRender(rendered);
+  });
 });

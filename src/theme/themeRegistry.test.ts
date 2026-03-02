@@ -17,4 +17,12 @@ describe('themeRegistry', () => {
     expect(getThemeById(firstTheme.id)).toEqual(firstTheme);
     expect(getThemeById('missing-theme')).toBeUndefined();
   });
+
+  it('contains themes in the "recommended" family', () => {
+    const recommended = THEME_REGISTRY.filter((t) => t.family === 'recommended');
+    expect(recommended.length).toBeGreaterThanOrEqual(7);
+    expect(recommended.map((t) => t.id)).toContain('apple-white');
+    expect(recommended.map((t) => t.id)).toContain('wechat-native');
+    expect(recommended.map((t) => t.id)).toContain('claude-oat');
+  });
 });

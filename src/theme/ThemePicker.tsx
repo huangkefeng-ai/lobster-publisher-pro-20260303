@@ -10,6 +10,7 @@ interface ThemePickerProps {
 }
 
 const FAMILY_LABELS: Record<string, string> = {
+  recommended: '常用（推荐）',
   warm: '暖色',
   nature: '自然',
   cool: '冷色',
@@ -56,7 +57,13 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
     return groups;
   }, [themes]);
 
-  const families = Object.keys(groupedThemes).sort();
+  const families = useMemo(() => {
+    return Object.keys(groupedThemes).sort((a, b) => {
+      if (a === 'recommended') return -1;
+      if (b === 'recommended') return 1;
+      return a.localeCompare(b);
+    });
+  }, [groupedThemes]);
   const selectedTheme = themes.find((t) => t.id === selectedThemeId);
 
   return (
