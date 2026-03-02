@@ -1,6 +1,7 @@
 import type { ThemeDefinition } from './themeTypes';
 
-type ThemeSeed = Omit<ThemeDefinition, 'tokens'> & {
+type ThemeSeed = Omit<ThemeDefinition, 'tokens' | 'description'> & {
+  description?: string;
   palette: {
     background: string;
     surface: string;
@@ -80,6 +81,7 @@ export const THEME_REGISTRY: ThemeDefinition[] = THEME_SEEDS.map((seed) => ({
   id: seed.id,
   name: seed.name,
   family: seed.family,
+  description: seed.description ?? `${seed.name} · ${seed.family} theme`,
   tokens: {
     ...seed.palette,
     ...seed.typography,

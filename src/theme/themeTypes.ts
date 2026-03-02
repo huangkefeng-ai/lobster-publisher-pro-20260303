@@ -16,5 +16,6 @@ export interface ThemeDefinition {
   id: string;
   name: string;
   family: string;
+  description: string;
   tokens: ThemeTokens;
 }

@@ -19,6 +19,7 @@ const TEST_THEME: ThemeDefinition = {
   id: 'test-theme',
   name: 'Test Theme',
   family: 'test',
+  description: 'Theme fixture for pipeline unit tests',
   tokens: {
     background: '#ffffff',
     surface: '#f5f5f5',
