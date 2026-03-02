@@ -1,0 +1,34 @@
+import { describe, expect, it } from 'vitest';
+import { filterThemes } from './themeFilter';
+import { THEME_REGISTRY } from './themeRegistry';
+
+describe('filterThemes', () => {
+  it('returns all themes for an empty query', () => {
+    expect(filterThemes(THEME_REGISTRY, '')).toEqual(THEME_REGISTRY);
+  });
+
+  it('returns all themes for whitespace-only query', () => {
+    expect(filterThemes(THEME_REGISTRY, '   ')).toEqual(THEME_REGISTRY);
+  });
+
+  it('filters by theme name (case-insensitive)', () => {
+    const results = filterThemes(THEME_REGISTRY, 'sunset');
+    expect(results.length).toBeGreaterThanOrEqual(1);
+    expect(results.every((t) => t.name.toLowerCase().includes('sunset'))).toBe(true);
+  });
+
+  it('filters by family', () => {
+    const results = filterThemes(THEME_REGISTRY, 'warm');
+    expect(results.length).toBeGreaterThanOrEqual(1);
+    expect(results.every((t) => t.family === 'warm')).toBe(true);
+  });
+
+  it('returns empty array when no themes match', () => {
+    expect(filterThemes(THEME_REGISTRY, 'xyznonexistent')).toEqual([]);
+  });
+
+  it('matches partial name fragments', () => {
+    const results = filterThemes(THEME_REGISTRY, 'ink');
+    expect(results.length).toBeGreaterThanOrEqual(1);
+  });
+});
