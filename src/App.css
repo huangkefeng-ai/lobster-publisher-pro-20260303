@@ -158,6 +158,32 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
 }
 
+.actions-panel {
+  margin-top: 1rem;
+}
+
+.action-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.action-row button {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  color: #0f172a;
+  cursor: pointer;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.85rem;
+}
+
+.action-status {
+  margin: 0.8rem 0 0;
+  color: #0f766e;
+  font-size: 0.86rem;
+}
+
 .theme-card {
   width: 100%;
   display: grid;

@@ -1,9 +1,14 @@
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import type { ThemeDefinition } from '../theme/themeTypes';
+import { applyWechatInlineStyles, sanitizeWechatHtml } from '../wechat';
+
+function markdownToSanitizedHtml(markdown: string): string {
+  return DOMPurify.sanitize(marked.parse(markdown, { async: false }));
+}
 
 export function toThemedHtml(markdown: string, theme: ThemeDefinition): string {
-  const htmlBody = DOMPurify.sanitize(marked.parse(markdown, { async: false }));
+  const htmlBody = markdownToSanitizedHtml(markdown);
 
   return `<!doctype html>
 <html>
@@ -23,4 +28,19 @@ a { color: ${theme.tokens.accent}; }
 ${htmlBody}
 </body>
 </html>`;
+}
+
+export function toWechatHtml(markdown: string, theme: ThemeDefinition): string {
+  const sanitized = sanitizeWechatHtml(markdownToSanitizedHtml(markdown));
+  return applyWechatInlineStyles(sanitized, theme);
+}
+
+export function downloadHtmlFile(filename: string, html: string): void {
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
 }
