@@ -132,13 +132,14 @@ function renderNode(node: Node, depth = 0): string {
     }
     case 'a': {
       const href = element.getAttribute('href')?.trim();
-      const text = renderChildren(element, depth).trim() || href;
+      const textContent = renderChildren(element, depth).trim();
       if (!href) {
-        return text ?? '';
+        return textContent;
       }
       if (!hasAllowedProtocol(href, ['http', 'https', 'mailto', 'tel'])) {
-        return text ?? '';
+        return textContent;
       }
+      const text = textContent || href;
       const safeText = (text ?? '').replace(/\]/g, '\\]');
       return `[${safeText}](${href})`;
     }

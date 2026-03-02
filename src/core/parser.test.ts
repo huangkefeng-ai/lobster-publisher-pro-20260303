@@ -68,6 +68,11 @@ describe('richTextToMarkdown', () => {
     );
   });
 
+  it('drops unsafe href fallback text when an anchor has no visible content', () => {
+    const html = '<p><a href="javascript:alert(1)"></a></p>';
+    expect(richTextToMarkdown(html)).toBe('');
+  });
+
   it('escapes closing brackets in markdown link text and image alt text', () => {
     const html = `
       <p><a href="https://example.com">docs] link</a></p>
