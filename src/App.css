@@ -1,0 +1,200 @@
+:root {
+  font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  color: #0f172a;
+  background: radial-gradient(circle at top right, #dbeafe, #f8fafc 45%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.app-shell {
+  margin: 0 auto;
+  max-width: 1280px;
+  padding: 2rem 1.25rem 2.5rem;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(1.75rem, 2.2vw, 2.5rem);
+  letter-spacing: 0.01em;
+}
+
+.hero p {
+  margin: 0.5rem 0 0;
+  color: #334155;
+}
+
+.workspace-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.panel {
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  padding: 0.9rem;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.8rem;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.panel-header p {
+  margin: 0;
+  color: #475569;
+  font-size: 0.85rem;
+}
+
+.toolbar {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.65rem;
+}
+
+.toolbar button,
+.theme-card {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.toolbar button {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.82rem;
+}
+
+.editor-textarea {
+  width: 100%;
+  min-height: 460px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  resize: vertical;
+  color: #0f172a;
+  background: #f8fafc;
+}
+
+.preview-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.article-preview {
+  flex: 1;
+  background: var(--theme-background);
+  color: var(--theme-text);
+  border: 1px solid var(--theme-border);
+  border-radius: 12px;
+  padding: 1rem;
+  font-family: var(--theme-body-font);
+  line-height: 1.8;
+}
+
+.article-preview h1,
+.article-preview h2,
+.article-preview h3 {
+  color: var(--theme-heading);
+  font-family: var(--theme-heading-font);
+  margin: 1.25em 0 0.5em;
+}
+
+.article-preview h1 {
+  font-size: 1.65rem;
+}
+
+.article-preview h2 {
+  font-size: 1.35rem;
+}
+
+.article-preview a {
+  color: var(--theme-accent);
+}
+
+.article-preview blockquote {
+  margin: 1rem 0;
+  padding: 0.75rem 0.85rem;
+  border-left: 4px solid var(--theme-quote-border);
+  background: var(--theme-quote-bg);
+}
+
+.article-preview pre,
+.article-preview code {
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+}
+
+.article-preview pre {
+  background: var(--theme-code-bg);
+  border-radius: 8px;
+  padding: 0.65rem;
+  overflow-x: auto;
+}
+
+.theme-grid {
+  display: grid;
+  gap: 0.55rem;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+}
+
+.theme-card {
+  width: 100%;
+  display: grid;
+  gap: 0.2rem;
+  text-align: left;
+  padding: 0.55rem 0.6rem;
+}
+
+.theme-card.active {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.18);
+}
+
+.theme-chip {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.theme-name {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.theme-family {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1024px) {
+  .workspace-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-textarea {
+    min-height: 330px;
+  }
+}
