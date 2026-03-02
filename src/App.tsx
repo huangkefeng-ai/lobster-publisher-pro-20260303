@@ -123,7 +123,7 @@ function App() {
     <main className="app-shell">
       <header className="hero">
         <div className="hero-content">
-          <h1>Lobster Publisher Pro</h1>
+          <h1>Lobster 公众号排版助手</h1>
           <p>
             {stats.wordCount} 字 · {stats.readingTimeMinutes} 分钟阅读 · {stats.lineCount} 行
           </p>

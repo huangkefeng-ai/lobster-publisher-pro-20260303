@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'lobster-publisher-draft-v2';
+const STORAGE_KEY = 'lobster-publisher-draft-v3';
 
 export interface EditorDraft {
   markdown: string;
