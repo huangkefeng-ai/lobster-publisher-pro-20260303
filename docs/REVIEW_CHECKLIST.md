@@ -96,18 +96,19 @@ _Module not yet implemented. Planned for phase 3._
 
 ## 9. Testing
 
-- [x] `editorState.test.ts` — reducer logic (3 tests)
+- [x] `editorState.test.ts` — reducer logic (4 tests)
 - [x] `themeRegistry.test.ts` — registry invariants (3 tests)
-- [x] `parser.test.ts` — rich text → markdown conversion (4 tests)
+- [x] `parser.test.ts` — rich text → markdown conversion (8 tests)
 - [x] `sanitizer.test.ts` — WeChat sanitization (1 test)
 - [x] `inlineStyles.test.ts` — inline style application (1 test)
 - [x] `htmlExporter.test.ts` — themed + WeChat HTML export (2 tests)
-- [x] `statistics.test.ts` — document stats and CJK word count (2 tests)
-- [x] `storage.test.ts` — localStorage save/load/clear (3 tests)
-- [x] `shortcuts.test.ts` — keyboard shortcut text transforms (5 tests)
-- [x] `themeFilter.test.ts` — theme search/filter (2 tests)
-- [x] `pdfExporter.test.ts` — PDF print function (1 test)
-- [x] All tests pass locally (`npm test`)
+- [x] `statistics.test.ts` — document stats and CJK word count (8 tests)
+- [x] `storage.test.ts` — localStorage save/load/clear (5 tests)
+- [x] `shortcuts.test.ts` — keyboard shortcut text transforms (9 tests)
+- [x] `themeFilter.test.ts` — theme search/filter (6 tests)
+- [x] `pdfExporter.test.ts` — PDF print function (3 tests)
+- [x] `debounce.test.ts` — debounce utility (3 tests)
+- [x] All tests pass locally (`npm test` — 53 tests, 12 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
 - [ ] Coverage target ≥ 80% — _not yet measured_
 - [ ] E2E tests (Playwright) — _not yet implemented_
@@ -126,8 +127,8 @@ _Module not yet implemented. Planned for phase 3._
 
 ## 11. Performance
 
-- [x] Bundle size: 86 KB gzipped (well under 500 KB target)
-- [x] Preview uses `useMemo` keyed on markdown content
+- [x] Bundle size: 90 KB gzipped (well under 500 KB target)
+- [x] EditorPane word count memoized via `useMemo`
 - [x] Preview debounced (100ms) via `createDebouncedFunction`
 - [x] Draft persistence debounced (250ms) via `createDebouncedFunction`
 - [ ] Large document (10k+ words) freeze test — _pending_
@@ -172,6 +173,32 @@ _Module not yet implemented. Planned for phase 3._
 3. **Missing table support in magic paste**: `<table>` pasted from rich text fell through to the default case, losing tabular structure. Added `table`/`thead`/`tbody`/`tr`/`td`/`th` cases to `parser.ts` producing GFM pipe tables.
 4. **Accessibility gap**: `ThemePicker` search input was missing `aria-label`. Added `aria-label="Search themes"`.
 5. **Stale docs**: ARCH_PLAN.md module tree and phase checklists updated to reflect all phase-2 completions (statistics, storage, debounce, shortcuts, themeFilter, pdfExporter).
+
+---
+
+## Phase-3 Architecture Audit (2026-03-03)
+
+| Area | Status | Notes |
+|------|--------|-------|
+| Lint | PASS | ESLint clean |
+| Tests | PASS | 53 tests across 12 suites |
+| Build | PASS | 90 KB gzip, < 1s build |
+| Strict TS | PASS | All strict flags enabled |
+| Module boundaries | FIXED | 7 barrel-bypass imports corrected |
+| Security | FIXED | Parser sanitizes `javascript:` / `data:` URIs |
+| Performance | FIXED | `useMemo` + targeted `querySelectorAll` |
+
+### Issues Fixed in Phase-3 Review
+
+1. **downloadHtmlFile Blob URL race** (BUG-01, HIGH): `URL.revokeObjectURL` was called synchronously after `anchor.click()`, before the browser started the download. Fixed by appending anchor to DOM, deferring removal and revocation via `setTimeout(..., 0)`.
+2. **pdfExporter iframe cleanup** (BUG-02/03, MEDIUM): Iframe removed on a 1-second magic timer that could fire mid-print. Replaced with `afterprint` event listener and a null-check on `contentWindow`.
+3. **Parser XSS: unsanitized href/src** (BUG-05/06, MEDIUM): `javascript:`, `data:`, and `vbscript:` URIs in pasted HTML were passed into Markdown verbatim. Added protocol allow-list filter.
+4. **Parser table pipe escape** (EDGE-01, MEDIUM): Pipe characters (`|`) inside table cell content broke GFM table syntax. Added `escPipe()` helper.
+5. **Line count off-by-N** (BUG-04, LOW): `statistics.ts` counted lines on `trimmed` string, stripping leading/trailing newlines. Changed to count on raw `markdown`.
+6. **Ctrl+K empty link text** (EDGE-03, LOW): With no selection, shortcut produced `[](url)`. Now inserts `[link text](url)` with placeholder.
+7. **EditorPane double stats computation** (BUG-08/PERF-01, MEDIUM): `computeDocumentStats()` called on every render without memoization. Wrapped in `useMemo`.
+8. **inlineStyles `querySelectorAll('*')` traversal** (PERF-04, MEDIUM): Replaced with targeted tag selector from `tagStyleMap` keys.
+9. **Module boundary violations** (MB-01 through MB-07): Fixed 7 imports across source and test files to use barrel `index.ts` exports instead of reaching into internal modules directly.
 
 ---
 
