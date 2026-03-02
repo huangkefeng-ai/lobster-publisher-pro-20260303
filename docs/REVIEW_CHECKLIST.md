@@ -248,14 +248,14 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 ---
 
-## Verification Refresh (2026-03-03)
+## Verification Refresh (2026-03-02)
 
 | Check | Status | Notes |
 |------|--------|-------|
 | Lint (`npm run lint`) | PASS | ESLint clean |
-| Tests (`npm test`) | PASS | 100 tests across 18 suites |
-| Coverage (`npm run test:coverage`) | PASS | lines 92.14%, statements 91.95% |
-| Build (`npm run build`) | PASS | 91.90 KB gzip, built in 876ms |
+| Tests (`npm test`) | PASS | 159 tests across 21 suites |
+| Coverage (`npm run test:coverage`) | PASS | lines 89.63%, statements 89.11% |
+| Build (`npm run build`) | PASS | JS bundle 94.53 KB gzip, built in 791ms |
 | Audit (`npm audit --audit-level=high`) | PASS | 0 vulnerabilities |
 
 ---
