@@ -108,9 +108,9 @@ _Module not yet implemented. Planned for phase 3._
 - [x] `themeFilter.test.ts` — theme search/filter (6 tests)
 - [x] `pdfExporter.test.ts` — PDF print function (4 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
-- [x] All tests pass locally (`npm test` — 62 tests, 13 suites)
+- [x] All tests pass locally (`npm test` — 67 tests, 15 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
-- [x] Coverage target ≥ 80% — _measured on 2026-03-03 (`npm run test:coverage`): lines 85.17%, statements 84.94%_
+- [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 86.91%, statements 86.64%_
 - [ ] E2E tests (Playwright) — _not yet implemented_
 
 ---
@@ -121,7 +121,7 @@ _Module not yet implemented. Planned for phase 3._
 - [x] `dangerouslySetInnerHTML` only used with DOMPurify-sanitized content
 - [x] WeChat sanitizer uses strict allow-list for tags and attributes
 - [x] No secrets or API keys in committed code
-- [x] `npm audit` (high) passes locally on 2026-03-03
+- [x] `npm audit` (high) passes locally on 2026-03-02
 
 ---
 
@@ -154,12 +154,12 @@ _Module not yet implemented. Planned for phase 3._
 
 ---
 
-## Phase-2 Audit Summary (2026-03-03)
+## Phase-2 Audit Summary (2026-03-02)
 
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | All tests pass |
+| Tests | PASS | 67 tests across 15 suites |
 | Build | PASS | 90 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | PASS | Barrel exports enforced |
@@ -176,12 +176,12 @@ _Module not yet implemented. Planned for phase 3._
 
 ---
 
-## Phase-3 Architecture Audit (2026-03-03)
+## Phase-3 Architecture Audit (2026-03-02)
 
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 62 tests across 13 suites |
+| Tests | PASS | 67 tests across 15 suites |
 | Build | PASS | 90 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | FIXED | 7 barrel-bypass imports corrected |
