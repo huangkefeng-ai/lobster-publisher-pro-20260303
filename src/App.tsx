@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import './App.css';
 import {
   DEFAULT_MARKDOWN,
@@ -27,6 +27,13 @@ function App() {
   const [previewMarkdown, setPreviewMarkdown] = useState(initialMarkdown);
   const [actionStatus, setActionStatus] = useState<string | null>(null);
   const [themeQuery, setThemeQuery] = useState('');
+  const statusTimerRef = useRef(0);
+
+  function setTimedStatus(msg: string) {
+    window.clearTimeout(statusTimerRef.current);
+    setActionStatus(msg);
+    statusTimerRef.current = window.setTimeout(() => setActionStatus(null), 4000);
+  }
 
   const selectedTheme = useMemo(
     () => getThemeById(selectedThemeId) ?? THEME_REGISTRY[0],
@@ -71,22 +78,22 @@ function App() {
   async function handleCopyWechatHtml() {
     try {
       await copyWechatHtmlToClipboard(wechatHtml);
-      setActionStatus('Copied WeChat-ready HTML to clipboard.');
+      setTimedStatus('Copied WeChat-ready HTML to clipboard.');
     } catch {
-      setActionStatus('Copy failed. Check clipboard permissions and try again.');
+      setTimedStatus('Copy failed. Check clipboard permissions and try again.');
     }
   }
 
   function handleDownloadHtml() {
     const htmlDocument = toThemedHtml(editorState.markdown, selectedTheme);
     downloadHtmlFile(`lobster-${selectedTheme.id}.html`, htmlDocument);
-    setActionStatus('Downloaded themed HTML file.');
+    setTimedStatus('Downloaded themed HTML file.');
   }
 
   const handlePrintPdf = useCallback(() => {
     const htmlDocument = toThemedHtml(editorState.markdown, selectedTheme);
     printThemedArticle(htmlDocument);
-    setActionStatus('Opened print dialog for PDF export.');
+    setTimedStatus('Opened print dialog for PDF export.');
   }, [editorState.markdown, selectedTheme]);
 
   return (
@@ -122,7 +129,7 @@ function App() {
             Print / Save PDF
           </button>
         </div>
-        {actionStatus ? <p className="action-status">{actionStatus}</p> : null}
+        <p className="action-status" role="status" aria-live="polite">{actionStatus ?? ''}</p>
       </section>
 
       <ThemePicker

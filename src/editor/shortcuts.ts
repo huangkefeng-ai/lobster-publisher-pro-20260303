@@ -36,7 +36,7 @@ function outdentLines(value: string, start: number, end: number): ShortcutResult
   return {
     value: value.slice(0, beforeStart) + outdented + value.slice(end),
     selectionStart: Math.max(beforeStart, start - Math.min(2, start - beforeStart)),
-    selectionEnd: end - removed,
+    selectionEnd: Math.max(beforeStart, end - removed),
   };
 }
 

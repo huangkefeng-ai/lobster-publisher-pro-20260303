@@ -13,7 +13,13 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
     <section className="panel" aria-labelledby="theme-gallery-heading">
       <header className="panel-header">
         <h2 id="theme-gallery-heading">Theme Gallery</h2>
-        <p aria-live="polite" aria-atomic="true">{themes.length} themes</p>
+        <p aria-live="polite" aria-atomic="true">
+          {themes.length === 0
+            ? 'No themes match this query.'
+            : themes.length === 1
+              ? '1 theme'
+              : `${themes.length} themes`}
+        </p>
       </header>
       {onThemeQueryChange ? (
         <input
