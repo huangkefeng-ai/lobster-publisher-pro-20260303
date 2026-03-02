@@ -96,7 +96,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 - [x] `editorState.test.ts` — reducer logic (4 tests)
 - [x] `themeRegistry.test.ts` — registry invariants (3 tests)
-- [x] `parser.test.ts` — rich text → markdown conversion (14 tests)
+- [x] `parser.test.ts` — rich text → markdown conversion (15 tests)
 - [x] `sanitizer.test.ts` — WeChat sanitization (2 tests)
 - [x] `inlineStyles.test.ts` — inline style application (2 tests)
 - [x] `htmlExporter.test.ts` — themed + WeChat HTML export (6 tests)
@@ -106,9 +106,9 @@ Use this checklist when reviewing PRs and before merging to `main`.
 - [x] `themeFilter.test.ts` — theme search/filter (6 tests)
 - [x] `pdfExporter.test.ts` — PDF print function (7 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
-- [x] All tests pass locally (`npm test` — 89 tests, 18 suites)
+- [x] All tests pass locally (`npm test` — 90 tests, 18 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
-- [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 88.17%, statements 87.92%_
+- [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 90.59%, statements 90.45%_
 - [ ] E2E tests (Playwright) — _not yet implemented_
 
 ---
@@ -157,7 +157,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 89 tests across 18 suites |
+| Tests | PASS | 90 tests across 18 suites |
 | Build | PASS | 91.55 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | PASS | Barrel exports enforced |
@@ -179,7 +179,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 89 tests across 18 suites |
+| Tests | PASS | 90 tests across 18 suites |
 | Build | PASS | 91.55 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | FIXED | 7 barrel-bypass imports corrected |
@@ -205,7 +205,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 89 tests across 18 suites |
+| Tests | PASS | 90 tests across 18 suites |
 | Build | PASS | TypeScript strict, zero errors |
 | Security | FIXED | CSS value sanitization, iframe sandbox, markdown escape |
 | Accessibility | FIXED | Live regions, theme count grammar, status announcements |
