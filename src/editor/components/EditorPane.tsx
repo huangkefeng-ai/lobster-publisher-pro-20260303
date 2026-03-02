@@ -31,7 +31,8 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
 
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
-    const nextValue = markdown.slice(0, start) + snippet + markdown.slice(end);
+    const currentValue = textarea.value;
+    const nextValue = currentValue.slice(0, start) + snippet + currentValue.slice(end);
     onMarkdownChange(nextValue);
 
     requestAnimationFrame(() => {
@@ -120,7 +121,8 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
     event.preventDefault();
     const start = event.currentTarget.selectionStart;
     const end = event.currentTarget.selectionEnd;
-    const nextValue = markdown.slice(0, start) + converted + markdown.slice(end);
+    const currentValue = event.currentTarget.value;
+    const nextValue = currentValue.slice(0, start) + converted + currentValue.slice(end);
     onMarkdownChange(nextValue);
 
     requestAnimationFrame(() => {

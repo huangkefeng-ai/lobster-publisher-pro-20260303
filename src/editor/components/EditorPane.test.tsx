@@ -111,7 +111,7 @@ describe('EditorPane', () => {
     cleanupRender(rendered);
   });
 
-  it('processes pasted image and inserts markdown image snippet', async () => {
+  it('processes pasted image and inserts markdown image snippet using latest editor value', async () => {
     let resolveUpload: ((value: string) => void) | null = null;
     vi.mocked(processImageFile).mockImplementation(
       () =>
@@ -135,12 +135,16 @@ describe('EditorPane', () => {
     expect(rendered.container.textContent).toContain('Processing image...');
     expect(textarea.disabled).toBe(true);
 
+    act(() => {
+      rendered.root.render(<EditorPane markdown="Start plus" onMarkdownChange={() => undefined} />);
+    });
+
     await act(async () => {
       resolveUpload?.('data:image/png;base64,abc');
       await Promise.resolve();
     });
 
-    expect(rendered.onMarkdownChange).toHaveBeenCalledWith('\n![paste.png](data:image/png;base64,abc)\nStart');
+    expect(rendered.onMarkdownChange).toHaveBeenCalledWith('Start plus\n![paste.png](data:image/png;base64,abc)\n');
     expect(textarea.disabled).toBe(false);
     cleanupRender(rendered);
   });
