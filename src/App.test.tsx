@@ -54,10 +54,10 @@ describe('App', () => {
     const clearTimeoutSpy = vi.spyOn(window, 'clearTimeout');
     const rendered = renderApp();
 
-    const copyButton = Array.from(rendered.container.querySelectorAll('button')).find((button) =>
-      button.textContent?.includes('Copy WeChat HTML'),
-    );
-    expect(copyButton).toBeDefined();
+    const copyButton = rendered.container.querySelector(
+      'button[aria-label="Copy WeChat HTML to clipboard"]',
+    ) as HTMLButtonElement | null;
+    expect(copyButton).not.toBeNull();
 
     await act(async () => {
       copyButton?.click();
@@ -94,7 +94,7 @@ describe('App', () => {
       await Promise.resolve();
     });
 
-    expect(status?.textContent).toContain('Copied WeChat-ready HTML to clipboard.');
+    expect(status?.textContent).toContain('已复制公众号兼容的 HTML 到剪贴板。');
 
     await act(async () => {
       vi.advanceTimersByTime(4000);

@@ -132,7 +132,7 @@ describe('EditorPane', () => {
       await Promise.resolve();
     });
 
-    expect(rendered.container.textContent).toContain('Processing image...');
+    expect(rendered.container.textContent).toContain('处理图片中...');
     expect(textarea.disabled).toBe(true);
 
     act(() => {
@@ -195,7 +195,7 @@ describe('EditorPane', () => {
     });
 
     expect(rendered.onMarkdownChange).not.toHaveBeenCalled();
-    expect(rendered.container.textContent).toContain('Image processing failed. Try another image.');
+    expect(rendered.container.textContent).toContain('图片处理失败，请尝试其他图片。');
     expect(textarea.disabled).toBe(false);
     cleanupRender(rendered);
   });

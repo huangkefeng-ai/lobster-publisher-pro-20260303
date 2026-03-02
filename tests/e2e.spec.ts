@@ -38,10 +38,10 @@ test.describe('Lobster Publisher Pro E2E', () => {
 
     // Prepare a mock 1x1 transparent png
     const buffer = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', 'base64');
-    
+
     // We upload using the hidden file input
     const fileChooserPromise = page.waitForEvent('filechooser');
-    await page.getByTitle('Upload or paste image').click();
+    await page.getByTitle('上传或粘贴图片').click();
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles({
       name: 'test.png',
@@ -62,7 +62,7 @@ test.describe('Lobster Publisher Pro E2E', () => {
   test('should display error prompt for invalid image upload', async ({ page }) => {
     // We upload an invalid file with an image mime type to trigger img.onerror
     const fileChooserPromise = page.waitForEvent('filechooser');
-    await page.getByTitle('Upload or paste image').click();
+    await page.getByTitle('上传或粘贴图片').click();
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles({
       name: 'broken.jpg',
@@ -73,7 +73,7 @@ test.describe('Lobster Publisher Pro E2E', () => {
     // We expect the error text to appear
     const errorText = page.locator('.error-text');
     await expect(errorText).toBeVisible();
-    await expect(errorText).toHaveText('Image processing failed. Try another image.');
+    await expect(errorText).toHaveText('图片处理失败，请尝试其他图片。');
   });
 
 });

@@ -46,7 +46,7 @@ describe('ThemePicker', () => {
     );
 
     const count = rendered.container.querySelector('.panel-header p');
-    expect(count?.textContent).toBe('2 themes');
+    expect(count?.textContent).toBe('2 个主题');
 
     const firstButton = rendered.container.querySelector(`button[aria-pressed="true"]`) as HTMLButtonElement | null;
     expect(firstButton).not.toBeNull();
@@ -115,7 +115,7 @@ describe('ThemePicker', () => {
       />,
     );
 
-    expect(rendered.container.textContent).toContain('No themes match this query.');
+    expect(rendered.container.textContent).toContain('没有找到匹配的主题。');
 
     cleanupRender(rendered);
   });
