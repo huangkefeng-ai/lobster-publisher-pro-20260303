@@ -60,4 +60,28 @@ describe('htmlExporter', () => {
     expect(() => vi.runAllTimers()).not.toThrow();
     expect(revokeObjectURLSpy).toHaveBeenCalledWith('blob:mock-url');
   });
+
+  it('sanitizes unsafe filename characters and control bytes', () => {
+    vi.useFakeTimers();
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url');
+    const appendChildSpy = vi.spyOn(document.body, 'appendChild');
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+
+    downloadHtmlFile('bad/name\u0000?.html', '<h1>Export</h1>');
+
+    const anchor = appendChildSpy.mock.calls[0][0] as HTMLAnchorElement;
+    expect(anchor.download).toBe('bad_name__.html');
+  });
+
+  it('falls back to export.html when filename is empty', () => {
+    vi.useFakeTimers();
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url');
+    const appendChildSpy = vi.spyOn(document.body, 'appendChild');
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+
+    downloadHtmlFile('', '<h1>Export</h1>');
+
+    const anchor = appendChildSpy.mock.calls[0][0] as HTMLAnchorElement;
+    expect(anchor.download).toBe('export.html');
+  });
 });

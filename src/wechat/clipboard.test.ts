@@ -35,6 +35,24 @@ describe('copyWechatHtmlToClipboard', () => {
     expect(writeText).toHaveBeenCalledWith('Hello\nWorld');
   });
 
+  it('ignores leading br when plain-text output starts empty', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText },
+      configurable: true,
+    });
+    Object.defineProperty(globalThis, 'ClipboardItem', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    });
+
+    await copyWechatHtmlToClipboard('<br><p>Hello</p>');
+
+    expect(writeText).toHaveBeenCalledTimes(1);
+    expect(writeText).toHaveBeenCalledWith('Hello');
+  });
+
   it('uses clipboard.write with html and plain text when ClipboardItem is available', async () => {
     const write = vi.fn().mockResolvedValue(undefined);
     const clipboardItemMock = vi.fn();

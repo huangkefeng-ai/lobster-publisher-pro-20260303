@@ -16,4 +16,16 @@ describe('applyWechatInlineStyles', () => {
     expect(result).toContain(theme.tokens.heading);
     expect(result).toContain(theme.tokens.accent);
   });
+
+  it('preserves existing inline styles while applying theme styles', () => {
+    const theme = THEME_REGISTRY[0];
+    const html =
+      '<p style="margin: 2em 0; background-image: url(https://example.com/a:b.png)">Paragraph</p>';
+
+    const result = applyWechatInlineStyles(html, theme);
+
+    expect(result).toContain('margin: 2em 0');
+    expect(result).toContain('background-image: url(https://example.com/a:b.png)');
+    expect(result).toContain(`color: ${theme.tokens.text}`);
+  });
 });
