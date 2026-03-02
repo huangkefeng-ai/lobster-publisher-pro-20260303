@@ -20,7 +20,7 @@ export function toThemedHtml(markdown: string, theme: ThemeDefinition): string {
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Lobster Export</title>
+<title>Lobster Publisher 导出</title>
 <style>
 body { margin: 0; padding: 20px; background: ${t(theme.tokens.background)}; color: ${t(theme.tokens.text)}; font-family: ${t(theme.tokens.bodyFont)}; }
 h1, h2, h3 { color: ${t(theme.tokens.heading)}; font-family: ${t(theme.tokens.headingFont)}; }

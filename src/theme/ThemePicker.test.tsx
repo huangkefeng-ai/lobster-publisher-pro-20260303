@@ -91,7 +91,7 @@ describe('ThemePicker', () => {
       />,
     );
 
-    const input = rendered.container.querySelector('input[aria-label="Search themes"]') as HTMLInputElement | null;
+    const input = rendered.container.querySelector('input[aria-label="搜索主题"]') as HTMLInputElement | null;
     expect(input).not.toBeNull();
 
     act(() => {

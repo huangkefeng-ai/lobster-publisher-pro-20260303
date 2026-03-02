@@ -18,11 +18,11 @@ interface EditorPaneProps {
 }
 
 const TOOLBAR_SNIPPETS: Array<{ label: string; snippet: string }> = [
-  { label: 'H2', snippet: '\n## New Section\n' },
-  { label: 'Quote', snippet: '\n> Key takeaway\n' },
-  { label: 'List', snippet: '\n- Point one\n- Point two\n' },
-  { label: 'Code', snippet: '\n```\ncode sample\n```\n' },
-  { label: 'Divider', snippet: '\n---\n' },
+  { label: '二级标题', snippet: '\n## 新段落\n' },
+  { label: '引用', snippet: '\n> 核心观点\n' },
+  { label: '列表', snippet: '\n- 要点一\n- 要点二\n' },
+  { label: '代码', snippet: '\n```\n示例代码\n```\n' },
+  { label: '分割线', snippet: '\n---\n' },
 ];
 
 function escapeMarkdownAltText(value: string): string {
@@ -191,7 +191,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
         <p>{wordCount} 字 {isUploading && '· 处理图片中...'}</p>
         {uploadError ? <p className="error-text" role="alert">{uploadError}</p> : null}
       </header>
-      <div className="toolbar" role="toolbar" aria-label="Editor snippets">
+      <div className="toolbar" role="toolbar" aria-label="编辑器片段">
         {TOOLBAR_SNIPPETS.map((item) => (
           <button key={item.label} type="button" onClick={() => handleInsert(item.snippet)} disabled={isUploading}>
             {item.label}
@@ -229,7 +229,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
         <textarea
           ref={textareaRef}
           className={`editor-textarea ${markdown.length === 0 ? 'empty-state' : ''}`}
-          aria-label="Markdown editor"
+          aria-label="Markdown 编辑器"
           placeholder="在此输入或粘贴 Markdown 内容...
 支持魔法粘贴，保留排版：
 - 从 飞书 / Notion / Word 等富文本编辑器直接粘贴

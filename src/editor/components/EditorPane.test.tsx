@@ -69,14 +69,14 @@ describe('EditorPane', () => {
     expect(textarea).toBeTruthy();
     textarea?.setSelectionRange(5, 5);
 
-    const h2Button = Array.from(rendered.container.querySelectorAll('button')).find((button) => button.textContent === 'H2');
+    const h2Button = Array.from(rendered.container.querySelectorAll('button')).find((button) => button.textContent === '二级标题');
     expect(h2Button).toBeTruthy();
 
     act(() => {
       h2Button?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     });
 
-    expect(rendered.onMarkdownChange).toHaveBeenCalledWith('Hello\n## New Section\n world');
+    expect(rendered.onMarkdownChange).toHaveBeenCalledWith('Hello\n## 新段落\n world');
     cleanupRender(rendered);
   });
 

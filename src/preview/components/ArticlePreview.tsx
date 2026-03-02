@@ -30,7 +30,7 @@ export function ArticlePreview({ markdown, theme }: ArticlePreviewProps) {
     <section className="panel preview-panel" aria-labelledby="preview-heading">
       <header className="panel-header" style={{ width: '100%' }}>
         <h2 id="preview-heading">实时预览</h2>
-        <div className="preview-controls" role="group" aria-label="Device preview toggle">
+        <div className="preview-controls" role="group" aria-label="设备预览切换">
           <button 
             type="button" 
             className={device === 'desktop' ? 'active' : ''} 

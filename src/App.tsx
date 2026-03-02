@@ -133,7 +133,7 @@ function App() {
             className="btn-primary"
             type="button"
             onClick={handleCopyWechatHtml}
-            aria-label="Copy WeChat HTML to clipboard"
+            aria-label="复制公众号 HTML 到剪贴板"
           >
             复制公众号 HTML
           </button>
@@ -141,7 +141,7 @@ function App() {
             className="btn-secondary"
             type="button"
             onClick={handleDownloadHtml}
-            aria-label="Export themed HTML file"
+            aria-label="导出带主题的 HTML 文件"
           >
             导出 HTML
           </button>
@@ -149,7 +149,7 @@ function App() {
             className="btn-secondary"
             type="button"
             onClick={handlePrintPdf}
-            aria-label="Open print dialog to save PDF"
+            aria-label="打开打印对话框以保存 PDF"
           >
             打印 / 导出 PDF
           </button>

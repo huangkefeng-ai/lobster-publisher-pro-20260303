@@ -55,7 +55,7 @@ describe('App', () => {
     const rendered = renderApp();
 
     const copyButton = rendered.container.querySelector(
-      'button[aria-label="Copy WeChat HTML to clipboard"]',
+      'button[aria-label="复制公众号 HTML 到剪贴板"]',
     ) as HTMLButtonElement | null;
     expect(copyButton).not.toBeNull();
 
@@ -86,7 +86,7 @@ describe('App', () => {
     expect(status).toBeTruthy();
     expect(status?.textContent).toBe('');
 
-    const copyButton = rendered.container.querySelector('button[aria-label="Copy WeChat HTML to clipboard"]');
+    const copyButton = rendered.container.querySelector('button[aria-label="复制公众号 HTML 到剪贴板"]');
     expect(copyButton).toBeTruthy();
 
     await act(async () => {

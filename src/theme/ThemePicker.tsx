@@ -26,7 +26,7 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
           className="theme-search"
           type="text"
           placeholder="搜索主题..."
-          aria-label="Search themes"
+          aria-label="搜索主题"
           value={themeQuery ?? ''}
           onChange={(e) => onThemeQueryChange(e.target.value)}
         />
