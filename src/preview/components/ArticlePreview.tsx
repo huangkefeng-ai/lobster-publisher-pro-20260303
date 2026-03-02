@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { htmlExportPipeline } from '../../pipeline';
 import { PublishErrorCode } from '../../core';
 import type { ThemeDefinition } from '../../theme';
@@ -9,7 +9,10 @@ interface ArticlePreviewProps {
   theme: ThemeDefinition;
 }
 
+type DeviceType = 'desktop' | 'tablet' | 'mobile';
+
 export function ArticlePreview({ markdown, theme }: ArticlePreviewProps) {
+  const [device, setDevice] = useState<DeviceType>('desktop');
   const htmlResult = useMemo(() => htmlExportPipeline(markdown, theme), [markdown, theme]);
 
   let content = null;
@@ -25,13 +28,40 @@ export function ArticlePreview({ markdown, theme }: ArticlePreviewProps) {
 
   return (
     <section className="panel preview-panel" aria-labelledby="preview-heading">
-      <header className="panel-header">
+      <header className="panel-header" style={{ width: '100%' }}>
         <h2 id="preview-heading">实时预览</h2>
-        <p>{theme.name}</p>
+        <div className="preview-controls" role="group" aria-label="Device preview toggle">
+          <button 
+            type="button" 
+            className={device === 'desktop' ? 'active' : ''} 
+            onClick={() => setDevice('desktop')}
+            aria-pressed={device === 'desktop'}
+          >
+            PC
+          </button>
+          <button 
+            type="button" 
+            className={device === 'tablet' ? 'active' : ''} 
+            onClick={() => setDevice('tablet')}
+            aria-pressed={device === 'tablet'}
+          >
+            平板
+          </button>
+          <button 
+            type="button" 
+            className={device === 'mobile' ? 'active' : ''} 
+            onClick={() => setDevice('mobile')}
+            aria-pressed={device === 'mobile'}
+          >
+            手机
+          </button>
+        </div>
       </header>
-      <article className="article-preview" style={toThemeCssVariables(theme)}>
-        {content}
-      </article>
+      <div className="article-preview-container">
+        <article className={`article-preview device-${device}`} style={toThemeCssVariables(theme)}>
+          {content}
+        </article>
+      </div>
     </section>
   );
 }
