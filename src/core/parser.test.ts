@@ -53,6 +53,11 @@ describe('richTextToMarkdown', () => {
     expect(richTextToMarkdown(html)).toBe('- Parent\n  - Child');
   });
 
+  it('preserves ordered list start index from rich text', () => {
+    const html = '<ol start="3"><li>Third</li><li>Fourth</li></ol>';
+    expect(richTextToMarkdown(html)).toBe('3. Third\n4. Fourth');
+  });
+
   it('keeps only safe anchor protocols in markdown links', () => {
     const html = `
       <p><a href="https://example.com">https</a></p>
