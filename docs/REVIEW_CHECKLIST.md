@@ -107,10 +107,10 @@ Use this checklist when reviewing PRs and before merging to `main`.
 - [x] `pdfExporter.test.ts` — PDF print function (7 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
 - [x] `processor.test.ts` — image processing and transparency (8 tests)
-- [x] All tests pass locally (`npm test` — 100 tests, 18 suites)
+- [x] All tests pass locally (`npm test` — 159 tests, 21 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
-- [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 92.11%, statements 91.92%_
-- [ ] E2E tests (Playwright) — _not yet implemented_
+- [x] Coverage target ≥ 80% — _measured on 2026-03-03 (`npm run test:coverage`): lines 89.46%, statements 88.97%_
+- [x] E2E tests (Playwright) — `tests/e2e.spec.ts` (3 scenarios)
 
 ---
 
@@ -159,7 +159,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 98 tests across 18 suites |
+| Tests | PASS | 159 tests across 21 suites |
 | Build | PASS | 91.74 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | PASS | Barrel exports enforced |
@@ -181,7 +181,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 98 tests across 18 suites |
+| Tests | PASS | 159 tests across 21 suites |
 | Build | PASS | 91.74 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | FIXED | 7 barrel-bypass imports corrected |
@@ -207,7 +207,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 98 tests across 18 suites |
+| Tests | PASS | 159 tests across 21 suites |
 | Build | PASS | TypeScript strict, zero errors |
 | Security | FIXED | CSS value sanitization, iframe sandbox, markdown escape |
 | Accessibility | FIXED | Live regions, theme count grammar, status announcements |
@@ -233,7 +233,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 100 tests across 18 suites |
+| Tests | PASS | 159 tests across 21 suites |
 | Build | PASS | 91.78 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Performance | FIXED | Lazy WeChat HTML computation |
@@ -248,14 +248,14 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 ---
 
-## Verification Refresh (2026-03-02)
+## Verification Refresh (2026-03-03)
 
 | Check | Status | Notes |
 |------|--------|-------|
 | Lint (`npm run lint`) | PASS | ESLint clean |
 | Tests (`npm test`) | PASS | 159 tests across 21 suites |
-| Coverage (`npm run test:coverage`) | PASS | lines 89.63%, statements 89.11% |
-| Build (`npm run build`) | PASS | JS bundle 94.53 KB gzip, built in 791ms |
+| Coverage (`npm run test:coverage`) | PASS | lines 89.46%, statements 88.97% |
+| Build (`npm run build`) | PASS | JS bundle 94.99 KB gzip, built in 744ms |
 | Audit (`npm audit --audit-level=high`) | PASS | 0 vulnerabilities |
 
 ---
