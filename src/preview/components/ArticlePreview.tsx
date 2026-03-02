@@ -1,18 +1,19 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { htmlExportPipeline } from '../../pipeline';
 import { PublishErrorCode } from '../../core';
 import type { ThemeDefinition } from '../../theme';
 import { toThemeCssVariables } from '../../theme';
 
+export type DeviceType = 'desktop' | 'tablet' | 'mobile';
+
 interface ArticlePreviewProps {
   markdown: string;
   theme: ThemeDefinition;
+  device: DeviceType;
+  onDeviceChange: (device: DeviceType) => void;
 }
 
-type DeviceType = 'desktop' | 'tablet' | 'mobile';
-
-export function ArticlePreview({ markdown, theme }: ArticlePreviewProps) {
-  const [device, setDevice] = useState<DeviceType>('desktop');
+export function ArticlePreview({ markdown, theme, device, onDeviceChange }: ArticlePreviewProps) {
   const htmlResult = useMemo(() => htmlExportPipeline(markdown, theme), [markdown, theme]);
 
   let content = null;
@@ -34,7 +35,7 @@ export function ArticlePreview({ markdown, theme }: ArticlePreviewProps) {
           <button 
             type="button" 
             className={device === 'desktop' ? 'active' : ''} 
-            onClick={() => setDevice('desktop')}
+            onClick={() => onDeviceChange('desktop')}
             aria-pressed={device === 'desktop'}
           >
             PC
@@ -42,7 +43,7 @@ export function ArticlePreview({ markdown, theme }: ArticlePreviewProps) {
           <button 
             type="button" 
             className={device === 'tablet' ? 'active' : ''} 
-            onClick={() => setDevice('tablet')}
+            onClick={() => onDeviceChange('tablet')}
             aria-pressed={device === 'tablet'}
           >
             平板
@@ -50,7 +51,7 @@ export function ArticlePreview({ markdown, theme }: ArticlePreviewProps) {
           <button 
             type="button" 
             className={device === 'mobile' ? 'active' : ''} 
-            onClick={() => setDevice('mobile')}
+            onClick={() => onDeviceChange('mobile')}
             aria-pressed={device === 'mobile'}
           >
             手机

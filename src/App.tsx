@@ -10,7 +10,7 @@ import {
 } from './core';
 import { EditorPane, createInitialEditorState, editorReducer } from './editor';
 import { downloadHtmlFile, printThemedArticle, toThemedHtml, toWechatHtml } from './export';
-import { ArticlePreview } from './preview';
+import { ArticlePreview, type DeviceType } from './preview';
 import { ThemePicker, filterThemes, getThemeById, THEME_REGISTRY } from './theme';
 import { copyWechatHtmlToClipboard } from './wechat';
 
@@ -25,6 +25,7 @@ function App() {
   const [editorState, dispatch] = useReducer(editorReducer, createInitialEditorState(initialMarkdown));
   const [selectedThemeId, setSelectedThemeId] = useState(initialThemeId);
   const [previewMarkdown, setPreviewMarkdown] = useState(initialMarkdown);
+  const [device, setDevice] = useState<DeviceType>('desktop');
   const [actionStatus, setActionStatus] = useState<string | null>(null);
   const [themeQuery, setThemeQuery] = useState('');
   const statusTimerRef = useRef(0);
@@ -175,12 +176,17 @@ function App() {
             themeQuery={themeQuery}
             onThemeQueryChange={setThemeQuery}
           />
-          <section className="workspace-grid">
+          <section className={`workspace-grid device-${device}`}>
             <EditorPane
               markdown={editorState.markdown}
               onMarkdownChange={(markdown) => dispatch({ type: 'set_markdown', markdown })}
             />
-            <ArticlePreview markdown={previewMarkdown} theme={selectedTheme} />
+            <ArticlePreview 
+              markdown={previewMarkdown} 
+              theme={selectedTheme} 
+              device={device}
+              onDeviceChange={setDevice}
+            />
           </section>
         </div>
       </div>
