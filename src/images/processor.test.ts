@@ -262,6 +262,80 @@ describe('images/processor', () => {
     }
   });
 
+  it('should normalize MIME casing for transparency-preserving formats', async () => {
+    const createObjectURL = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url');
+    const revokeObjectURL = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+    const originalImage = globalThis.Image;
+
+    class MockImage {
+      width = 400;
+      height = 300;
+      onload: ((event: Event) => unknown) | null = null;
+      onerror: ((event: string | Event) => unknown) | null = null;
+
+      set src(_value: string) {
+        setTimeout(() => {
+          this.onload?.(new Event('load'));
+        }, 0);
+      }
+    }
+
+    globalThis.Image = MockImage as unknown as typeof Image;
+    const getContextSpy = vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
+      drawImage: vi.fn(),
+    } as unknown as CanvasRenderingContext2D);
+    const toDataURLSpy = vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL').mockReturnValue('data:image/png;base64,mocked');
+
+    try {
+      const uppercasePng = new File(['mock-data'], 'icon.png', { type: 'IMAGE/PNG' });
+      await processImageFile(uppercasePng);
+      expect(toDataURLSpy).toHaveBeenCalledWith('image/png', undefined);
+    } finally {
+      globalThis.Image = originalImage;
+      getContextSpy.mockRestore();
+      toDataURLSpy.mockRestore();
+      createObjectURL.mockRestore();
+      revokeObjectURL.mockRestore();
+    }
+  });
+
+  it('should preserve SVG alpha by outputting png', async () => {
+    const createObjectURL = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url');
+    const revokeObjectURL = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+    const originalImage = globalThis.Image;
+
+    class MockImage {
+      width = 500;
+      height = 500;
+      onload: ((event: Event) => unknown) | null = null;
+      onerror: ((event: string | Event) => unknown) | null = null;
+
+      set src(_value: string) {
+        setTimeout(() => {
+          this.onload?.(new Event('load'));
+        }, 0);
+      }
+    }
+
+    globalThis.Image = MockImage as unknown as typeof Image;
+    const getContextSpy = vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
+      drawImage: vi.fn(),
+    } as unknown as CanvasRenderingContext2D);
+    const toDataURLSpy = vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL').mockReturnValue('data:image/png;base64,mocked');
+
+    try {
+      const svgFile = new File(['<svg></svg>'], 'icon.svg', { type: 'image/svg+xml' });
+      await processImageFile(svgFile);
+      expect(toDataURLSpy).toHaveBeenCalledWith('image/png', undefined);
+    } finally {
+      globalThis.Image = originalImage;
+      getContextSpy.mockRestore();
+      toDataURLSpy.mockRestore();
+      createObjectURL.mockRestore();
+      revokeObjectURL.mockRestore();
+    }
+  });
+
   it('should reject when serialization throws during processing', async () => {
     const createObjectURL = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url');
     const revokeObjectURL = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});

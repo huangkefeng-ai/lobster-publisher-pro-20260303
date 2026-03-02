@@ -45,8 +45,9 @@ export async function processImageFile(file: File, options: ProcessImageOptions 
 
         ctx.drawImage(img, 0, 0, width, height);
 
-        const TRANSPARENT_TYPES = new Set(['image/png', 'image/webp', 'image/gif']);
-        const mimeType = TRANSPARENT_TYPES.has(file.type) ? 'image/png' : 'image/jpeg';
+        const transparentTypes = new Set(['image/png', 'image/webp', 'image/gif', 'image/svg+xml']);
+        const normalizedType = file.type.trim().toLowerCase();
+        const mimeType = transparentTypes.has(normalizedType) ? 'image/png' : 'image/jpeg';
         const outputQuality = mimeType === 'image/jpeg' ? normalizedQuality : undefined;
 
         const dataUrl = canvas.toDataURL(mimeType, outputQuality);
