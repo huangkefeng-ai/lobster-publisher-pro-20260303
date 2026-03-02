@@ -721,15 +721,17 @@ body {
 }
 
 .article-preview.device-mobile {
-  width: 375px;
-  min-width: 375px;
+  width: 470px;
+  max-width: 470px;
+  min-width: 470px;
   padding: 1.5rem;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
 .article-preview.device-tablet {
-  width: 768px;
-  min-width: 768px;
+  width: 777px;
+  max-width: 777px;
+  min-width: 777px;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
