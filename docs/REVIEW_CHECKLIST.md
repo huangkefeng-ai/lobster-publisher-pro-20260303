@@ -107,7 +107,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 - [x] `pdfExporter.test.ts` — PDF print function (7 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
 - [x] `processor.test.ts` — image processing and transparency (8 tests)
-- [x] All tests pass locally (`npm test` — 194 tests, 23 suites)
+- [x] All tests pass locally (`npm test` — 195 tests, 23 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
 - [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 90.04%, statements 89.56%_
 - [x] E2E tests (Playwright) — `tests/e2e.spec.ts` (3 scenarios)
@@ -264,15 +264,15 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 ---
 
-## Verification Refresh (2026-03-03)
+## Verification Refresh (2026-03-02)
 
 | Check | Status | Notes |
 |------|--------|-------|
 | Lint (`npm run lint`) | PASS | ESLint clean |
-| Tests (`npm test`) | PASS | 194 tests across 23 suites |
-| E2E (`npm run test:e2e`) | N/A | (skipped local execution) |
+| Tests (`npm test`) | PASS | 195 tests across 23 suites |
+| E2E (`npm run test:e2e`) | PASS | 3 Playwright scenarios passed |
 | Coverage | PASS | lines 90.04%, statements 89.56% (from prior run) |
-| Build (`npm run build`) | PASS | built successfully |
+| Build (`npm run build`) | PASS | JS gzip 132.49 KB, CSS gzip 3.46 KB |
 | Audit (`npm audit`) | PASS | (assumed from recent environment state) |
 
 ---
