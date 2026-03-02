@@ -7,6 +7,7 @@ export function printThemedArticle(html: string): void {
   iframe.style.width = '0';
   iframe.style.height = '0';
   iframe.style.border = 'none';
+  iframe.setAttribute('sandbox', 'allow-modals allow-same-origin');
   document.body.appendChild(iframe);
 
   const iframeDoc = iframe.contentDocument ?? iframe.contentWindow?.document;

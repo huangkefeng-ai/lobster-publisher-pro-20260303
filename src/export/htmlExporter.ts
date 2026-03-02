@@ -36,7 +36,12 @@ export function toWechatHtml(markdown: string, theme: ThemeDefinition): string {
 }
 
 export function downloadHtmlFile(filename: string, html: string): void {
-  const safeFilename = filename.replace(/[/\\?%*:|"<>\x00-\x1f]/g, '_') || 'export.html';
+  const safeFilename =
+    filename
+      .replace(/[/\\?%*:|"<>]/g, '_')
+      .split('')
+      .map((char) => (char.charCodeAt(0) <= 0x1f ? '_' : char))
+      .join('') || 'export.html';
   const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
