@@ -2,6 +2,7 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
+import { DEFAULT_THEME_ID, saveEditorDraft } from './core';
 
 vi.mock('./wechat', async () => {
   const actual = await vi.importActual<typeof import('./wechat')>('./wechat');
@@ -138,20 +139,8 @@ describe('App', () => {
   });
 
   it('renders multi-image grid when adjacent images are present', async () => {
+    saveEditorDraft('![img1](url1) ![img2](url2)', DEFAULT_THEME_ID);
     const rendered = renderApp();
-    const textarea = rendered.container.querySelector('textarea') as HTMLTextAreaElement;
-    
-    await act(async () => {
-      const newValue = '![img1](url1) ![img2](url2)';
-      // Trigger React's synthetic event system correctly
-      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, "value")?.set;
-      nativeInputValueSetter?.call(textarea, newValue);
-      textarea.dispatchEvent(new Event('input', { bubbles: true }));
-      textarea.dispatchEvent(new Event('change', { bubbles: true }));
-      
-      // Wait for debounced update (100ms)
-      vi.advanceTimersByTime(200);
-    });
 
     const imageGroup = rendered.container.querySelector('[data-image-group="true"]');
     expect(imageGroup).toBeTruthy();
