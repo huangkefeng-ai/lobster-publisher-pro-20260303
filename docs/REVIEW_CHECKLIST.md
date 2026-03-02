@@ -253,10 +253,10 @@ Use this checklist when reviewing PRs and before merging to `main`.
 | Check | Status | Notes |
 |------|--------|-------|
 | Lint (`npm run lint`) | PASS | ESLint clean |
-| Tests (`npm test`) | PASS | 184 tests across 23 suites |
+| Tests (`npm test`) | PASS | 188 tests across 23 suites |
 | E2E (`npm run test:e2e`) | PASS | 3 Playwright scenarios passing |
-| Coverage (`npm run test:coverage`) | PASS | lines 89.75%, statements 89.33% |
-| Build (`npm run build`) | PASS | JS bundle 131.82 KB gzip, built in 989ms |
+| Coverage (`npm run test:coverage`) | PASS | lines 89.32%, statements 88.74% |
+| Build (`npm run build`) | PASS | JS bundle 132.19 KB gzip, built in 931ms |
 | Audit (`npm audit --audit-level=high`) | PASS | 0 vulnerabilities |
 
 ---
