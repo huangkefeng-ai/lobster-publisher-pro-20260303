@@ -3,6 +3,7 @@ export { createDebouncedFunction } from './debounce';
 export type { DebouncedFunction } from './debounce';
 export { PublishError, PublishErrorCode, ok, err } from './errors';
 export type { Result } from './errors';
+export { highlightCode, isLanguageSupported } from './highlight';
 export { richTextToMarkdown, markdownFromClipboard } from './parser';
 export { renderMarkdownToHtml } from './renderer';
 export { computeDocumentStats } from './statistics';
