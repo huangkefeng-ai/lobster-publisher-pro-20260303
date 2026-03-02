@@ -42,6 +42,21 @@ describe('richTextToMarkdown', () => {
     expect(richTextToMarkdown(html)).toBe('- Parent\n  - Child');
   });
 
+  it('keeps only safe anchor protocols in markdown links', () => {
+    const html = `
+      <p><a href="https://example.com">https</a></p>
+      <p><a href="mailto:test@example.com">mail</a></p>
+      <p><a href="tel:+15551234567">phone</a></p>
+      <p><a href="javascript:alert(1)">bad-js</a></p>
+      <p><a href="data:text/html;base64,abcd">bad-data</a></p>
+      <p><a href="/docs/page">relative</a></p>
+    `;
+
+    expect(richTextToMarkdown(html)).toBe(
+      '[https](https://example.com)\n\n[mail](mailto:test@example.com)\n\n[phone](tel:+15551234567)\n\nbad-js\n\nbad-data\n\nrelative',
+    );
+  });
+
   it('processes large 10k+ word clipboard html without freezing', () => {
     const wordsPerParagraph = 250;
     const paragraphCount = 40;

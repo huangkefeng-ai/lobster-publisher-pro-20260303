@@ -132,7 +132,7 @@ function renderNode(node: Node, depth = 0): string {
       if (!href) {
         return text ?? '';
       }
-      if (/^(javascript|data|vbscript):/i.test(href)) {
+      if (!/^(https?|mailto|tel):/i.test(href)) {
         return text ?? '';
       }
       return `[${text}](${href})`;
