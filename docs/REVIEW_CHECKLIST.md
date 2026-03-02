@@ -153,28 +153,25 @@ _Module not yet implemented. Planned for phase 3._
 
 ---
 
-## Phase-1 Audit Summary (2026-03-03)
+## Phase-2 Audit Summary (2026-03-03)
 
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 14/14 tests pass |
+| Tests | PASS | All tests pass |
 | Build | PASS | 86 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | PASS | Barrel exports enforced |
 | Security | PASS | DOMPurify on all HTML paths |
 | Bundle size | PASS | 86 KB << 500 KB target |
 
-### Issues Fixed in This Review
+### Issues Fixed in Phase-2 Review
 
-1. `index.html` title changed from `tmp-scaffold` to `Lobster Publisher Pro`
-2. Added barrel `index.ts` for all 6 modules; App.tsx updated to barrel imports
-3. Extracted shared `core/renderer.ts` — eliminated duplicate marked+DOMPurify in preview and export
-4. Removed `marked.setOptions()` side effect from `ArticlePreview.tsx`
-5. Vitest config widened to include `.test.tsx` files
-6. ARCH_PLAN.md tech stack updated (Vite, npm, textarea, marked vs. Next.js, pnpm, CodeMirror, unified)
-7. ARCH_PLAN.md module layout updated to match actual file tree
-8. Phase checkboxes updated with completion status
+1. **pdfExporter double-print bug**: `iframeDoc.close()` set `readyState` to `complete`, causing the fallback block to fire immediately AND `onload` to fire later — two print dialogs. Fixed by registering `onload` before `write()`/`close()` and removing the redundant fallback.
+2. **Inconsistent word count**: `EditorPane` used a naive `split(/\s+/)` while `App.tsx` used CJK-aware `computeDocumentStats()`. Fixed `EditorPane` to use `computeDocumentStats()`.
+3. **Missing table support in magic paste**: `<table>` pasted from rich text fell through to the default case, losing tabular structure. Added `table`/`thead`/`tbody`/`tr`/`td`/`th` cases to `parser.ts` producing GFM pipe tables.
+4. **Accessibility gap**: `ThemePicker` search input was missing `aria-label`. Added `aria-label="Search themes"`.
+5. **Stale docs**: ARCH_PLAN.md module tree and phase checklists updated to reflect all phase-2 completions (statistics, storage, debounce, shortcuts, themeFilter, pdfExporter).
 
 ---
 
