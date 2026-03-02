@@ -149,11 +149,11 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
   }
 
   return (
-    <section className="panel">
+    <section className="panel editor-panel">
       <header className="panel-header">
         <h2>Markdown Editor</h2>
         <p>{wordCount} words {isUploading && '· Processing image...'}</p>
-        {uploadError ? <p role="alert">{uploadError}</p> : null}
+        {uploadError ? <p className="error-text" role="alert">{uploadError}</p> : null}
       </header>
       <div className="toolbar" role="toolbar" aria-label="Editor snippets">
         {TOOLBAR_SNIPPETS.map((item) => (
@@ -166,8 +166,9 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
           onClick={() => fileInputRef.current?.click()} 
           disabled={isUploading}
           title="Upload or paste image"
+          className="upload-btn"
         >
-          Image
+          {isUploading ? 'Uploading...' : 'Image'}
         </button>
         <input 
           type="file" 
@@ -177,19 +178,28 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
           onChange={handleFileChange} 
         />
       </div>
-      <textarea
-        ref={textareaRef}
-        className="editor-textarea"
-        aria-label="Markdown editor"
-        value={markdown}
-        onChange={(event) => onMarkdownChange(event.target.value)}
-        onPaste={handlePaste}
-        onKeyDown={handleKeyDown}
-        onDrop={handleDrop}
-        onDragOver={(e) => e.preventDefault()}
-        spellCheck
-        disabled={isUploading}
-      />
+      <div className="editor-container">
+        {isUploading && (
+          <div className="loading-overlay">
+            <span className="loading-spinner"></span>
+            <p>Processing image...</p>
+          </div>
+        )}
+        <textarea
+          ref={textareaRef}
+          className={`editor-textarea ${markdown.length === 0 ? 'empty-state' : ''}`}
+          aria-label="Markdown editor"
+          placeholder="Type or paste your Markdown here..."
+          value={markdown}
+          onChange={(event) => onMarkdownChange(event.target.value)}
+          onPaste={handlePaste}
+          onKeyDown={handleKeyDown}
+          onDrop={handleDrop}
+          onDragOver={(e) => e.preventDefault()}
+          spellCheck
+          disabled={isUploading}
+        />
+      </div>
     </section>
   );
 }
