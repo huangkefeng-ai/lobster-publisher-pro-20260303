@@ -39,9 +39,30 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
                 type="button"
                 aria-pressed={active}
               >
-                <span className="theme-chip" style={{ backgroundColor: theme.tokens.accent }} aria-hidden="true" />
-                <span className="theme-name">{theme.name}</span>
-                <span className="theme-family">{theme.family}</span>
+                <div
+                  className="theme-thumbnail"
+                  style={{
+                    backgroundColor: theme.tokens.background,
+                    borderColor: theme.tokens.border,
+                  }}
+                  aria-hidden="true"
+                >
+                  <div className="theme-thumbnail-heading" style={{ backgroundColor: theme.tokens.heading }} />
+                  <div className="theme-thumbnail-text" style={{ backgroundColor: theme.tokens.text }} />
+                  <div className="theme-thumbnail-text" style={{ backgroundColor: theme.tokens.text, width: '80%' }} />
+                  <div
+                    className="theme-thumbnail-quote"
+                    style={{
+                      backgroundColor: theme.tokens.quoteBackground,
+                      borderLeftColor: theme.tokens.quoteBorder,
+                    }}
+                  />
+                  <div className="theme-thumbnail-accent" style={{ backgroundColor: theme.tokens.accent }} />
+                </div>
+                <div className="theme-info">
+                  <span className="theme-name">{theme.name}</span>
+                  <span className="theme-family">{theme.family}</span>
+                </div>
               </button>
             );
           })}
