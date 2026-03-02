@@ -1,13 +1,18 @@
-import { renderMarkdownToHtml } from '../core';
+import { wechatPipeline, htmlExportPipeline } from '../pipeline';
+import { PublishErrorCode } from '../core/errors';
 import type { ThemeDefinition } from '../theme';
-import { applyWechatInlineStyles, sanitizeWechatHtml } from '../wechat';
 
 function sanitizeCssValue(value: string): string {
   return value.replace(/[<>"'\\]/g, '');
 }
 
 export function toThemedHtml(markdown: string, theme: ThemeDefinition): string {
-  const htmlBody = renderMarkdownToHtml(markdown);
+  const result = htmlExportPipeline(markdown, theme);
+  if (!result.ok) {
+    if (result.error.code === PublishErrorCode.EMPTY_INPUT) return '';
+    throw result.error;
+  }
+  const htmlBody = result.value.html;
   const t = (v: string) => sanitizeCssValue(v);
 
   return `<!doctype html>
@@ -31,8 +36,12 @@ ${htmlBody}
 }
 
 export function toWechatHtml(markdown: string, theme: ThemeDefinition): string {
-  const sanitized = sanitizeWechatHtml(renderMarkdownToHtml(markdown));
-  return applyWechatInlineStyles(sanitized, theme);
+  const result = wechatPipeline(markdown, theme);
+  if (!result.ok) {
+    if (result.error.code === PublishErrorCode.EMPTY_INPUT) return '';
+    throw result.error;
+  }
+  return result.value.html;
 }
 
 export function downloadHtmlFile(filename: string, html: string): void {
