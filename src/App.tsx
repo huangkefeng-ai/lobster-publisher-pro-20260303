@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import './App.css';
-import { DEFAULT_MARKDOWN, DEFAULT_THEME_ID, computeDocumentStats, loadEditorDraft, saveEditorDraft } from './core';
+import {
+  DEFAULT_MARKDOWN,
+  DEFAULT_THEME_ID,
+  computeDocumentStats,
+  createDebouncedFunction,
+  loadEditorDraft,
+  saveEditorDraft,
+} from './core';
 import { EditorPane, createInitialEditorState, editorReducer } from './editor';
 import { downloadHtmlFile, printThemedArticle, toThemedHtml, toWechatHtml } from './export';
 import { ArticlePreview } from './preview';
@@ -17,12 +24,21 @@ function App() {
 
   const [editorState, dispatch] = useReducer(editorReducer, createInitialEditorState(initialMarkdown));
   const [selectedThemeId, setSelectedThemeId] = useState(initialThemeId);
+  const [previewMarkdown, setPreviewMarkdown] = useState(initialMarkdown);
   const [actionStatus, setActionStatus] = useState<string | null>(null);
   const [themeQuery, setThemeQuery] = useState('');
 
   const selectedTheme = useMemo(
     () => getThemeById(selectedThemeId) ?? THEME_REGISTRY[0],
     [selectedThemeId],
+  );
+  const persistDraft = useMemo(
+    () => createDebouncedFunction((markdown: string, themeId: string) => saveEditorDraft(markdown, themeId), 250),
+    [],
+  );
+  const updatePreview = useMemo(
+    () => createDebouncedFunction((markdown: string) => setPreviewMarkdown(markdown), 100),
+    [],
   );
   const wechatHtml = useMemo(
     () => toWechatHtml(editorState.markdown, selectedTheme),
@@ -38,11 +54,19 @@ function App() {
   );
 
   useEffect(() => {
-    const saveTimer = window.setTimeout(() => {
-      saveEditorDraft(editorState.markdown, selectedTheme.id);
-    }, 250);
-    return () => window.clearTimeout(saveTimer);
-  }, [editorState.markdown, selectedTheme.id]);
+    persistDraft(editorState.markdown, selectedTheme.id);
+  }, [editorState.markdown, selectedTheme.id, persistDraft]);
+
+  useEffect(() => {
+    updatePreview(editorState.markdown);
+  }, [editorState.markdown, updatePreview]);
+
+  useEffect(() => {
+    return () => {
+      persistDraft.cancel();
+      updatePreview.cancel();
+    };
+  }, [persistDraft, updatePreview]);
 
   async function handleCopyWechatHtml() {
     try {
@@ -79,7 +103,7 @@ function App() {
           markdown={editorState.markdown}
           onMarkdownChange={(markdown) => dispatch({ type: 'set_markdown', markdown })}
         />
-        <ArticlePreview markdown={editorState.markdown} theme={selectedTheme} />
+        <ArticlePreview markdown={previewMarkdown} theme={selectedTheme} />
       </section>
 
       <section className="panel actions-panel">

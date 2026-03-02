@@ -1,4 +1,6 @@
 export { DEFAULT_MARKDOWN, DEFAULT_THEME_ID } from './constants';
+export { createDebouncedFunction } from './debounce';
+export type { DebouncedFunction } from './debounce';
 export { richTextToMarkdown, markdownFromClipboard } from './parser';
 export { renderMarkdownToHtml } from './renderer';
 export { computeDocumentStats } from './statistics';
