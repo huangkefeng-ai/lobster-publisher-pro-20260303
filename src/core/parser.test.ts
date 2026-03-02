@@ -41,6 +41,21 @@ describe('richTextToMarkdown', () => {
     const html = '<ul><li>Parent<ul><li>Child</li></ul></li></ul>';
     expect(richTextToMarkdown(html)).toBe('- Parent\n  - Child');
   });
+
+  it('processes large 10k+ word clipboard html without freezing', () => {
+    const wordsPerParagraph = 250;
+    const paragraphCount = 40;
+    const paragraph = Array.from({ length: wordsPerParagraph }, (_, index) => `word${index + 1}`).join(' ');
+    const html = Array.from({ length: paragraphCount }, () => `<p>${paragraph}</p>`).join('');
+    const inputWordCount = wordsPerParagraph * paragraphCount;
+
+    const startedAt = performance.now();
+    const markdown = richTextToMarkdown(html);
+    const elapsedMs = performance.now() - startedAt;
+
+    expect(markdown.split(/\s+/).length).toBeGreaterThanOrEqual(inputWordCount);
+    expect(elapsedMs).toBeLessThan(4000);
+  });
 });
 
 describe('markdownFromClipboard', () => {

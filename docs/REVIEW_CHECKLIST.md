@@ -108,7 +108,7 @@ _Module not yet implemented. Planned for phase 3._
 - [x] `themeFilter.test.ts` — theme search/filter (6 tests)
 - [x] `pdfExporter.test.ts` — PDF print function (3 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
-- [x] All tests pass locally (`npm test` — 55 tests, 13 suites)
+- [x] All tests pass locally (`npm test` — 56 tests, 13 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
 - [x] Coverage target ≥ 80% — _measured on 2026-03-03 (`npm run test:coverage`): lines 80.66%, statements 80.47%_
 - [ ] E2E tests (Playwright) — _not yet implemented_
@@ -131,7 +131,7 @@ _Module not yet implemented. Planned for phase 3._
 - [x] EditorPane word count memoized via `useMemo`
 - [x] Preview debounced (100ms) via `createDebouncedFunction`
 - [x] Draft persistence debounced (250ms) via `createDebouncedFunction`
-- [ ] Large document (10k+ words) freeze test — _pending_
+- [x] Large document (10k+ words) freeze test — covered by `parser.test.ts` stress case
 - [ ] Image lazy-loading — _not applicable yet_
 
 ---
