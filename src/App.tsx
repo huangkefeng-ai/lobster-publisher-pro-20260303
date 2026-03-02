@@ -1,12 +1,10 @@
 import { useMemo, useReducer, useState } from 'react';
 import './App.css';
-import { DEFAULT_MARKDOWN, DEFAULT_THEME_ID } from './core/constants';
-import { EditorPane } from './editor/components/EditorPane';
-import { createInitialEditorState, editorReducer } from './editor/state/editorState';
-import { downloadHtmlFile, toThemedHtml, toWechatHtml } from './export/htmlExporter';
-import { ArticlePreview } from './preview/components/ArticlePreview';
-import { ThemePicker } from './theme/ThemePicker';
-import { getThemeById, THEME_REGISTRY } from './theme/themeRegistry';
+import { DEFAULT_MARKDOWN, DEFAULT_THEME_ID } from './core';
+import { EditorPane, createInitialEditorState, editorReducer } from './editor';
+import { downloadHtmlFile, toThemedHtml, toWechatHtml } from './export';
+import { ArticlePreview } from './preview';
+import { ThemePicker, getThemeById, THEME_REGISTRY } from './theme';
 import { copyWechatHtmlToClipboard } from './wechat';
 
 function App() {

@@ -1,14 +1,9 @@
-import DOMPurify from 'dompurify';
-import { marked } from 'marked';
+import { renderMarkdownToHtml } from '../core';
 import type { ThemeDefinition } from '../theme/themeTypes';
 import { applyWechatInlineStyles, sanitizeWechatHtml } from '../wechat';
 
-function markdownToSanitizedHtml(markdown: string): string {
-  return DOMPurify.sanitize(marked.parse(markdown, { async: false }));
-}
-
 export function toThemedHtml(markdown: string, theme: ThemeDefinition): string {
-  const htmlBody = markdownToSanitizedHtml(markdown);
+  const htmlBody = renderMarkdownToHtml(markdown);
 
   return `<!doctype html>
 <html>
@@ -31,7 +26,7 @@ ${htmlBody}
 }
 
 export function toWechatHtml(markdown: string, theme: ThemeDefinition): string {
-  const sanitized = sanitizeWechatHtml(markdownToSanitizedHtml(markdown));
+  const sanitized = sanitizeWechatHtml(renderMarkdownToHtml(markdown));
   return applyWechatInlineStyles(sanitized, theme);
 }
 

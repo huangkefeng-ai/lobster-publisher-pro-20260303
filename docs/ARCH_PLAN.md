@@ -22,107 +22,84 @@ An open-source WeChat article layout tool that converts rich text / markdown int
 | Layer | Choice | Rationale |
 |-------|--------|-----------|
 | Runtime | Node.js ≥ 20 | LTS, wide ecosystem |
-| Language | TypeScript 5.x | Type safety across all modules |
-| Framework | Next.js 14 (App Router) | SSR for preview, API routes for export |
-| UI | React 18 + Tailwind CSS + shadcn/ui | Rapid theming, accessible components |
-| Editor | CodeMirror 6 | Extensible markdown editor with syntax highlighting |
-| Markdown → HTML | unified (remark + rehype) | Pluggable pipeline, battle-tested |
-| PDF export | Puppeteer (headless Chrome) | Pixel-perfect PDF from rendered HTML |
-| State | Zustand | Lightweight, no boilerplate |
-| Testing | Vitest + React Testing Library + Playwright | Unit / integration / E2E |
-| Package manager | pnpm | Fast, strict, workspace-ready |
-| Linting | ESLint + Prettier | Consistent code style |
-| CI | GitHub Actions | Lint → Test → Build on every PR |
+| Language | TypeScript 5.9 (strict) | Type safety across all modules |
+| Bundler | Vite 7 | Fast HMR, ESM-native, minimal config |
+| UI | React 19 + vanilla CSS | Lightweight, CSS custom properties for theming |
+| Editor | `<textarea>` (phase-1) | Simple baseline; CodeMirror planned for phase-4 |
+| Markdown → HTML | marked + DOMPurify | Fast parsing, XSS-safe output |
+| State | `useReducer` | Zero-dep, co-located with editor module |
+| Testing | Vitest + jsdom | Unit tests with DOM-capable environment |
+| Package manager | npm | Standard, zero-config |
+| Linting | ESLint 9 (flat config) | Consistent code style |
+| CI | GitHub Actions (planned) | Lint → Test → Build on every PR |
 
 ---
 
 ## 3. Module Boundaries
 
-The codebase is organized into **seven isolated modules**. Each module owns its types, logic, and tests. Cross-module imports go through explicit barrel exports (`index.ts`).
+The codebase is organized into **six isolated modules**. Each module owns its types, logic, and tests. Cross-module imports go through explicit barrel exports (`index.ts`).
 
 ```
 src/
 ├── core/                  # Module 1 — Markdown processing pipeline
+│   ├── constants.ts       #   App-wide defaults (DEFAULT_MARKDOWN, DEFAULT_THEME_ID)
 │   ├── parser.ts          #   Rich text / HTML → Markdown (magic paste)
-│   ├── transformer.ts     #   Markdown AST transforms (GFM, math, etc.)
-│   ├── renderer.ts        #   Markdown → themed HTML
+│   ├── renderer.ts        #   Markdown → sanitized HTML (marked + DOMPurify)
 │   └── index.ts
 │
-├── themes/                # Module 2 — Theme engine
-│   ├── engine.ts          #   CSS-in-JS theme application
-│   ├── registry.ts        #   Theme discovery & loading
-│   ├── presets/            #   30+ built-in theme CSS files
-│   │   ├── elegant.css
-│   │   ├── tech-dark.css
-│   │   └── ...
+├── theme/                 # Module 2 — Theme engine
+│   ├── themeTypes.ts      #   ThemeTokens & ThemeDefinition interfaces
+│   ├── themeRegistry.ts   #   33 built-in token-based themes + lookup
+│   ├── themeCss.ts        #   Tokens → CSS custom properties
+│   ├── ThemePicker.tsx    #   Theme gallery selection component
 │   └── index.ts
 │
 ├── wechat/                # Module 3 — WeChat compatibility layer
-│   ├── sanitizer.ts       #   Strip unsupported tags / attrs
-│   ├── inline-styles.ts   #   Convert classes → inline styles
-│   ├── clipboard.ts       #   Copy formatted HTML to clipboard
+│   ├── sanitizer.ts       #   Strip unsupported tags / attrs (DOMPurify allow-list)
+│   ├── inlineStyles.ts    #   Apply theme tokens as inline styles per element
+│   ├── clipboard.ts       #   Copy text/html to clipboard via Clipboard API
 │   └── index.ts
 │
 ├── export/                # Module 4 — Export engine
-│   ├── html.ts            #   Standalone HTML file export
-│   ├── pdf.ts             #   PDF generation via Puppeteer
+│   ├── htmlExporter.ts    #   Themed HTML doc export + WeChat HTML + file download
 │   └── index.ts
 │
-├── images/                # Module 5 — Image handling
-│   ├── uploader.ts        #   Drag-and-drop / paste image upload
-│   ├── processor.ts       #   Resize, compress, base64 encode
+├── editor/                # Module 5 — Editor UI
+│   ├── components/
+│   │   └── EditorPane.tsx #   Textarea editor with snippet toolbar
+│   ├── state/
+│   │   └── editorState.ts #   useReducer-based editor state
 │   └── index.ts
 │
-├── editor/                # Module 6 — Editor UI
-│   ├── Editor.tsx          #   CodeMirror wrapper component
-│   ├── Toolbar.tsx         #   Formatting toolbar
-│   ├── PasteHandler.tsx    #   Magic paste interception
+├── preview/               # Module 6 — Live preview
+│   ├── components/
+│   │   └── ArticlePreview.tsx  # Rendered HTML preview pane
 │   └── index.ts
 │
-├── preview/               # Module 7 — Live preview
-│   ├── Preview.tsx         #   Rendered HTML preview pane
-│   ├── ThemePicker.tsx     #   Theme selection sidebar
-│   ├── ExportBar.tsx       #   Export action buttons
-│   └── index.ts
-│
-├── app/                   # Next.js App Router pages
-│   ├── layout.tsx
-│   ├── page.tsx            #   Main split-pane editor + preview
-│   └── api/
-│       └── export/
-│           └── route.ts    #   POST /api/export — PDF/HTML generation
-│
-├── lib/                   # Shared utilities (no business logic)
-│   ├── types.ts
-│   ├── constants.ts
-│   └── utils.ts
-│
-└── store/                 # Zustand stores
-    ├── editor-store.ts
-    └── theme-store.ts
+├── App.tsx                # Root component — layout + orchestration
+├── App.css                # Global layout and theme variable styles
+├── main.tsx               # Vite entry point
+└── index.css              # Font imports
 ```
 
 ### Module Dependency Graph
 
 ```
-editor ──→ core ──→ themes
-  │          │
-  │          ▼
-  │       wechat
+editor ──→ core
   │          │
   ▼          ▼
-preview    export
-  │
-  ▼
-images
+preview    export ──→ wechat
+             │
+             ▼
+           theme
 ```
 
 **Rules:**
-- `core` depends on `themes` (to apply theme CSS during rendering).
+- `core` owns the shared markdown→HTML renderer (`renderer.ts`) used by `preview` and `export`.
 - `wechat` depends on `core` output (rendered HTML) but NOT on `core` internals.
-- `export` depends on `core` + `wechat` (generates final exportable artifacts).
+- `export` depends on `core` + `wechat` + `theme` (generates final exportable artifacts).
 - `editor` and `preview` are UI shells; they orchestrate the other modules.
-- `images` is standalone; called from `editor` and `core`.
+- `theme` is data-only (types + token registry + CSS variable mapping).
 - No circular dependencies allowed.
 
 ---
@@ -158,13 +135,13 @@ images
 
 ## 5. Key Design Decisions
 
-### 5.1 Unified Markdown Pipeline (remark/rehype)
+### 5.1 Centralized Markdown Renderer (marked + DOMPurify)
 
-All markdown processing goes through a single `unified` pipeline. Themes, WeChat sanitization, and exports are implemented as rehype plugins. This keeps the pipeline composable and testable.
+All markdown→HTML conversion goes through `core/renderer.ts`, which calls `marked.parse()` and sanitizes via `DOMPurify.sanitize()`. Both `preview/` and `export/` consume this single function, eliminating duplication and ensuring consistent GFM + line-break handling.
 
-### 5.2 CSS-Only Themes
+### 5.2 Token-Based Themes
 
-Themes are pure CSS files. The engine injects them as scoped `<style>` blocks during rendering. No JavaScript in themes — this makes them safe, portable, and easy to contribute.
+Themes are TypeScript objects with a `ThemeTokens` interface (colors, fonts). The theme engine maps tokens to CSS custom properties at runtime via `toThemeCssVariables()`. No separate CSS files — tokens are the single source of truth.
 
 ### 5.3 WeChat Inline-Style Conversion
 
@@ -183,27 +160,27 @@ The copy-to-WeChat flow writes `text/html` MIME type to the clipboard using the 
 ## 6. Implementation Phases
 
 ### Phase 1 — Foundation (MVP)
-- [ ] Project scaffolding (Next.js + TypeScript + pnpm)
-- [ ] `core/parser` — markdown parsing with unified
-- [ ] `core/renderer` — basic HTML rendering
-- [ ] `editor/Editor` — CodeMirror markdown editor
-- [ ] `preview/Preview` — live HTML preview
-- [ ] 5 starter themes
-- [ ] Basic copy-to-clipboard
+- [x] Project scaffolding (Vite + TypeScript + npm)
+- [x] `core/parser` — rich text → markdown (magic paste via DOMParser)
+- [x] `core/renderer` — markdown → sanitized HTML (marked + DOMPurify)
+- [x] `editor/EditorPane` — textarea markdown editor with snippet toolbar
+- [x] `preview/ArticlePreview` — live themed HTML preview
+- [x] 33 token-based themes with gallery picker
+- [x] Barrel `index.ts` exports for all modules
 
 ### Phase 2 — WeChat Compatibility
-- [ ] `core/parser` — magic paste (rich text → markdown)
-- [ ] `wechat/sanitizer` — strip unsupported elements
-- [ ] `wechat/inline-styles` — CSS → inline conversion
-- [ ] `wechat/clipboard` — WeChat-optimized clipboard copy
-- [ ] Expand to 15 themes
+- [x] `wechat/sanitizer` — strip unsupported elements (DOMPurify allow-list)
+- [x] `wechat/inlineStyles` — theme tokens → inline styles per element
+- [x] `wechat/clipboard` — Clipboard API `text/html` copy
+- [x] Copy-to-WeChat button in UI
+- [x] 33 themes (exceeds 15 target)
 
 ### Phase 3 — Export & Images
-- [ ] `export/html` — standalone HTML file download
-- [ ] `export/pdf` — Puppeteer PDF generation
+- [x] `export/htmlExporter` — standalone themed HTML file download
+- [ ] `export/pdf` — PDF generation (planned)
 - [ ] `images/uploader` — drag-and-drop image upload
 - [ ] `images/processor` — resize, compress, base64
-- [ ] Expand to 30+ themes
+- [x] 33 themes (exceeds 30+ target)
 
 ### Phase 4 — Polish
 - [ ] Keyboard shortcuts
