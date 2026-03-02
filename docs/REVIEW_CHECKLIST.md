@@ -98,7 +98,7 @@ _Module not yet implemented. Planned for phase 3._
 
 - [x] `editorState.test.ts` — reducer logic (4 tests)
 - [x] `themeRegistry.test.ts` — registry invariants (3 tests)
-- [x] `parser.test.ts` — rich text → markdown conversion (11 tests)
+- [x] `parser.test.ts` — rich text → markdown conversion (14 tests)
 - [x] `sanitizer.test.ts` — WeChat sanitization (2 tests)
 - [x] `inlineStyles.test.ts` — inline style application (1 test)
 - [x] `htmlExporter.test.ts` — themed + WeChat HTML export (4 tests)
@@ -108,7 +108,7 @@ _Module not yet implemented. Planned for phase 3._
 - [x] `themeFilter.test.ts` — theme search/filter (6 tests)
 - [x] `pdfExporter.test.ts` — PDF print function (7 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
-- [x] All tests pass locally (`npm test` — 72 tests, 15 suites)
+- [x] All tests pass locally (`npm test` — 75 tests, 15 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
 - [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 88.95%, statements 88.63%_
 - [ ] E2E tests (Playwright) — _not yet implemented_
@@ -199,6 +199,32 @@ _Module not yet implemented. Planned for phase 3._
 7. **EditorPane double stats computation** (BUG-08/PERF-01, MEDIUM): `computeDocumentStats()` called on every render without memoization. Wrapped in `useMemo`.
 8. **inlineStyles `querySelectorAll('*')` traversal** (PERF-04, MEDIUM): Replaced with targeted tag selector from `tagStyleMap` keys.
 9. **Module boundary violations** (MB-01 through MB-07): Fixed 7 imports across source and test files to use barrel `index.ts` exports instead of reaching into internal modules directly.
+
+---
+
+## Phase-4 Architecture Audit (2026-03-03)
+
+| Area | Status | Notes |
+|------|--------|-------|
+| Lint | PASS | ESLint clean |
+| Tests | PASS | 75 tests across 15 suites |
+| Build | PASS | TypeScript strict, zero errors |
+| Security | FIXED | CSS value sanitization, iframe sandbox, markdown escape |
+| Accessibility | FIXED | Live regions, theme count grammar, status announcements |
+| Performance | IMPROVED | Action status auto-clear, outdent clamp |
+
+### Issues Fixed in Phase-4 Review
+
+1. **CSS injection via theme tokens in HTML export** (SEC-01, HIGH): Theme token values interpolated raw into `<style>` block in `htmlExporter.ts`. Added `sanitizeCssValue()` to strip `<`, `>`, `"`, `'`, `\` from all token values before CSS interpolation.
+2. **Markdown link/image text injection** (SEC-02, MEDIUM): `]` characters in link text and image alt text could break Markdown syntax and produce unexpected rendering. Added `]` escaping in `parser.ts` for both `[text](url)` and `![alt](src)`.
+3. **Print iframe missing sandbox** (SEC-03, MEDIUM): `pdfExporter.ts` iframe had no `sandbox` attribute, allowing scripts within injected HTML to execute. Added `sandbox="allow-modals allow-same-origin"`.
+4. **Download filename unsanitized** (SEC-04, MEDIUM): `downloadHtmlFile()` passed `filename` directly to `anchor.download` without stripping path separators or control characters. Added filename sanitization regex.
+5. **`lineCount` inconsistency** (BUG-09, MEDIUM): `statistics.ts` computed `lineCount` on raw `markdown` but other stats on `trimmed`, causing trailing blank lines to be counted. Changed to use `trimmed` consistently.
+6. **`outdentLines` negative selectionEnd** (BUG-10, MEDIUM): `shortcuts.ts` `outdentLines` could produce negative `selectionEnd` when `removed > end`. Added `Math.max(beforeStart, ...)` lower-bound clamp.
+7. **Action status never clears** (UX-01, MEDIUM): `App.tsx` `actionStatus` messages persisted indefinitely. Added `setTimedStatus()` with 4-second auto-clear via `useRef`-managed timer.
+8. **Theme count grammar and empty state** (A11Y-01, HIGH): `ThemePicker` live region announced "0 themes" instead of empty-state message. Fixed singular/plural grammar and moved empty-state text into the `aria-live` region.
+9. **Action status invisible to screen readers** (A11Y-02, MEDIUM): Status messages rendered conditionally without a live region. Changed to always-rendered `<p role="status" aria-live="polite">` element.
+10. **Test expectation: URL space encoding** (TEST-01, LOW): `parser.test.ts` expected `q=120` but jsdom correctly percent-encodes spaces in `href` to `%20`, producing `q=1%202`. Fixed test expectation.
 
 ---
 
