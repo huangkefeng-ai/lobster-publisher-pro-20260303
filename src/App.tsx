@@ -75,6 +75,12 @@ function App() {
     };
   }, [persistDraft, updatePreview]);
 
+  useEffect(() => {
+    return () => {
+      window.clearTimeout(statusTimerRef.current);
+    };
+  }, []);
+
   async function handleCopyWechatHtml() {
     try {
       await copyWechatHtmlToClipboard(wechatHtml);
