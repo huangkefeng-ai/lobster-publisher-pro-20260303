@@ -20,7 +20,7 @@ const FAMILY_LABELS: Record<string, string> = {
   classic: '经典',
 };
 
-const QUICK_THEME_IDS = ['sunset-paper', 'matcha-journal', 'ocean-signal', 'midnight-byte'];
+const QUICK_THEME_IDS = ['apple-white', 'claude-oat', 'wechat-native', 'sunset-paper', 'matcha-journal'];
 
 export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery, onThemeQueryChange }: ThemePickerProps) {
   const [activeTab, setActiveTab] = useState<string>('all');

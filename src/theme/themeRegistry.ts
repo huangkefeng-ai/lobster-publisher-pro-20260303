@@ -38,6 +38,9 @@ const FONTS = {
 } as const;
 
 const THEME_SEEDS: ThemeSeed[] = [
+  { id: 'apple-white', name: 'Mac（纯净白）', family: 'minimal', palette: { background: '#ffffff', surface: '#ffffff', text: '#1d1d1f', heading: '#111111', accent: '#0066cc', border: '#eaeaea', quoteBackground: '#f5f5f7', quoteBorder: '#0066cc', codeBackground: '#f5f5f7' }, typography: FONTS.modern },
+  { id: 'claude-oat', name: 'Claude（燕麦色）', family: 'soft', palette: { background: '#f8f6f0', surface: '#ffffff', text: '#2b2b2b', heading: '#b75c3d', accent: '#b75c3d', border: '#e0ddd6', quoteBackground: '#f3f0e8', quoteBorder: '#b75c3d', codeBackground: '#f0ece4' }, typography: FONTS.modern },
+  { id: 'wechat-native', name: '微信公众号原生', family: 'classic', palette: { background: '#ffffff', surface: '#ffffff', text: '#333333', heading: '#111111', accent: '#07c160', border: '#eaeaea', quoteBackground: '#f0f7f2', quoteBorder: '#07c160', codeBackground: '#f0f7f2' }, typography: FONTS.classic },
   { id: 'sunset-paper', name: 'Sunset Paper', family: 'warm', palette: { background: '#fff7ed', surface: '#ffffff', text: '#422006', heading: '#9a3412', accent: '#ea580c', border: '#fdba74', quoteBackground: '#ffedd5', quoteBorder: '#fb923c', codeBackground: '#ffedd5' }, typography: FONTS.editorial },
   { id: 'matcha-journal', name: 'Matcha Journal', family: 'nature', palette: { background: '#f0fdf4', surface: '#ffffff', text: '#14532d', heading: '#166534', accent: '#16a34a', border: '#86efac', quoteBackground: '#dcfce7', quoteBorder: '#4ade80', codeBackground: '#dcfce7' }, typography: FONTS.classic },
   { id: 'ocean-signal', name: 'Ocean Signal', family: 'cool', palette: { background: '#eff6ff', surface: '#ffffff', text: '#1e3a8a', heading: '#1d4ed8', accent: '#2563eb', border: '#93c5fd', quoteBackground: '#dbeafe', quoteBorder: '#60a5fa', codeBackground: '#dbeafe' }, typography: FONTS.modern },
