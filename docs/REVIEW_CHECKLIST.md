@@ -96,7 +96,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 - [x] `editorState.test.ts` — reducer logic (4 tests)
 - [x] `themeRegistry.test.ts` — registry invariants (3 tests)
-- [x] `parser.test.ts` — rich text → markdown conversion (16 tests)
+- [x] `parser.test.ts` — rich text → markdown conversion (17 tests)
 - [x] `sanitizer.test.ts` — WeChat sanitization (2 tests)
 - [x] `inlineStyles.test.ts` — inline style application (2 tests)
 - [x] `htmlExporter.test.ts` — themed + WeChat HTML export (6 tests)
@@ -106,7 +106,8 @@ Use this checklist when reviewing PRs and before merging to `main`.
 - [x] `themeFilter.test.ts` — theme search/filter (6 tests)
 - [x] `pdfExporter.test.ts` — PDF print function (7 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
-- [x] All tests pass locally (`npm test` — 98 tests, 18 suites)
+- [x] `processor.test.ts` — image processing and transparency (8 tests)
+- [x] All tests pass locally (`npm test` — 100 tests, 18 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
 - [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 92.11%, statements 91.92%_
 - [ ] E2E tests (Playwright) — _not yet implemented_
@@ -125,7 +126,8 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 ## 11. Performance
 
-- [x] Bundle size: 91.74 KB gzipped (well under 500 KB target)
+- [x] Bundle size: 91.78 KB gzipped (well under 500 KB target)
+- [x] WeChat HTML computed lazily on copy, not on every keystroke
 - [x] EditorPane word count memoized via `useMemo`
 - [x] Preview debounced (100ms) via `createDebouncedFunction`
 - [x] Draft persistence debounced (250ms) via `createDebouncedFunction`
@@ -226,14 +228,33 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 ---
 
-## Verification Refresh (2026-03-02)
+## Phase-5 Architecture Audit (2026-03-03)
+
+| Area | Status | Notes |
+|------|--------|-------|
+| Lint | PASS | ESLint clean |
+| Tests | PASS | 100 tests across 18 suites |
+| Build | PASS | 91.78 KB gzip, < 1s build |
+| Strict TS | PASS | All strict flags enabled |
+| Performance | FIXED | Lazy WeChat HTML computation |
+| Parser | FIXED | Strikethrough GFM support |
+| Images | FIXED | Transparency preservation |
+
+### Issues Fixed in Phase-5 Review
+
+1. **Eager WeChat HTML recomputation on every keystroke** (PERF-05, MEDIUM): `App.tsx` computed `toWechatHtml()` (render → sanitize → inline styles) via `useMemo` on every markdown change, but the result was only consumed on "Copy WeChat HTML" button click. Moved computation into the `handleCopyWechatHtml` handler so it runs only on demand.
+2. **Parser missing strikethrough support** (EDGE-04, MEDIUM): `<del>` and `<s>` tags from pasted rich text (Word, Google Docs) fell through to the `default` case, losing `~~text~~` GFM semantics. Added explicit `del`/`s` cases producing `~~content~~`.
+3. **Image processor drops transparency for WebP and GIF** (BUG-11, MEDIUM): `processor.ts` mapped all non-PNG formats to `image/jpeg`, causing transparent pixels in WebP/GIF uploads to render as black. Changed to preserve PNG output for formats that support transparency (`image/png`, `image/webp`, `image/gif`).
+
+---
+
+## Verification Refresh (2026-03-03)
 
 | Check | Status | Notes |
 |------|--------|-------|
 | Lint (`npm run lint`) | PASS | ESLint clean |
-| Tests (`npm test -- --run`) | PASS | 98 tests across 18 suites |
-| Coverage (`npm run test:coverage`) | PASS | 92.11% lines, 91.92% statements |
-| Build (`npm run build`) | PASS | 91.74 KB gzip, built in 781ms |
+| Tests (`npm test`) | PASS | 100 tests across 18 suites |
+| Build (`npm run build`) | PASS | 91.78 KB gzip, built in 821ms |
 
 ---
 
