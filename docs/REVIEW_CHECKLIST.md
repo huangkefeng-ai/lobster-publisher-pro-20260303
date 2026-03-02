@@ -108,9 +108,9 @@ _Module not yet implemented. Planned for phase 3._
 - [x] `themeFilter.test.ts` — theme search/filter (6 tests)
 - [x] `pdfExporter.test.ts` — PDF print function (3 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
-- [x] All tests pass locally (`npm test` — 56 tests, 13 suites)
+- [x] All tests pass locally (`npm test` — 59 tests, 13 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
-- [x] Coverage target ≥ 80% — _measured on 2026-03-03 (`npm run test:coverage`): lines 80.66%, statements 80.47%_
+- [x] Coverage target ≥ 80% — _measured on 2026-03-03 (`npm run test:coverage`): lines 84.03%, statements 83.77%_
 - [ ] E2E tests (Playwright) — _not yet implemented_
 
 ---
@@ -160,11 +160,11 @@ _Module not yet implemented. Planned for phase 3._
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
 | Tests | PASS | All tests pass |
-| Build | PASS | 86 KB gzip, < 1s build |
+| Build | PASS | 90 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | PASS | Barrel exports enforced |
 | Security | PASS | DOMPurify on all HTML paths |
-| Bundle size | PASS | 86 KB << 500 KB target |
+| Bundle size | PASS | 90 KB << 500 KB target |
 
 ### Issues Fixed in Phase-2 Review
 
@@ -181,7 +181,7 @@ _Module not yet implemented. Planned for phase 3._
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 55 tests across 13 suites |
+| Tests | PASS | 59 tests across 13 suites |
 | Build | PASS | 90 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | FIXED | 7 barrel-bypass imports corrected |
