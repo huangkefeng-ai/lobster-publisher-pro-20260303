@@ -65,7 +65,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 - [x] `downloadHtmlFile()` triggers browser download via Blob URL
 - [x] WeChat HTML export chains: render → sanitize → inline styles
 - [x] PDF export via hidden iframe + `window.print()` (`pdfExporter.ts`)
-- [ ] Large document (10k+ words) stress test — _pending_
+- [x] Large document (10k+ words) stress test — covered by `parser.test.ts` stress case
 
 ---
 
@@ -98,19 +98,19 @@ _Module not yet implemented. Planned for phase 3._
 
 - [x] `editorState.test.ts` — reducer logic (4 tests)
 - [x] `themeRegistry.test.ts` — registry invariants (3 tests)
-- [x] `parser.test.ts` — rich text → markdown conversion (8 tests)
-- [x] `sanitizer.test.ts` — WeChat sanitization (1 test)
+- [x] `parser.test.ts` — rich text → markdown conversion (11 tests)
+- [x] `sanitizer.test.ts` — WeChat sanitization (2 tests)
 - [x] `inlineStyles.test.ts` — inline style application (1 test)
-- [x] `htmlExporter.test.ts` — themed + WeChat HTML export (2 tests)
+- [x] `htmlExporter.test.ts` — themed + WeChat HTML export (4 tests)
 - [x] `statistics.test.ts` — document stats and CJK word count (8 tests)
 - [x] `storage.test.ts` — localStorage save/load/clear (5 tests)
 - [x] `shortcuts.test.ts` — keyboard shortcut text transforms (9 tests)
 - [x] `themeFilter.test.ts` — theme search/filter (6 tests)
 - [x] `pdfExporter.test.ts` — PDF print function (3 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
-- [x] All tests pass locally (`npm test` — 59 tests, 13 suites)
+- [x] All tests pass locally (`npm test` — 61 tests, 13 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
-- [x] Coverage target ≥ 80% — _measured on 2026-03-03 (`npm run test:coverage`): lines 84.03%, statements 83.77%_
+- [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 84.47%, statements 84.25%_
 - [ ] E2E tests (Playwright) — _not yet implemented_
 
 ---
@@ -181,7 +181,7 @@ _Module not yet implemented. Planned for phase 3._
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 59 tests across 13 suites |
+| Tests | PASS | 61 tests across 13 suites |
 | Build | PASS | 90 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | FIXED | 7 barrel-bypass imports corrected |
