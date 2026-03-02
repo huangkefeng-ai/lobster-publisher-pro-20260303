@@ -6,6 +6,20 @@ function escapeMarkdownText(value: string): string {
   return value.replace(/([*_`~])/g, '\\$1');
 }
 
+function longestBacktickRun(value: string): number {
+  const matches = value.match(/`+/g);
+  if (!matches) {
+    return 0;
+  }
+
+  return matches.reduce((max, match) => Math.max(max, match.length), 0);
+}
+
+function wrapWithBacktickFence(value: string): string {
+  const fence = '`'.repeat(longestBacktickRun(value) + 1);
+  return `${fence}${value}${fence}`;
+}
+
 function renderList(node: Element, depth = 0): string {
   const isOrdered = node.tagName.toLowerCase() === 'ol';
   const items = Array.from(node.children).filter((child) => child.tagName.toLowerCase() === 'li');
@@ -86,11 +100,16 @@ function renderNode(node: Node, depth = 0): string {
     }
     case 'code': {
       const content = element.textContent?.trim() ?? '';
-      return content.length > 0 ? `\`${content}\`` : '';
+      return content.length > 0 ? wrapWithBacktickFence(content) : '';
     }
     case 'pre': {
       const codeText = element.textContent?.replace(/^\n+|\n+$/g, '') ?? '';
-      return codeText.length > 0 ? `\`\`\`\n${codeText}\n\`\`\`\n\n` : '';
+      if (codeText.length === 0) {
+        return '';
+      }
+
+      const fence = '`'.repeat(Math.max(3, longestBacktickRun(codeText) + 1));
+      return `${fence}\n${codeText}\n${fence}\n\n`;
     }
     case 'blockquote': {
       const content = renderChildren(element, depth)

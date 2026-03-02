@@ -27,6 +27,16 @@ describe('richTextToMarkdown', () => {
     expect(richTextToMarkdown(html)).toBe('Use \\*stars\\* and \\_underscores\\_ literally.');
   });
 
+  it('uses variable inline code fences when content has backticks', () => {
+    const html = '<p><code>const key = `value`;</code></p>';
+    expect(richTextToMarkdown(html)).toBe('``const key = `value`;``');
+  });
+
+  it('uses longer code block fences when content has triple backticks', () => {
+    const html = '<pre>console.log("a");\n```\nconsole.log("b");</pre>';
+    expect(richTextToMarkdown(html)).toBe('````\nconsole.log("a");\n```\nconsole.log("b");\n````');
+  });
+
   it('preserves nested list structure from rich text', () => {
     const html = '<ul><li>Parent<ul><li>Child</li></ul></li></ul>';
     expect(richTextToMarkdown(html)).toBe('- Parent\n  - Child');
