@@ -191,12 +191,14 @@ function renderNode(node: Node, depth = 0): string {
         .filter((cells) => cells.length > 0);
       if (rowCells.length === 0) return '';
       const escPipe = (s: string) => s.replace(/\|/g, '\\|');
-      const toRow = (cells: Element[]) => cells.map((c) => escPipe(renderChildren(c, depth).trim())).join(' | ');
+      const columnCount = Math.max(...rowCells.map((cells) => cells.length));
+      const toRow = (cells: Element[]) =>
+        Array.from({ length: columnCount }, (_, index) => {
+          const cell = cells[index];
+          return cell ? escPipe(renderChildren(cell, depth).trim()) : '';
+        }).join(' | ');
       const header = toRow(rowCells[0]);
-      const separator = header
-        .split(' | ')
-        .map(() => '---')
-        .join(' | ');
+      const separator = Array.from({ length: columnCount }, () => '---').join(' | ');
       const body = rowCells
         .slice(1)
         .map((cells) => `| ${toRow(cells)} |`)

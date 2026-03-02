@@ -109,6 +109,19 @@ describe('richTextToMarkdown', () => {
     );
   });
 
+  it('normalizes table columns when rows have uneven cell counts', () => {
+    const html = `
+      <table>
+        <tr><th>Name</th></tr>
+        <tr><td>Lobster</td><td>Publisher</td></tr>
+      </table>
+    `;
+
+    expect(richTextToMarkdown(html)).toBe(
+      '| Name |  |\n| --- | --- |\n| Lobster | Publisher |',
+    );
+  });
+
   it('processes large 10k+ word clipboard html without freezing', () => {
     const wordsPerParagraph = 250;
     const paragraphCount = 40;
