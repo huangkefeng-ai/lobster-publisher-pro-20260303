@@ -47,27 +47,29 @@ const WECHAT_ALLOWED_ATTR = [
   'data-image-group',
 ] as const;
 
-const WECHAT_ALLOWED_URI_REGEXP =
+const WECHAT_ALLOWED_HREF_URI_REGEXP =
   /^(?:(?:https?|mailto|tel):|data:image\/(?:png|jpe?g|gif|webp);base64,)/i;
+
+const WECHAT_ALLOWED_SRC_URI_REGEXP = /^(?:(?:https?):|data:image\/(?:png|jpe?g|gif|webp);base64,)/i;
 
 export function sanitizeWechatHtml(html: string): string {
   const sanitized = DOMPurify.sanitize(html, {
     ALLOWED_TAGS: [...WECHAT_ALLOWED_TAGS],
     ALLOWED_ATTR: [...WECHAT_ALLOWED_ATTR],
     FORBID_TAGS: ['script', 'style'],
-    ALLOWED_URI_REGEXP: WECHAT_ALLOWED_URI_REGEXP,
+    ALLOWED_URI_REGEXP: WECHAT_ALLOWED_HREF_URI_REGEXP,
   });
 
   const doc = new DOMParser().parseFromString(sanitized, 'text/html');
   const uriElements = doc.body.querySelectorAll<HTMLElement>('[href], [src]');
   uriElements.forEach((element) => {
     const href = element.getAttribute('href');
-    if (href && !WECHAT_ALLOWED_URI_REGEXP.test(href)) {
+    if (href && !WECHAT_ALLOWED_HREF_URI_REGEXP.test(href)) {
       element.removeAttribute('href');
     }
 
     const src = element.getAttribute('src');
-    if (src && !WECHAT_ALLOWED_URI_REGEXP.test(src)) {
+    if (src && !WECHAT_ALLOWED_SRC_URI_REGEXP.test(src)) {
       element.removeAttribute('src');
     }
   });

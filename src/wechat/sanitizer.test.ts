@@ -49,4 +49,17 @@ describe('sanitizeWechatHtml', () => {
     expect(sanitized).toContain('<a>bad-data</a>');
     expect(sanitized).not.toContain('data:text/html');
   });
+
+  it('allows tel links in href but strips tel URIs from src', () => {
+    const html = `
+      <p><a href="tel:+15557654321">call</a></p>
+      <p><img alt="bad-src" src="tel:+15557654321" /></p>
+    `;
+
+    const sanitized = sanitizeWechatHtml(html);
+
+    expect(sanitized).toContain('<a href="tel:+15557654321">call</a>');
+    expect(sanitized).toContain('<img alt="bad-src">');
+    expect(sanitized).not.toContain('src="tel:+15557654321"');
+  });
 });
