@@ -5,11 +5,13 @@ describe('printThemedArticle', () => {
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
+    vi.useFakeTimers();
     // jsdom logs "Not implemented: Window's print() method".
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
+    vi.clearAllTimers();
     vi.useRealTimers();
     consoleErrorSpy.mockRestore();
   });
