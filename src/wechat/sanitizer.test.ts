@@ -34,15 +34,18 @@ describe('sanitizeWechatHtml', () => {
     expect(sanitized).not.toContain('javascript:');
   });
 
-  it('keeps base64 data image src but strips non-image data URIs', () => {
+  it('keeps safe base64 raster image src but strips unsafe data URIs', () => {
     const html = `
       <p><img alt="safe" src="data:image/png;base64,abcd" /></p>
+      <p><img alt="svg" src="data:image/svg+xml;base64,abcd" /></p>
       <p><a href="data:text/html;base64,abcd">bad-data</a></p>
     `;
 
     const sanitized = sanitizeWechatHtml(html);
 
     expect(sanitized).toContain('<img alt="safe" src="data:image/png;base64,abcd">');
+    expect(sanitized).toContain('<img alt="svg">');
+    expect(sanitized).not.toContain('data:image/svg+xml');
     expect(sanitized).toContain('<a>bad-data</a>');
     expect(sanitized).not.toContain('data:text/html');
   });
