@@ -1,16 +1,24 @@
-import { useMemo, useReducer, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import './App.css';
-import { DEFAULT_MARKDOWN, DEFAULT_THEME_ID } from './core';
+import { DEFAULT_MARKDOWN, DEFAULT_THEME_ID, computeDocumentStats, loadEditorDraft, saveEditorDraft } from './core';
 import { EditorPane, createInitialEditorState, editorReducer } from './editor';
-import { downloadHtmlFile, toThemedHtml, toWechatHtml } from './export';
+import { downloadHtmlFile, printThemedArticle, toThemedHtml, toWechatHtml } from './export';
 import { ArticlePreview } from './preview';
-import { ThemePicker, getThemeById, THEME_REGISTRY } from './theme';
+import { ThemePicker, filterThemes, getThemeById, THEME_REGISTRY } from './theme';
 import { copyWechatHtmlToClipboard } from './wechat';
 
 function App() {
-  const [editorState, dispatch] = useReducer(editorReducer, createInitialEditorState(DEFAULT_MARKDOWN));
-  const [selectedThemeId, setSelectedThemeId] = useState(DEFAULT_THEME_ID);
+  const initialDraft = useMemo(() => loadEditorDraft(), []);
+  const initialMarkdown = initialDraft?.markdown ?? DEFAULT_MARKDOWN;
+  const initialThemeId =
+    initialDraft?.themeId && getThemeById(initialDraft.themeId)
+      ? initialDraft.themeId
+      : DEFAULT_THEME_ID;
+
+  const [editorState, dispatch] = useReducer(editorReducer, createInitialEditorState(initialMarkdown));
+  const [selectedThemeId, setSelectedThemeId] = useState(initialThemeId);
   const [actionStatus, setActionStatus] = useState<string | null>(null);
+  const [themeQuery, setThemeQuery] = useState('');
 
   const selectedTheme = useMemo(
     () => getThemeById(selectedThemeId) ?? THEME_REGISTRY[0],
@@ -20,6 +28,21 @@ function App() {
     () => toWechatHtml(editorState.markdown, selectedTheme),
     [editorState.markdown, selectedTheme],
   );
+  const stats = useMemo(
+    () => computeDocumentStats(editorState.markdown),
+    [editorState.markdown],
+  );
+  const filteredThemes = useMemo(
+    () => filterThemes(THEME_REGISTRY, themeQuery),
+    [themeQuery],
+  );
+
+  useEffect(() => {
+    const saveTimer = window.setTimeout(() => {
+      saveEditorDraft(editorState.markdown, selectedTheme.id);
+    }, 250);
+    return () => window.clearTimeout(saveTimer);
+  }, [editorState.markdown, selectedTheme.id]);
 
   async function handleCopyWechatHtml() {
     try {
@@ -36,11 +59,19 @@ function App() {
     setActionStatus('Downloaded themed HTML file.');
   }
 
+  const handlePrintPdf = useCallback(() => {
+    const htmlDocument = toThemedHtml(editorState.markdown, selectedTheme);
+    printThemedArticle(htmlDocument);
+    setActionStatus('Opened print dialog for PDF export.');
+  }, [editorState.markdown, selectedTheme]);
+
   return (
     <main className="app-shell">
       <header className="hero">
         <h1>Lobster Publisher Pro</h1>
-        <p>Phase 1: foundation, markdown editor, and scalable theme system.</p>
+        <p>
+          {stats.wordCount} words · {stats.readingTimeMinutes} min read · {stats.lineCount} lines
+        </p>
       </header>
 
       <section className="workspace-grid">
@@ -63,14 +94,19 @@ function App() {
           <button type="button" onClick={handleDownloadHtml}>
             Export HTML File
           </button>
+          <button type="button" onClick={handlePrintPdf}>
+            Print / Save PDF
+          </button>
         </div>
         {actionStatus ? <p className="action-status">{actionStatus}</p> : null}
       </section>
 
       <ThemePicker
         selectedThemeId={selectedTheme.id}
-        themes={THEME_REGISTRY}
+        themes={filteredThemes}
         onSelectTheme={setSelectedThemeId}
+        themeQuery={themeQuery}
+        onThemeQueryChange={setThemeQuery}
       />
     </main>
   );

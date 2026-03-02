@@ -158,6 +158,21 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
 }
 
+.theme-search {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.86rem;
+  margin-bottom: 0.65rem;
+}
+
+.theme-empty {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
 .actions-panel {
   margin-top: 1rem;
 }

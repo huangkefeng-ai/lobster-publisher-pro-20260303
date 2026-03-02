@@ -93,4 +93,15 @@ describe('handleEditorShortcut', () => {
     expect(result).not.toBeNull();
     expect(result!.value).toBe('**text**');
   });
+
+  it('handles uppercase key values from keyboard events', () => {
+    const result = handleEditorShortcut(
+      { key: 'C', metaKey: false, ctrlKey: true, shiftKey: true },
+      'use state',
+      4,
+      9,
+    );
+    expect(result).not.toBeNull();
+    expect(result!.value).toBe('use `state`');
+  });
 });

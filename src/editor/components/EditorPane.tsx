@@ -1,5 +1,6 @@
-import { useMemo, useRef, type ClipboardEvent } from 'react';
+import { useMemo, useRef, type ClipboardEvent, type KeyboardEvent } from 'react';
 import { markdownFromClipboard } from '../../core';
+import { handleEditorShortcut } from '../shortcuts';
 
 interface EditorPaneProps {
   markdown: string;
@@ -38,6 +39,30 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
       textarea.selectionStart = cursor;
       textarea.selectionEnd = cursor;
     });
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    const textarea = textareaRef.current;
+    if (!textarea) {
+      return;
+    }
+
+    const result = handleEditorShortcut(
+      event,
+      markdown,
+      textarea.selectionStart,
+      textarea.selectionEnd,
+    );
+
+    if (result) {
+      event.preventDefault();
+      onMarkdownChange(result.value);
+      requestAnimationFrame(() => {
+        textarea.focus();
+        textarea.selectionStart = result.selectionStart;
+        textarea.selectionEnd = result.selectionEnd;
+      });
+    }
   }
 
   function handlePaste(event: ClipboardEvent<HTMLTextAreaElement>) {
@@ -86,6 +111,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
         value={markdown}
         onChange={(event) => onMarkdownChange(event.target.value)}
         onPaste={handlePaste}
+        onKeyDown={handleKeyDown}
         spellCheck
       />
     </section>

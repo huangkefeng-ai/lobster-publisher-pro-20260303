@@ -47,16 +47,17 @@ export function handleEditorShortcut(
   selectionEnd: number,
 ): ShortcutResult | null {
   const mod = event.metaKey || event.ctrlKey;
+  const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
 
-  if (mod && !event.shiftKey && event.key === 'b') {
+  if (mod && !event.shiftKey && key === 'b') {
     return wrapSelection(value, selectionStart, selectionEnd, '**', '**');
   }
 
-  if (mod && !event.shiftKey && event.key === 'i') {
+  if (mod && !event.shiftKey && key === 'i') {
     return wrapSelection(value, selectionStart, selectionEnd, '*', '*');
   }
 
-  if (mod && !event.shiftKey && event.key === 'k') {
+  if (mod && !event.shiftKey && key === 'k') {
     const selected = value.slice(selectionStart, selectionEnd);
     const before = value.slice(0, selectionStart);
     const after = value.slice(selectionEnd);
@@ -68,11 +69,11 @@ export function handleEditorShortcut(
     };
   }
 
-  if (mod && event.shiftKey && event.key === 'c') {
+  if (mod && event.shiftKey && key === 'c') {
     return wrapSelection(value, selectionStart, selectionEnd, '`', '`');
   }
 
-  if (event.key === 'Tab' && !mod) {
+  if (key === 'Tab' && !mod) {
     if (event.shiftKey) {
       return outdentLines(value, selectionStart, selectionEnd);
     }
