@@ -27,6 +27,13 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const wordCount = useMemo(() => computeDocumentStats(markdown).wordCount, [markdown]);
 
+  const [pasteStatus, setPasteStatus] = useState<{ status: 'success' | 'error', message: string } | null>(null);
+
+  function showPasteStatus(status: 'success' | 'error', message: string) {
+    setPasteStatus({ status, message });
+    setTimeout(() => setPasteStatus(null), 3000);
+  }
+
   function handleInsert(snippet: string) {
     const textarea = textareaRef.current;
     if (!textarea) {
@@ -60,8 +67,10 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
       const base64 = await processImageFile(file);
       const snippet = `\n![${escapeMarkdownAltText(file.name)}](${base64})\n`;
       handleInsert(snippet);
+      showPasteStatus('success', '图片已成功插入');
     } catch {
       setUploadError('图片处理失败，请尝试其他图片。');
+      showPasteStatus('error', '图片处理失败');
     } finally {
       setIsUploading(false);
     }
@@ -121,6 +130,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
     const plainText = event.clipboardData.getData('text/plain');
     const converted = markdownFromClipboard(html, plainText);
     if (converted.trim().length === 0) {
+      showPasteStatus('error', '未能识别有效内容');
       return;
     }
 
@@ -130,6 +140,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
     const currentValue = event.currentTarget.value;
     const nextValue = currentValue.slice(0, start) + converted + currentValue.slice(end);
     onMarkdownChange(nextValue);
+    showPasteStatus('success', '魔法粘贴成功，已转换为 Markdown');
 
     requestAnimationFrame(() => {
       const ta = textareaRef.current;
@@ -177,6 +188,11 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
           style={{ display: 'none' }} 
           onChange={handleFileChange} 
         />
+        {pasteStatus && (
+          <span className={`paste-status ${pasteStatus.status}`} role="status" aria-live="polite">
+            {pasteStatus.message}
+          </span>
+        )}
       </div>
       <div className="editor-container">
         {isUploading && (
@@ -189,7 +205,10 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
           ref={textareaRef}
           className={`editor-textarea ${markdown.length === 0 ? 'empty-state' : ''}`}
           aria-label="Markdown editor"
-          placeholder="在此输入或粘贴 Markdown 内容..."
+          placeholder="在此输入或粘贴 Markdown 内容...
+支持魔法粘贴，保留排版：
+- 从 飞书 / Notion / Word 等富文本编辑器直接粘贴
+- 从 网页内容 (带链接、图片) 直接复制粘贴"
           value={markdown}
           onChange={(event) => onMarkdownChange(event.target.value)}
           onPaste={handlePaste}
