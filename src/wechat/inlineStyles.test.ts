@@ -28,4 +28,22 @@ describe('applyWechatInlineStyles', () => {
     expect(result).toContain('background-image: url(https://example.com/a:b.png)');
     expect(result).toContain(`color: ${theme.tokens.text}`);
   });
+
+  it('applies grid styles to multi-image groups', () => {
+    const theme = THEME_REGISTRY[0];
+    const html = '<div data-image-group="true"><div><img src="img1"></div><div><img src="img2"></div></div>';
+    const result = applyWechatInlineStyles(html, theme);
+    expect(result).toContain('display: flex');
+    expect(result).toContain('flex: 1');
+    expect(result).toContain('width: 100%');
+  });
+
+  it('applies borders and padding to tables', () => {
+    const theme = THEME_REGISTRY[0];
+    const html = '<table><thead><tr><th>Header</th></tr></thead><tbody><tr><td>Cell</td></tr></tbody></table>';
+    const result = applyWechatInlineStyles(html, theme);
+    expect(result).toContain('border-collapse: collapse');
+    expect(result).toContain('border: 1px solid');
+    expect(result).toContain('padding: 0.6em 0.8em');
+  });
 });

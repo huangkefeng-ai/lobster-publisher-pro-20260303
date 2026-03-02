@@ -50,3 +50,23 @@ describe('renderMarkdownToHtml syntax highlighting', () => {
     expect(html).not.toContain('<span style=');
   });
 });
+
+describe('renderMarkdownToHtml multi-image and table', () => {
+  it('groups consecutive images into a grid container', () => {
+    const md = '![img1](url1) ![img2](url2)';
+    const html = renderMarkdownToHtml(md);
+    expect(html).toContain('data-image-group="true"');
+    expect(html).toContain('<div style="flex: 1; min-width: 0; padding: 2px;"><img src="url1"');
+    expect(html).toContain('<div style="flex: 1; min-width: 0; padding: 2px;"><img src="url2"');
+  });
+
+  it('renders standard markdown tables', () => {
+    const md = '| A | B |\n|---|---|\n| 1 | 2 |';
+    const html = renderMarkdownToHtml(md);
+    expect(html).toContain('<table');
+    expect(html).toContain('<thead>');
+    expect(html).toContain('<tbody>');
+    expect(html).toContain('<th>A</th>');
+    expect(html).toContain('<td>1</td>');
+  });
+});
