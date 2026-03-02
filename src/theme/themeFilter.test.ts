@@ -12,15 +12,15 @@ describe('filterThemes', () => {
   });
 
   it('filters by theme name (case-insensitive)', () => {
-    const results = filterThemes(THEME_REGISTRY, 'sunset');
+    const results = filterThemes(THEME_REGISTRY, 'mac');
     expect(results.length).toBeGreaterThanOrEqual(1);
-    expect(results.every((t) => t.name.toLowerCase().includes('sunset'))).toBe(true);
+    expect(results.every((t) => t.name.toLowerCase().includes('mac'))).toBe(true);
   });
 
   it('filters by family', () => {
-    const results = filterThemes(THEME_REGISTRY, 'warm');
+    const results = filterThemes(THEME_REGISTRY, 'recommended');
     expect(results.length).toBeGreaterThanOrEqual(1);
-    expect(results.every((t) => t.family === 'warm')).toBe(true);
+    expect(results.every((t) => t.family === 'recommended')).toBe(true);
   });
 
   it('returns empty array when no themes match', () => {
@@ -28,7 +28,7 @@ describe('filterThemes', () => {
   });
 
   it('matches partial name fragments', () => {
-    const results = filterThemes(THEME_REGISTRY, 'ink');
+    const results = filterThemes(THEME_REGISTRY, '原生');
     expect(results.length).toBeGreaterThanOrEqual(1);
   });
 });
