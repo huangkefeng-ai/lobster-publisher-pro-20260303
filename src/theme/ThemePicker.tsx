@@ -104,7 +104,10 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
       {isDropdownOpen && (
         <div className="theme-dropdown-panel">
           <header className="theme-dropdown-header">
-            <h3 className="theme-dropdown-title">主题库</h3>
+            <h3 className="theme-dropdown-title">
+              主题库
+              <span className="theme-count-badge">共 {themes.length} 款</span>
+            </h3>
             {onThemeQueryChange && (
               <input
                 className="theme-search"
