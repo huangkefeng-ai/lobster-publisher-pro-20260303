@@ -189,8 +189,8 @@ The copy-to-WeChat flow writes `text/html` MIME type to the clipboard using the 
 
 ### Phase 3 — Images & Advanced Export
 - [x] `export/htmlExporter` — standalone themed HTML file download
-- [ ] `images/uploader` — drag-and-drop image upload
-- [ ] `images/processor` — resize, compress, base64
+- [x] `images/uploader` — drag-and-drop image upload
+- [x] `images/processor` — resize, compress, base64
 - [x] 33 themes (exceeds 30+ target)
 
 ### Phase 4 — Polish

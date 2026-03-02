@@ -71,12 +71,10 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 ## 7. Image Handling (images/)
 
-_Module not yet implemented. Planned for phase 3._
-
-- [ ] Drag-and-drop upload works
-- [ ] Paste image from clipboard works
-- [ ] Images are compressed before embedding (max 1MB per image)
-- [ ] Supported formats: PNG, JPEG, GIF, WebP
+- [x] Drag-and-drop upload works
+- [x] Paste image from clipboard works
+- [x] Images are compressed before embedding
+- [x] Supported formats: PNG, JPEG, GIF, WebP
 
 ---
 

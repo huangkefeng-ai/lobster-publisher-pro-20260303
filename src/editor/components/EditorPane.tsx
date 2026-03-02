@@ -1,6 +1,7 @@
-import { useMemo, useRef, type ClipboardEvent, type KeyboardEvent } from 'react';
+import { useMemo, useRef, useState, type ChangeEvent, type ClipboardEvent, type DragEvent, type KeyboardEvent } from 'react';
 import { markdownFromClipboard, computeDocumentStats } from '../../core';
 import { handleEditorShortcut } from '../shortcuts';
+import { processImageFile } from '../../images';
 
 interface EditorPaneProps {
   markdown: string;
@@ -17,6 +18,8 @@ const TOOLBAR_SNIPPETS: Array<{ label: string; snippet: string }> = [
 
 export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const wordCount = useMemo(() => computeDocumentStats(markdown).wordCount, [markdown]);
 
   function handleInsert(snippet: string) {
@@ -37,6 +40,35 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
       textarea.selectionStart = cursor;
       textarea.selectionEnd = cursor;
     });
+  }
+
+  async function handleImageFiles(files: FileList | File[] | null) {
+    if (!files || files.length === 0) return;
+    
+    const file = Array.from(files).find(f => f.type.startsWith('image/'));
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      const base64 = await processImageFile(file);
+      const snippet = `\n![${file.name}](${base64})\n`;
+      handleInsert(snippet);
+    } catch (error) {
+      console.error('Failed to process image:', error);
+    } finally {
+      setIsUploading(false);
+    }
+  }
+
+  function handleDrop(event: DragEvent<HTMLTextAreaElement>) {
+    const files = event.dataTransfer.files;
+    if (files && files.length > 0) {
+      const hasImage = Array.from(files).some(f => f.type.startsWith('image/'));
+      if (hasImage) {
+        event.preventDefault();
+        handleImageFiles(files);
+      }
+    }
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
@@ -64,6 +96,16 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
   }
 
   function handlePaste(event: ClipboardEvent<HTMLTextAreaElement>) {
+    const files = event.clipboardData.files;
+    if (files && files.length > 0) {
+      const hasImage = Array.from(files).some(f => f.type.startsWith('image/'));
+      if (hasImage) {
+        event.preventDefault();
+        handleImageFiles(files);
+        return;
+      }
+    }
+
     const html = event.clipboardData.getData('text/html');
     if (html.trim().length === 0) {
       return;
@@ -91,18 +133,40 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
     });
   }
 
+  function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
+    handleImageFiles(event.target.files);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  }
+
   return (
     <section className="panel">
       <header className="panel-header">
         <h2>Markdown Editor</h2>
-        <p>{wordCount} words</p>
+        <p>{wordCount} words {isUploading && '· Processing image...'}</p>
       </header>
       <div className="toolbar" role="toolbar" aria-label="Editor snippets">
         {TOOLBAR_SNIPPETS.map((item) => (
-          <button key={item.label} type="button" onClick={() => handleInsert(item.snippet)}>
+          <button key={item.label} type="button" onClick={() => handleInsert(item.snippet)} disabled={isUploading}>
             {item.label}
           </button>
         ))}
+        <button 
+          type="button" 
+          onClick={() => fileInputRef.current?.click()} 
+          disabled={isUploading}
+          title="Upload or paste image"
+        >
+          Image
+        </button>
+        <input 
+          type="file" 
+          ref={fileInputRef} 
+          accept="image/*" 
+          style={{ display: 'none' }} 
+          onChange={handleFileChange} 
+        />
       </div>
       <textarea
         ref={textareaRef}
@@ -112,7 +176,10 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
         onChange={(event) => onMarkdownChange(event.target.value)}
         onPaste={handlePaste}
         onKeyDown={handleKeyDown}
+        onDrop={handleDrop}
+        onDragOver={(e) => e.preventDefault()}
         spellCheck
+        disabled={isUploading}
       />
     </section>
   );
