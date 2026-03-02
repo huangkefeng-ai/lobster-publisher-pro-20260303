@@ -96,7 +96,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 - [x] `editorState.test.ts` — reducer logic (4 tests)
 - [x] `themeRegistry.test.ts` — registry invariants (3 tests)
-- [x] `parser.test.ts` — rich text → markdown conversion (15 tests)
+- [x] `parser.test.ts` — rich text → markdown conversion (16 tests)
 - [x] `sanitizer.test.ts` — WeChat sanitization (2 tests)
 - [x] `inlineStyles.test.ts` — inline style application (2 tests)
 - [x] `htmlExporter.test.ts` — themed + WeChat HTML export (6 tests)
