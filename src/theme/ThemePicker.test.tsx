@@ -30,6 +30,14 @@ function cleanupRender({ container, root }: RenderResult) {
   container.remove();
 }
 
+function openThemeDropdown(container: HTMLDivElement) {
+  const trigger = container.querySelector('.theme-dropdown-trigger') as HTMLButtonElement | null;
+  expect(trigger).not.toBeNull();
+  act(() => {
+    trigger?.click();
+  });
+}
+
 describe('ThemePicker', () => {
   afterEach(() => {
     document.body.innerHTML = '';
@@ -45,8 +53,10 @@ describe('ThemePicker', () => {
       />,
     );
 
-    const count = rendered.container.querySelector('.panel-header p');
-    expect(count?.textContent).toBe('2 个主题');
+    const trigger = rendered.container.querySelector('.theme-dropdown-trigger');
+    expect(trigger?.textContent).toContain('全部 2 款');
+
+    openThemeDropdown(rendered.container);
 
     const firstButton = rendered.container.querySelector(`.theme-card[aria-pressed="true"]`) as HTMLButtonElement | null;
     expect(firstButton).not.toBeNull();
@@ -65,6 +75,8 @@ describe('ThemePicker', () => {
         onSelectTheme={onSelectTheme}
       />,
     );
+
+    openThemeDropdown(rendered.container);
 
     const secondButton = rendered.container.querySelector(`.theme-card:not([aria-pressed="true"])`) as HTMLButtonElement | null;
     expect(secondButton).not.toBeNull();
@@ -91,6 +103,8 @@ describe('ThemePicker', () => {
       />,
     );
 
+    openThemeDropdown(rendered.container);
+
     const input = rendered.container.querySelector('input[aria-label="搜索主题"]') as HTMLInputElement | null;
     expect(input).not.toBeNull();
 
@@ -114,6 +128,8 @@ describe('ThemePicker', () => {
         onSelectTheme={() => {}}
       />,
     );
+
+    openThemeDropdown(rendered.container);
 
     expect(rendered.container.textContent).toContain('没有找到匹配的主题。');
 

@@ -161,7 +161,7 @@ function App() {
       </p>
 
       <div className="app-body">
-        <aside className="app-sidebar">
+        <div className="main-workspace">
           <ThemePicker
             selectedThemeId={selectedTheme.id}
             themes={filteredThemes}
@@ -169,15 +169,14 @@ function App() {
             themeQuery={themeQuery}
             onThemeQueryChange={setThemeQuery}
           />
-        </aside>
-
-        <section className="workspace-grid">
-          <EditorPane
-            markdown={editorState.markdown}
-            onMarkdownChange={(markdown) => dispatch({ type: 'set_markdown', markdown })}
-          />
-          <ArticlePreview markdown={previewMarkdown} theme={selectedTheme} />
-        </section>
+          <section className="workspace-grid">
+            <EditorPane
+              markdown={editorState.markdown}
+              onMarkdownChange={(markdown) => dispatch({ type: 'set_markdown', markdown })}
+            />
+            <ArticlePreview markdown={previewMarkdown} theme={selectedTheme} />
+          </section>
+        </div>
       </div>
     </main>
   );
