@@ -20,15 +20,15 @@ const codeRenderer: RendererObject = {
   },
   paragraph({ tokens }: Tokens.Paragraph): string | false {
     if (tokens && tokens.length > 1) {
-      // Check if the paragraph consists ONLY of images and whitespace/space
-      const isOnlyImagesAndSpace = tokens.every(t => 
+      // Check if the paragraph consists ONLY of images, whitespace, or pipe characters
+      const isImageGroupIntent = tokens.every(t => 
         t.type === 'image' || 
-        (t.type === 'text' && !t.raw.trim()) || 
+        (t.type === 'text' && !t.raw.replace(/[|\s]+/g, '').trim()) || 
         t.type === 'space' ||
         t.type === 'br'
       );
       
-      if (isOnlyImagesAndSpace) {
+      if (isImageGroupIntent) {
         const images = tokens.filter(t => t.type === 'image') as Tokens.Image[];
         if (images.length > 1) {
           const gridHtml = images.map(img => 

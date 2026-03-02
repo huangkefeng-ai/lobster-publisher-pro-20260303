@@ -75,6 +75,13 @@ describe('renderMarkdownToHtml multi-image and table', () => {
     expect(html).toContain('data-image-count="2"');
   });
 
+  it('groups images separated by pipe delimiters in the same paragraph', () => {
+    const md = '![img1](url1) | ![img2](url2)';
+    const html = renderMarkdownToHtml(md);
+    expect(html).toContain('data-image-group="true"');
+    expect(html).toContain('data-image-count="2"');
+  });
+
   it('does not group images in different paragraphs', () => {
     const md = '![img1](url1)\n\n![img2](url2)';
     const html = renderMarkdownToHtml(md);
