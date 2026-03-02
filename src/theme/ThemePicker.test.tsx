@@ -48,7 +48,7 @@ describe('ThemePicker', () => {
     const count = rendered.container.querySelector('.panel-header p');
     expect(count?.textContent).toBe('2 个主题');
 
-    const firstButton = rendered.container.querySelector(`button[aria-pressed="true"]`) as HTMLButtonElement | null;
+    const firstButton = rendered.container.querySelector(`.theme-card[aria-pressed="true"]`) as HTMLButtonElement | null;
     expect(firstButton).not.toBeNull();
     expect(firstButton?.textContent).toContain(themes[0].name);
 
@@ -66,7 +66,7 @@ describe('ThemePicker', () => {
       />,
     );
 
-    const secondButton = rendered.container.querySelector(`button:not([aria-pressed="true"])`) as HTMLButtonElement | null;
+    const secondButton = rendered.container.querySelector(`.theme-card:not([aria-pressed="true"])`) as HTMLButtonElement | null;
     expect(secondButton).not.toBeNull();
 
     act(() => {
