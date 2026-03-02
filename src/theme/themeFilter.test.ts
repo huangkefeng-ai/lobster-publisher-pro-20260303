@@ -28,7 +28,7 @@ describe('filterThemes', () => {
   });
 
   it('matches partial name fragments', () => {
-    const results = filterThemes(THEME_REGISTRY, '原生');
+    const results = filterThemes(THEME_REGISTRY, '大地');
     expect(results.length).toBeGreaterThanOrEqual(1);
   });
 });
