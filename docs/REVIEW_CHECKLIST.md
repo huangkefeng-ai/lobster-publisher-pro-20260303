@@ -106,11 +106,11 @@ _Module not yet implemented. Planned for phase 3._
 - [x] `storage.test.ts` — localStorage save/load/clear (5 tests)
 - [x] `shortcuts.test.ts` — keyboard shortcut text transforms (9 tests)
 - [x] `themeFilter.test.ts` — theme search/filter (6 tests)
-- [x] `pdfExporter.test.ts` — PDF print function (4 tests)
+- [x] `pdfExporter.test.ts` — PDF print function (7 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
-- [x] All tests pass locally (`npm test` — 67 tests, 15 suites)
+- [x] All tests pass locally (`npm test` — 72 tests, 15 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
-- [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 86.91%, statements 86.64%_
+- [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 88.95%, statements 88.63%_
 - [ ] E2E tests (Playwright) — _not yet implemented_
 
 ---
@@ -159,7 +159,7 @@ _Module not yet implemented. Planned for phase 3._
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 67 tests across 15 suites |
+| Tests | PASS | 72 tests across 15 suites |
 | Build | PASS | 90 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | PASS | Barrel exports enforced |
@@ -181,7 +181,7 @@ _Module not yet implemented. Planned for phase 3._
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 67 tests across 15 suites |
+| Tests | PASS | 72 tests across 15 suites |
 | Build | PASS | 90 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | FIXED | 7 barrel-bypass imports corrected |

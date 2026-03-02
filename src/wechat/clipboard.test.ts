@@ -62,4 +62,31 @@ describe('copyWechatHtmlToClipboard', () => {
     expect(clipboardItemMock).toHaveBeenCalledTimes(1);
     expect(write).toHaveBeenCalledTimes(1);
   });
+
+  it('throws when clipboard api is unavailable', async () => {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: undefined,
+      configurable: true,
+    });
+
+    await expect(copyWechatHtmlToClipboard('<p>Hello</p>')).rejects.toThrow(
+      'Clipboard API is not available in this environment.',
+    );
+  });
+
+  it('throws when clipboard write methods are unavailable', async () => {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: {},
+      configurable: true,
+    });
+    Object.defineProperty(globalThis, 'ClipboardItem', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    });
+
+    await expect(copyWechatHtmlToClipboard('<p>Hello</p>')).rejects.toThrow(
+      'Clipboard write methods are unavailable.',
+    );
+  });
 });
