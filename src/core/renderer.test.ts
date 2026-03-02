@@ -43,6 +43,13 @@ describe('renderMarkdownToHtml syntax highlighting', () => {
     expect(html).not.toContain('data-lang');
   });
 
+  it('escapes quotes in code language attribute', () => {
+    const md = "```js\\\" onmouseover=\\\"alert(1)\nconst x = 1;\n```";
+    const html = renderMarkdownToHtml(md);
+    expect(html).toContain('data-lang="js&quot; onmouseover=&quot;alert(1)"');
+    expect(html).not.toContain('" onmouseover="');
+  });
+
   it('handles inline code without highlighting (unchanged)', () => {
     const md = 'Use `const x = 1` inline.';
     const html = renderMarkdownToHtml(md);
@@ -68,5 +75,14 @@ describe('renderMarkdownToHtml multi-image and table', () => {
     expect(html).toContain('<tbody>');
     expect(html).toContain('<th>A</th>');
     expect(html).toContain('<td>1</td>');
+  });
+
+  it('escapes image attribute values in grouped images', () => {
+    const md = '![a "quoted"](url"1) ![b](url2)';
+    const html = renderMarkdownToHtml(md);
+    expect(html).toContain('alt="a &quot;quoted&quot;"');
+    expect(html).toContain('src="url&quot;1"');
+    expect(html).not.toContain('" quoted"');
+    expect(html).not.toContain('src="url"1"');
   });
 });
