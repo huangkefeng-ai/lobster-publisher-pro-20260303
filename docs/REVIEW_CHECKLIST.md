@@ -108,7 +108,7 @@ _Module not yet implemented. Planned for phase 3._
 - [x] `themeFilter.test.ts` — theme search/filter (6 tests)
 - [x] `pdfExporter.test.ts` — PDF print function (3 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
-- [x] All tests pass locally (`npm test` — 53 tests, 12 suites)
+- [x] All tests pass locally (`npm test` — 55 tests, 13 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
 - [ ] Coverage target ≥ 80% — _not yet measured_
 - [ ] E2E tests (Playwright) — _not yet implemented_
@@ -121,7 +121,7 @@ _Module not yet implemented. Planned for phase 3._
 - [x] `dangerouslySetInnerHTML` only used with DOMPurify-sanitized content
 - [x] WeChat sanitizer uses strict allow-list for tags and attributes
 - [x] No secrets or API keys in committed code
-- [ ] `npm audit` — _run periodically_
+- [x] `npm audit` (high) passes locally on 2026-03-03
 
 ---
 
@@ -181,7 +181,7 @@ _Module not yet implemented. Planned for phase 3._
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 53 tests across 12 suites |
+| Tests | PASS | 55 tests across 13 suites |
 | Build | PASS | 90 KB gzip, < 1s build |
 | Strict TS | PASS | All strict flags enabled |
 | Module boundaries | FIXED | 7 barrel-bypass imports corrected |
