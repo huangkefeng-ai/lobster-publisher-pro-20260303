@@ -156,7 +156,13 @@ function App() {
         </div>
       </header>
 
-      <p className="status-toast" role="status" aria-live="polite" aria-atomic="true">
+      <p 
+        className="status-toast" 
+        role="status" 
+        aria-live="polite" 
+        aria-atomic="true"
+        style={{ display: actionStatus ? 'block' : 'none' }}
+      >
         {actionStatus ?? ''}
       </p>
 
