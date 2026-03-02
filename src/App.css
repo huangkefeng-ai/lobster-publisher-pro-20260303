@@ -180,10 +180,18 @@ body {
   color: #0f172a;
 }
 
+/* --- Interactive States --- */
+.editor-container {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 500px;
+}
+
 .editor-textarea {
   flex: 1;
   width: 100%;
-  min-height: 500px;
+  min-height: 100%;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   padding: 1rem;
@@ -194,6 +202,11 @@ body {
   color: #334155;
   background: #f8fafc;
   transition: border-color 0.2s;
+}
+
+.editor-textarea.empty-state {
+  border-color: #cbd5e1;
+  background: #ffffff;
 }
 
 .editor-textarea:focus {
@@ -271,7 +284,7 @@ body {
   overflow-x: auto;
   font-size: 0.9em;
   line-height: 1.5;
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .article-preview code {
@@ -340,7 +353,7 @@ body {
 .theme-card:hover {
   background: #f1f5f9;
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .theme-card.active {
@@ -357,7 +370,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .theme-thumbnail-heading {
@@ -404,6 +417,55 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-top: 0.2rem;
+}
+
+.error-text {
+  color: #ef4444;
+  font-size: 0.85rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(2px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 8px;
+  color: #334155;
+  font-weight: 500;
+}
+
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #cbd5e1;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 0.5rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.preview-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 400px;
+  color: #94a3b8;
+  font-style: italic;
 }
 
 @media (max-width: 1024px) {

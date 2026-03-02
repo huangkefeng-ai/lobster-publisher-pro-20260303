@@ -18,7 +18,11 @@ export function ArticlePreview({ markdown, theme }: ArticlePreviewProps) {
         <p>{theme.name}</p>
       </header>
       <article className="article-preview" style={toThemeCssVariables(theme)}>
-        <div dangerouslySetInnerHTML={{ __html: html }} />
+        {html.trim() ? (
+          <div dangerouslySetInnerHTML={{ __html: html }} />
+        ) : (
+          <div className="preview-empty">No content to preview</div>
+        )}
       </article>
     </section>
   );
