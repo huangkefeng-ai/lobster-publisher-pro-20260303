@@ -59,6 +59,24 @@ describe('copyWechatHtmlToClipboard', () => {
     expect(writeText).toHaveBeenCalledWith('Hello');
   });
 
+  it('preserves separators between table cells in plain-text fallback', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText },
+      configurable: true,
+    });
+    Object.defineProperty(globalThis, 'ClipboardItem', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    });
+
+    await copyWechatHtmlToClipboard('<table><tr><td>Left</td><td>Right</td></tr></table>');
+
+    expect(writeText).toHaveBeenCalledTimes(1);
+    expect(writeText).toHaveBeenCalledWith('Left\nRight');
+  });
+
   it('uses clipboard.write with html and plain text when ClipboardItem is available', async () => {
     const write = vi.fn().mockResolvedValue(undefined);
     const clipboardItemMock = vi.fn();

@@ -19,6 +19,8 @@ const BLOCK_TAGS = new Set([
   'pre',
   'section',
   'table',
+  'td',
+  'th',
   'tr',
   'ul',
 ]);
