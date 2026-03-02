@@ -254,7 +254,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 |------|--------|-------|
 | Lint (`npm run lint`) | PASS | ESLint clean |
 | Tests (`npm test`) | PASS | 100 tests across 18 suites |
-| Build (`npm run build`) | PASS | 91.78 KB gzip, built in 821ms |
+| Build (`npm run build`) | PASS | 91.78 KB gzip, built in 800ms |
 
 ---
 
