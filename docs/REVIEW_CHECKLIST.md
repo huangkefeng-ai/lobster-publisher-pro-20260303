@@ -234,7 +234,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
 | Tests | PASS | 159 tests across 21 suites |
-| Build | PASS | 91.78 KB gzip, < 1s build |
+| Build | PASS | 95.27 KB gzip, built in 847ms |
 | Strict TS | PASS | All strict flags enabled |
 | Performance | FIXED | Lazy WeChat HTML computation |
 | Parser | FIXED | Strikethrough GFM support |
@@ -254,8 +254,9 @@ Use this checklist when reviewing PRs and before merging to `main`.
 |------|--------|-------|
 | Lint (`npm run lint`) | PASS | ESLint clean |
 | Tests (`npm test`) | PASS | 159 tests across 21 suites |
+| E2E (`npm run test:e2e`) | PASS | 3 Playwright scenarios passing |
 | Coverage (`npm run test:coverage`) | PASS | lines 89.08%, statements 88.66% |
-| Build (`npm run build`) | PASS | JS bundle 95.27 KB gzip, built in 736ms |
+| Build (`npm run build`) | PASS | JS bundle 95.27 KB gzip, built in 847ms |
 | Audit (`npm audit --audit-level=high`) | PASS | 0 vulnerabilities |
 
 ---
