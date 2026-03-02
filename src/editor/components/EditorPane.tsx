@@ -1,4 +1,5 @@
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, type ClipboardEvent } from 'react';
+import { markdownFromClipboard } from '../../core';
 
 interface EditorPaneProps {
   markdown: string;
@@ -39,6 +40,33 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
     });
   }
 
+  function handlePaste(event: ClipboardEvent<HTMLTextAreaElement>) {
+    const html = event.clipboardData.getData('text/html');
+    if (html.trim().length === 0) {
+      return;
+    }
+
+    const plainText = event.clipboardData.getData('text/plain');
+    const converted = markdownFromClipboard(html, plainText);
+    if (converted.trim().length === 0) {
+      return;
+    }
+
+    event.preventDefault();
+    const textarea = event.currentTarget;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const nextValue = markdown.slice(0, start) + converted + markdown.slice(end);
+    onMarkdownChange(nextValue);
+
+    requestAnimationFrame(() => {
+      const cursor = start + converted.length;
+      textarea.focus();
+      textarea.selectionStart = cursor;
+      textarea.selectionEnd = cursor;
+    });
+  }
+
   return (
     <section className="panel">
       <header className="panel-header">
@@ -57,6 +85,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
         className="editor-textarea"
         value={markdown}
         onChange={(event) => onMarkdownChange(event.target.value)}
+        onPaste={handlePaste}
         spellCheck
       />
     </section>
