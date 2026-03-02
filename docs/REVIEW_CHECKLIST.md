@@ -108,7 +108,7 @@ _Module not yet implemented. Planned for phase 3._
 - [x] `themeFilter.test.ts` — theme search/filter (6 tests)
 - [x] `pdfExporter.test.ts` — PDF print function (7 tests)
 - [x] `debounce.test.ts` — debounce utility (3 tests)
-- [x] All tests pass locally (`npm test` — 75 tests, 15 suites)
+- [x] All tests pass locally (`npm test` — 76 tests, 16 suites)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
 - [x] Coverage target ≥ 80% — _measured on 2026-03-02 (`npm run test:coverage`): lines 88.95%, statements 88.63%_
 - [ ] E2E tests (Playwright) — _not yet implemented_
@@ -207,7 +207,7 @@ _Module not yet implemented. Planned for phase 3._
 | Area | Status | Notes |
 |------|--------|-------|
 | Lint | PASS | ESLint clean |
-| Tests | PASS | 75 tests across 15 suites |
+| Tests | PASS | 76 tests across 16 suites |
 | Build | PASS | TypeScript strict, zero errors |
 | Security | FIXED | CSS value sanitization, iframe sandbox, markdown escape |
 | Accessibility | FIXED | Live regions, theme count grammar, status announcements |
