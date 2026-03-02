@@ -142,7 +142,7 @@ function renderNode(node: Node, depth = 0): string {
       if (!src) {
         return '';
       }
-      if (/^(javascript|data|vbscript):/i.test(src)) {
+      if (/^[a-z]+:/i.test(src) && !/^(https?|data:image\/)/i.test(src)) {
         return '';
       }
       const alt = element.getAttribute('alt')?.trim() ?? '';

@@ -7,13 +7,13 @@ export function createDebouncedFunction<TArgs extends unknown[]>(
   callback: (...args: TArgs) => void,
   delayMs: number,
 ): DebouncedFunction<TArgs> {
-  let timerId: number | null = null;
+  let timerId: ReturnType<typeof setTimeout> | null = null;
 
   const debounced = (...args: TArgs) => {
     if (timerId !== null) {
-      window.clearTimeout(timerId);
+      clearTimeout(timerId);
     }
-    timerId = window.setTimeout(() => {
+    timerId = setTimeout(() => {
       timerId = null;
       callback(...args);
     }, delayMs);
@@ -21,7 +21,7 @@ export function createDebouncedFunction<TArgs extends unknown[]>(
 
   debounced.cancel = () => {
     if (timerId !== null) {
-      window.clearTimeout(timerId);
+      clearTimeout(timerId);
       timerId = null;
     }
   };

@@ -34,7 +34,7 @@ function mergeInlineStyle(element: Element, nextStyle: Record<string, string>): 
 export function applyWechatInlineStyles(html: string, theme: ThemeDefinition): string {
   const parser = new DOMParser();
   const document = parser.parseFromString(`<section data-wechat-article="true">${html}</section>`, 'text/html');
-  const container = document.querySelector('section');
+  const container = document.querySelector('section[data-wechat-article="true"]');
 
   if (!container) {
     return html;

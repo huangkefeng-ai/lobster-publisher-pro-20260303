@@ -32,13 +32,13 @@ const WECHAT_ALLOWED_TAGS = [
   'ul',
 ] as const;
 
-const WECHAT_ALLOWED_ATTR = ['alt', 'colspan', 'href', 'rowspan', 'src', 'style', 'title'] as const;
+const WECHAT_ALLOWED_ATTR = ['alt', 'colspan', 'href', 'rowspan', 'src', 'title'] as const;
 
 export function sanitizeWechatHtml(html: string): string {
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: [...WECHAT_ALLOWED_TAGS],
     ALLOWED_ATTR: [...WECHAT_ALLOWED_ATTR],
     FORBID_TAGS: ['script', 'style'],
-    FORBID_ATTR: ['class', 'id', 'onclick', 'onerror'],
+    ALLOWED_URI_REGEXP: /^(?:https?|mailto):/i,
   });
 }
