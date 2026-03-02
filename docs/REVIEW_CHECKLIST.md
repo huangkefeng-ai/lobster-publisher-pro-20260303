@@ -226,6 +226,17 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 ---
 
+## Verification Refresh (2026-03-02)
+
+| Check | Status | Notes |
+|------|--------|-------|
+| Lint (`npm run lint`) | PASS | ESLint clean |
+| Tests (`npm test -- --run`) | PASS | 98 tests across 18 suites |
+| Coverage (`npm run test:coverage`) | PASS | 92.11% lines, 91.92% statements |
+| Build (`npm run build`) | PASS | 91.74 KB gzip, built in 781ms |
+
+---
+
 ## Quick Reference: Reviewer Sign-off
 
 ```
