@@ -25,7 +25,7 @@ function renderList(node: Element, depth = 0): string {
 function renderNode(node: Node, depth = 0): string {
   if (node.nodeType === Node.TEXT_NODE) {
     const collapsed = collapseInlineWhitespace(node.textContent ?? '');
-    return collapsed.trim().length === 0 ? '' : collapsed;
+    return collapsed.trim().length === 0 ? '' : escapeMarkdownText(collapsed);
   }
 
   if (node.nodeType !== Node.ELEMENT_NODE) {
@@ -55,12 +55,12 @@ function renderNode(node: Node, depth = 0): string {
       return '\n';
     case 'strong':
     case 'b': {
-      const content = escapeMarkdownText(renderChildren(element, depth).trim());
+      const content = renderChildren(element, depth).trim();
       return content.length > 0 ? `**${content}**` : '';
     }
     case 'em':
     case 'i': {
-      const content = escapeMarkdownText(renderChildren(element, depth).trim());
+      const content = renderChildren(element, depth).trim();
       return content.length > 0 ? `*${content}*` : '';
     }
     case 'code': {

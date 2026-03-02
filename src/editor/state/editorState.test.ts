@@ -27,4 +27,15 @@ describe('editorState', () => {
 
     expect(nextState.markdown).toBe('Hello brave world');
   });
+
+  it('clamps negative insert position to the start', () => {
+    const state = createInitialEditorState('world');
+    const nextState = editorReducer(state, {
+      type: 'insert_snippet',
+      snippet: 'hello ',
+      position: -1,
+    });
+
+    expect(nextState.markdown).toBe('hello world');
+  });
 });

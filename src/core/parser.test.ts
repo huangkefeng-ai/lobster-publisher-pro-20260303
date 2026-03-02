@@ -21,6 +21,11 @@ describe('richTextToMarkdown', () => {
       '![diagram](https://img.test/a.png)\n\n```\nconst a = 1;\n```',
     );
   });
+
+  it('escapes literal markdown control characters in plain text', () => {
+    const html = '<p>Use *stars* and _underscores_ literally.</p>';
+    expect(richTextToMarkdown(html)).toBe('Use \\*stars\\* and \\_underscores\\_ literally.');
+  });
 });
 
 describe('markdownFromClipboard', () => {

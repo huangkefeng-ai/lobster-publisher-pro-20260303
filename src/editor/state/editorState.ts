@@ -15,7 +15,8 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
     case 'set_markdown':
       return { ...state, markdown: action.markdown };
     case 'insert_snippet': {
-      const index = action.position ?? state.markdown.length;
+      const rawIndex = action.position ?? state.markdown.length;
+      const index = Math.max(0, Math.min(rawIndex, state.markdown.length));
       const nextMarkdown =
         state.markdown.slice(0, index) + action.snippet + state.markdown.slice(index);
       return { ...state, markdown: nextMarkdown };
