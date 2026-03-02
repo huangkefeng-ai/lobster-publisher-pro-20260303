@@ -16,6 +16,10 @@ const TOOLBAR_SNIPPETS: Array<{ label: string; snippet: string }> = [
   { label: 'Divider', snippet: '\n---\n' },
 ];
 
+function escapeMarkdownAltText(value: string): string {
+  return value.replace(/\]/g, '\\]');
+}
+
 export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -52,7 +56,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
     setIsUploading(true);
     try {
       const base64 = await processImageFile(file);
-      const snippet = `\n![${file.name}](${base64})\n`;
+      const snippet = `\n![${escapeMarkdownAltText(file.name)}](${base64})\n`;
       handleInsert(snippet);
     } catch (error) {
       console.error('Failed to process image:', error);

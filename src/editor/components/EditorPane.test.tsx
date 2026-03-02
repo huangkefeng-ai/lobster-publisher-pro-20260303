@@ -122,7 +122,7 @@ describe('EditorPane', () => {
 
     const rendered = renderEditor('Start');
     const textarea = rendered.container.querySelector('textarea') as HTMLTextAreaElement;
-    const image = new File(['data'], 'paste.png', { type: 'image/png' });
+    const image = new File(['data'], 'paste]image.png', { type: 'image/png' });
 
     await act(async () => {
       dispatchPaste(textarea, {
@@ -144,7 +144,9 @@ describe('EditorPane', () => {
       await Promise.resolve();
     });
 
-    expect(rendered.onMarkdownChange).toHaveBeenCalledWith('Start plus\n![paste.png](data:image/png;base64,abc)\n');
+    expect(rendered.onMarkdownChange).toHaveBeenCalledWith(
+      'Start plus\n![paste\\]image.png](data:image/png;base64,abc)\n',
+    );
     expect(textarea.disabled).toBe(false);
     cleanupRender(rendered);
   });
