@@ -66,6 +66,10 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
         <div className="theme-quick-chips" role="group" aria-label="快捷主题">
           {quickThemes.map((theme) => {
             const active = theme.id === selectedThemeId;
+            // Short names for quick chips: Mac, Claude, 微信公众号原生, or first word of others.
+            const shortName = theme.id === 'apple-white' ? 'Mac' : 
+                             theme.id === 'claude-oat' ? 'Claude' : 
+                             theme.name;
             return (
               <button
                 key={theme.id}
@@ -74,7 +78,7 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
                 type="button"
                 aria-pressed={active}
               >
-                {theme.name.split(' ')[0]}
+                {shortName}
               </button>
             );
           })}
