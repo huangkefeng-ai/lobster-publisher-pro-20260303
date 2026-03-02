@@ -139,7 +139,8 @@ function renderNode(node: Node, depth = 0): string {
       if (!hasAllowedProtocol(href, ['http', 'https', 'mailto', 'tel'])) {
         return text ?? '';
       }
-      return `[${text}](${href})`;
+      const safeText = (text ?? '').replace(/\]/g, '\\]');
+      return `[${safeText}](${href})`;
     }
     case 'img': {
       const src = element.getAttribute('src')?.trim();
@@ -149,7 +150,7 @@ function renderNode(node: Node, depth = 0): string {
       if (!hasAllowedProtocol(src, ['http', 'https'])) {
         return '';
       }
-      const alt = element.getAttribute('alt')?.trim() ?? '';
+      const alt = (element.getAttribute('alt')?.trim() ?? '').replace(/\]/g, '\\]');
       return `![${alt}](${src})`;
     }
     case 'table': {

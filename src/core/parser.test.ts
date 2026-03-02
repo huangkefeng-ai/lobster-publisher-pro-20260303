@@ -68,6 +68,17 @@ describe('richTextToMarkdown', () => {
     );
   });
 
+  it('escapes closing brackets in markdown link text and image alt text', () => {
+    const html = `
+      <p><a href="https://example.com">docs] link</a></p>
+      <p><img alt="chart] image" src="https://img.test/chart.png" /></p>
+    `;
+
+    expect(richTextToMarkdown(html)).toBe(
+      '[docs\\] link](https://example.com)\n\n![chart\\] image](https://img.test/chart.png)',
+    );
+  });
+
   it('processes large 10k+ word clipboard html without freezing', () => {
     const wordsPerParagraph = 250;
     const paragraphCount = 40;

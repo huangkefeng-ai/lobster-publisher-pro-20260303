@@ -2,8 +2,13 @@ import { renderMarkdownToHtml } from '../core';
 import type { ThemeDefinition } from '../theme';
 import { applyWechatInlineStyles, sanitizeWechatHtml } from '../wechat';
 
+function sanitizeCssValue(value: string): string {
+  return value.replace(/[<>"'\\]/g, '');
+}
+
 export function toThemedHtml(markdown: string, theme: ThemeDefinition): string {
   const htmlBody = renderMarkdownToHtml(markdown);
+  const t = (v: string) => sanitizeCssValue(v);
 
   return `<!doctype html>
 <html>
@@ -12,11 +17,11 @@ export function toThemedHtml(markdown: string, theme: ThemeDefinition): string {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Lobster Export</title>
 <style>
-body { margin: 0; padding: 20px; background: ${theme.tokens.background}; color: ${theme.tokens.text}; font-family: ${theme.tokens.bodyFont}; }
-h1, h2, h3 { color: ${theme.tokens.heading}; font-family: ${theme.tokens.headingFont}; }
-blockquote { border-left: 4px solid ${theme.tokens.quoteBorder}; background: ${theme.tokens.quoteBackground}; margin: 1rem 0; padding: 0.75rem 0.85rem; }
-pre { background: ${theme.tokens.codeBackground}; padding: 0.65rem; border-radius: 8px; overflow-x: auto; }
-a { color: ${theme.tokens.accent}; }
+body { margin: 0; padding: 20px; background: ${t(theme.tokens.background)}; color: ${t(theme.tokens.text)}; font-family: ${t(theme.tokens.bodyFont)}; }
+h1, h2, h3 { color: ${t(theme.tokens.heading)}; font-family: ${t(theme.tokens.headingFont)}; }
+blockquote { border-left: 4px solid ${t(theme.tokens.quoteBorder)}; background: ${t(theme.tokens.quoteBackground)}; margin: 1rem 0; padding: 0.75rem 0.85rem; }
+pre { background: ${t(theme.tokens.codeBackground)}; padding: 0.65rem; border-radius: 8px; overflow-x: auto; }
+a { color: ${t(theme.tokens.accent)}; }
 </style>
 </head>
 <body>
@@ -31,11 +36,12 @@ export function toWechatHtml(markdown: string, theme: ThemeDefinition): string {
 }
 
 export function downloadHtmlFile(filename: string, html: string): void {
+  const safeFilename = filename.replace(/[/\\?%*:|"<>\x00-\x1f]/g, '_') || 'export.html';
   const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = filename;
+  anchor.download = safeFilename;
   document.body.appendChild(anchor);
   anchor.click();
   setTimeout(() => {

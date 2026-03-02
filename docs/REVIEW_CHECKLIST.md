@@ -12,7 +12,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 - [x] No `console.log` left in production code
 - [x] No hardcoded strings — use `constants.ts`
 - [x] Functions are ≤ 50 lines; files are ≤ 300 lines
-- [ ] No circular imports (enforced by ESLint plugin) — _plugin not yet configured_
+- [x] No circular imports (enforced by ESLint `import/no-cycle` rule)
 
 ---
 
