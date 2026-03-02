@@ -24,6 +24,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const wordCount = useMemo(() => computeDocumentStats(markdown).wordCount, [markdown]);
 
   function handleInsert(snippet: string) {
@@ -49,17 +50,18 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
 
   async function handleImageFiles(files: FileList | File[] | null) {
     if (!files || files.length === 0) return;
-    
+
     const file = Array.from(files).find(f => f.type.startsWith('image/'));
     if (!file) return;
 
     setIsUploading(true);
+    setUploadError(null);
     try {
       const base64 = await processImageFile(file);
       const snippet = `\n![${escapeMarkdownAltText(file.name)}](${base64})\n`;
       handleInsert(snippet);
-    } catch (error) {
-      console.error('Failed to process image:', error);
+    } catch {
+      setUploadError('Image processing failed. Try another image.');
     } finally {
       setIsUploading(false);
     }
@@ -151,6 +153,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
       <header className="panel-header">
         <h2>Markdown Editor</h2>
         <p>{wordCount} words {isUploading && '· Processing image...'}</p>
+        {uploadError ? <p role="alert">{uploadError}</p> : null}
       </header>
       <div className="toolbar" role="toolbar" aria-label="Editor snippets">
         {TOOLBAR_SNIPPETS.map((item) => (

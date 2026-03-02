@@ -179,4 +179,24 @@ describe('EditorPane', () => {
     expect(fileInput.value).toBe('');
     cleanupRender(rendered);
   });
+
+  it('shows an error message when image processing fails', async () => {
+    vi.mocked(processImageFile).mockRejectedValue(new Error('bad-image'));
+    const rendered = renderEditor('Text');
+    const textarea = rendered.container.querySelector('textarea') as HTMLTextAreaElement;
+    const image = new File(['data'], 'broken.png', { type: 'image/png' });
+
+    await act(async () => {
+      dispatchPaste(textarea, {
+        files: [image],
+        getData: () => '',
+      });
+      await Promise.resolve();
+    });
+
+    expect(rendered.onMarkdownChange).not.toHaveBeenCalled();
+    expect(rendered.container.textContent).toContain('Image processing failed. Try another image.');
+    expect(textarea.disabled).toBe(false);
+    cleanupRender(rendered);
+  });
 });
