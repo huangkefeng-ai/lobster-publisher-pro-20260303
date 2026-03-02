@@ -31,10 +31,9 @@ Use this checklist when reviewing PRs and before merging to `main`.
 
 - [x] `core/renderer.ts` is the single markdown→HTML entry point (marked + DOMPurify)
 - [x] `core/parser.ts` handles rich text → markdown via DOMParser
-- [x] Magic paste correctly handles: bold, italic, links, images, lists, code blocks
+- [x] Magic paste correctly handles: bold, italic, links, images, lists, code blocks, tables
 - [x] Output HTML is valid and well-formed
 - [x] No XSS vectors in rendered output (DOMPurify sanitized by default)
-- [ ] Table support in magic paste — _not yet tested_
 
 ---
 
@@ -65,7 +64,7 @@ Use this checklist when reviewing PRs and before merging to `main`.
 - [x] HTML export produces a standalone file (embedded CSS, no external deps)
 - [x] `downloadHtmlFile()` triggers browser download via Blob URL
 - [x] WeChat HTML export chains: render → sanitize → inline styles
-- [ ] PDF export — _not yet implemented (phase 3)_
+- [x] PDF export via hidden iframe + `window.print()` (`pdfExporter.ts`)
 - [ ] Large document (10k+ words) stress test — _pending_
 
 ---
@@ -84,12 +83,13 @@ _Module not yet implemented. Planned for phase 3._
 ## 8. Editor & Preview UI
 
 - [x] Editor and preview panes resize correctly (CSS grid, responsive)
-- [x] Live preview updates on every keystroke (synchronous via `useMemo`)
+- [x] Live preview updates on every keystroke (debounced via `createDebouncedFunction`)
 - [x] Toolbar inserts snippets at cursor position
 - [x] Theme picker shows all 33 themes with active highlight
 - [x] Export/copy buttons in dedicated actions panel
-- [ ] Keyboard shortcuts (Ctrl/Cmd+B, I, K) — _not yet implemented_
-- [ ] Paste handler intercepts rich text — _not yet wired to editor_
+- [x] Keyboard shortcuts (Ctrl/Cmd+B, I, K, Shift+C, Tab/Shift+Tab)
+- [x] Paste handler intercepts rich text and converts to markdown
+- [x] Theme search input has `aria-label` for accessibility
 - [ ] ARIA labels on all interactive elements — _partial_
 
 ---
@@ -102,7 +102,12 @@ _Module not yet implemented. Planned for phase 3._
 - [x] `sanitizer.test.ts` — WeChat sanitization (1 test)
 - [x] `inlineStyles.test.ts` — inline style application (1 test)
 - [x] `htmlExporter.test.ts` — themed + WeChat HTML export (2 tests)
-- [x] All 14 tests pass locally (`npm test`)
+- [x] `statistics.test.ts` — document stats and CJK word count (2 tests)
+- [x] `storage.test.ts` — localStorage save/load/clear (3 tests)
+- [x] `shortcuts.test.ts` — keyboard shortcut text transforms (5 tests)
+- [x] `themeFilter.test.ts` — theme search/filter (2 tests)
+- [x] `pdfExporter.test.ts` — PDF print function (1 test)
+- [x] All tests pass locally (`npm test`)
 - [x] Vitest config includes both `.test.ts` and `.test.tsx` files
 - [ ] Coverage target ≥ 80% — _not yet measured_
 - [ ] E2E tests (Playwright) — _not yet implemented_
@@ -123,7 +128,8 @@ _Module not yet implemented. Planned for phase 3._
 
 - [x] Bundle size: 86 KB gzipped (well under 500 KB target)
 - [x] Preview uses `useMemo` keyed on markdown content
-- [ ] Markdown rendering debounce (≥ 150ms) — _not yet implemented_
+- [x] Preview debounced (100ms) via `createDebouncedFunction`
+- [x] Draft persistence debounced (250ms) via `createDebouncedFunction`
 - [ ] Large document (10k+ words) freeze test — _pending_
 - [ ] Image lazy-loading — _not applicable yet_
 

@@ -102,6 +102,32 @@ function renderNode(node: Node, depth = 0): string {
       const alt = element.getAttribute('alt')?.trim() ?? '';
       return `![${alt}](${src})`;
     }
+    case 'table': {
+      const rows = Array.from(element.querySelectorAll('tr'));
+      if (rows.length === 0) return '';
+      const toRow = (row: Element) =>
+        Array.from(row.children)
+          .filter((c) => c.tagName.toLowerCase() === 'td' || c.tagName.toLowerCase() === 'th')
+          .map((c) => renderChildren(c, depth).trim())
+          .join(' | ');
+      const header = toRow(rows[0]);
+      const separator = header
+        .split(' | ')
+        .map(() => '---')
+        .join(' | ');
+      const body = rows
+        .slice(1)
+        .map((r) => `| ${toRow(r)} |`)
+        .join('\n');
+      return `| ${header} |\n| ${separator} |\n${body}\n\n`;
+    }
+    case 'thead':
+    case 'tbody':
+    case 'tfoot':
+    case 'tr':
+    case 'td':
+    case 'th':
+      return renderChildren(element, depth);
     case 'hr':
       return '\n---\n\n';
     case 'style':

@@ -43,15 +43,19 @@ The codebase is organized into **six isolated modules**. Each module owns its ty
 src/
 ├── core/                  # Module 1 — Markdown processing pipeline
 │   ├── constants.ts       #   App-wide defaults (DEFAULT_MARKDOWN, DEFAULT_THEME_ID)
-│   ├── parser.ts          #   Rich text / HTML → Markdown (magic paste)
+│   ├── debounce.ts        #   Generic debounce utility
+│   ├── parser.ts          #   Rich text / HTML → Markdown (magic paste, incl. tables)
 │   ├── renderer.ts        #   Markdown → sanitized HTML (marked + DOMPurify)
+│   ├── statistics.ts      #   Document stats (word count, reading time, CJK-aware)
+│   ├── storage.ts         #   LocalStorage draft persistence
 │   └── index.ts
 │
 ├── theme/                 # Module 2 — Theme engine
 │   ├── themeTypes.ts      #   ThemeTokens & ThemeDefinition interfaces
 │   ├── themeRegistry.ts   #   33 built-in token-based themes + lookup
 │   ├── themeCss.ts        #   Tokens → CSS custom properties
-│   ├── ThemePicker.tsx    #   Theme gallery selection component
+│   ├── themeFilter.ts     #   Search/filter themes by name or family
+│   ├── ThemePicker.tsx    #   Theme gallery selection component (with search)
 │   └── index.ts
 │
 ├── wechat/                # Module 3 — WeChat compatibility layer
@@ -62,13 +66,15 @@ src/
 │
 ├── export/                # Module 4 — Export engine
 │   ├── htmlExporter.ts    #   Themed HTML doc export + WeChat HTML + file download
+│   ├── pdfExporter.ts     #   Browser-native PDF export via hidden iframe + print()
 │   └── index.ts
 │
 ├── editor/                # Module 5 — Editor UI
 │   ├── components/
-│   │   └── EditorPane.tsx #   Textarea editor with snippet toolbar
+│   │   └── EditorPane.tsx #   Textarea editor with snippet toolbar + paste handler
 │   ├── state/
 │   │   └── editorState.ts #   useReducer-based editor state
+│   ├── shortcuts.ts       #   Keyboard shortcuts (bold, italic, link, code, indent)
 │   └── index.ts
 │
 ├── preview/               # Module 6 — Live preview
@@ -168,25 +174,30 @@ The copy-to-WeChat flow writes `text/html` MIME type to the clipboard using the 
 - [x] 33 token-based themes with gallery picker
 - [x] Barrel `index.ts` exports for all modules
 
-### Phase 2 — WeChat Compatibility
+### Phase 2 — Core Logic & Editor Productivity
+- [x] `core/statistics` — CJK-aware word count, reading time, line count
+- [x] `core/storage` — LocalStorage draft persistence (save/load/clear)
+- [x] `core/debounce` — Generic debounce utility for preview + persistence
+- [x] `editor/shortcuts` — Keyboard shortcuts (Ctrl/Cmd+B/I/K, Shift+C, Tab)
+- [x] `theme/themeFilter` — Search/filter themes by name or family
+- [x] `export/pdfExporter` — Browser-native PDF export via print dialog
 - [x] `wechat/sanitizer` — strip unsupported elements (DOMPurify allow-list)
 - [x] `wechat/inlineStyles` — theme tokens → inline styles per element
 - [x] `wechat/clipboard` — Clipboard API `text/html` copy
 - [x] Copy-to-WeChat button in UI
 - [x] 33 themes (exceeds 15 target)
 
-### Phase 3 — Export & Images
+### Phase 3 — Images & Advanced Export
 - [x] `export/htmlExporter` — standalone themed HTML file download
-- [ ] `export/pdf` — PDF generation (planned)
 - [ ] `images/uploader` — drag-and-drop image upload
 - [ ] `images/processor` — resize, compress, base64
 - [x] 33 themes (exceeds 30+ target)
 
 ### Phase 4 — Polish
-- [ ] Keyboard shortcuts
+- [x] Keyboard shortcuts (Ctrl/Cmd+B, I, K, Shift+C, Tab/Shift+Tab)
+- [x] Performance optimization (debounced preview + persistence)
 - [ ] Mobile-responsive layout
 - [ ] Theme customization UI
-- [ ] Performance optimization (debounced rendering)
 - [ ] Documentation site
 
 ---

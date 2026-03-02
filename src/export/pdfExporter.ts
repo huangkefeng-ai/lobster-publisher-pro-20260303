@@ -14,24 +14,33 @@ export function printThemedArticle(html: string): void {
     throw new Error('Failed to access iframe document for printing.');
   }
 
-  iframeDoc.open();
-  iframeDoc.write(html);
-  iframeDoc.close();
+  let hasPrinted = false;
+  let fallbackTimer = 0;
 
-  iframe.onload = () => {
-    iframe.contentWindow?.print();
-    setTimeout(() => {
-      document.body.removeChild(iframe);
-    }, 1000);
-  };
-
-  // Fallback: if onload doesn't fire (already loaded synchronously)
-  if (iframeDoc.readyState === 'complete') {
+  const printOnce = () => {
+    if (hasPrinted) {
+      return;
+    }
+    hasPrinted = true;
+    window.clearTimeout(fallbackTimer);
     iframe.contentWindow?.print();
     setTimeout(() => {
       if (iframe.parentNode) {
         document.body.removeChild(iframe);
       }
     }, 1000);
-  }
+  };
+
+  iframe.onload = () => {
+    printOnce();
+  };
+
+  // Fallback for browsers that never dispatch iframe onload after document.write().
+  fallbackTimer = window.setTimeout(() => {
+    printOnce();
+  }, 250);
+
+  iframeDoc.open();
+  iframeDoc.write(html);
+  iframeDoc.close();
 }

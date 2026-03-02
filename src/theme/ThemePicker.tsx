@@ -20,6 +20,7 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
           className="theme-search"
           type="text"
           placeholder="Search themes…"
+          aria-label="Search themes"
           value={themeQuery ?? ''}
           onChange={(e) => onThemeQueryChange(e.target.value)}
         />

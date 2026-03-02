@@ -1,5 +1,5 @@
-import { useMemo, useRef, type ClipboardEvent, type KeyboardEvent } from 'react';
-import { markdownFromClipboard } from '../../core';
+import { useRef, type ClipboardEvent, type KeyboardEvent } from 'react';
+import { markdownFromClipboard, computeDocumentStats } from '../../core';
 import { handleEditorShortcut } from '../shortcuts';
 
 interface EditorPaneProps {
@@ -17,9 +17,7 @@ const TOOLBAR_SNIPPETS: Array<{ label: string; snippet: string }> = [
 
 export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const wordCount = useMemo(() => {
-    return markdown.trim().length === 0 ? 0 : markdown.trim().split(/\s+/).length;
-  }, [markdown]);
+  const wordCount = computeDocumentStats(markdown).wordCount;
 
   function handleInsert(snippet: string) {
     const textarea = textareaRef.current;
