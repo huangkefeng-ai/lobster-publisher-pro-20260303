@@ -95,6 +95,20 @@ describe('richTextToMarkdown', () => {
     );
   });
 
+  it('converts tables while ignoring empty rows and escaping pipe characters in cells', () => {
+    const html = `
+      <table>
+        <tr></tr>
+        <tr><th>Name</th><th>Role</th></tr>
+        <tr><td>Lobster</td><td>Editor|Publisher</td></tr>
+      </table>
+    `;
+
+    expect(richTextToMarkdown(html)).toBe(
+      '| Name | Role |\n| --- | --- |\n| Lobster | Editor\\|Publisher |',
+    );
+  });
+
   it('processes large 10k+ word clipboard html without freezing', () => {
     const wordsPerParagraph = 250;
     const paragraphCount = 40;

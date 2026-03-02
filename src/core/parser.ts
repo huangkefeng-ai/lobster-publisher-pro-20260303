@@ -182,21 +182,24 @@ function renderNode(node: Node, depth = 0): string {
     }
     case 'table': {
       const rows = Array.from(element.querySelectorAll('tr'));
-      if (rows.length === 0) return '';
+      const rowCells = rows
+        .map((row) =>
+          Array.from(row.children).filter(
+            (cell) => cell.tagName.toLowerCase() === 'td' || cell.tagName.toLowerCase() === 'th',
+          ),
+        )
+        .filter((cells) => cells.length > 0);
+      if (rowCells.length === 0) return '';
       const escPipe = (s: string) => s.replace(/\|/g, '\\|');
-      const toRow = (row: Element) =>
-        Array.from(row.children)
-          .filter((c) => c.tagName.toLowerCase() === 'td' || c.tagName.toLowerCase() === 'th')
-          .map((c) => escPipe(renderChildren(c, depth).trim()))
-          .join(' | ');
-      const header = toRow(rows[0]);
+      const toRow = (cells: Element[]) => cells.map((c) => escPipe(renderChildren(c, depth).trim())).join(' | ');
+      const header = toRow(rowCells[0]);
       const separator = header
         .split(' | ')
         .map(() => '---')
         .join(' | ');
-      const body = rows
+      const body = rowCells
         .slice(1)
-        .map((r) => `| ${toRow(r)} |`)
+        .map((cells) => `| ${toRow(cells)} |`)
         .join('\n');
       return `| ${header} |\n| ${separator} |\n${body}\n\n`;
     }
