@@ -166,6 +166,20 @@ describe('richTextToMarkdown', () => {
     expect(md).toContain('- [ ] Todo task');
   });
 
+  it('does not treat parent list items as checkboxes when only nested items contain checkboxes', () => {
+    const html = `
+      <ul>
+        <li>Parent item
+          <ul>
+            <li><input type="checkbox" checked />Nested done</li>
+          </ul>
+        </li>
+      </ul>
+    `;
+
+    expect(richTextToMarkdown(html)).toBe('- Parent item\n  - [x] Nested done');
+  });
+
   it('converts <strike> tag to GFM tildes', () => {
     const html = '<p><strike>old text</strike></p>';
     expect(richTextToMarkdown(html)).toBe('~~old text~~');

@@ -53,9 +53,31 @@ function getInlineStyleValue(element: Element, property: string): string {
 
 /** Detect whether a <li> starts with a checkbox <input> (Notion/Feishu paste). */
 function extractCheckbox(item: Element): { checked: boolean } | null {
-  const first = item.querySelector('input[type="checkbox"]');
-  if (!first) return null;
-  return { checked: first.hasAttribute('checked') };
+  for (const child of Array.from(item.childNodes)) {
+    if (child.nodeType === Node.TEXT_NODE) {
+      if ((child.textContent ?? '').trim().length === 0) {
+        continue;
+      }
+      return null;
+    }
+
+    if (child.nodeType !== Node.ELEMENT_NODE) {
+      continue;
+    }
+
+    const element = child as Element;
+    if (element.tagName.toLowerCase() !== 'input') {
+      return null;
+    }
+
+    if (element.getAttribute('type') !== 'checkbox') {
+      return null;
+    }
+
+    return { checked: element.hasAttribute('checked') };
+  }
+
+  return null;
 }
 
 function renderList(node: Element, depth = 0): string {
