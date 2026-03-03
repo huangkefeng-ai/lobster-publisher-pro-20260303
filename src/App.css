@@ -504,16 +504,16 @@ body {
 
 .workspace-grid.device-desktop .editor-panel { flex: 1; }
 .workspace-grid.device-desktop .preview-panel { flex: 1; }
-.workspace-grid.device-tablet .editor-panel { flex: 1; }
-.workspace-grid.device-tablet .preview-panel { flex: 1; }
+.workspace-grid.device-tablet .editor-panel { flex: 0.95; }
+.workspace-grid.device-tablet .preview-panel { flex: 1.05; }
 .workspace-grid.device-mobile .editor-panel { flex: 1; }
 .workspace-grid.device-mobile .preview-panel { flex: 1; }
 
 @media (min-width: 1440px) {
-  .workspace-grid.device-tablet .editor-panel { flex: 1.2; }
-  .workspace-grid.device-tablet .preview-panel { flex: 0.8; }
-  .workspace-grid.device-mobile .editor-panel { flex: 1.5; }
-  .workspace-grid.device-mobile .preview-panel { flex: 0.5; }
+  .workspace-grid.device-tablet .editor-panel { flex: 0.9; }
+  .workspace-grid.device-tablet .preview-panel { flex: 1.1; }
+  .workspace-grid.device-mobile .editor-panel { flex: 1.35; }
+  .workspace-grid.device-mobile .preview-panel { flex: 0.65; }
 }
 
 .panel {
