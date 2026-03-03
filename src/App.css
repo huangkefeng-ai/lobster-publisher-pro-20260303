@@ -706,13 +706,13 @@ body {
 }
 
 .article-preview-container.device-tablet {
-  align-items: flex-start; /* Prevent top clipping */
-  padding: 1rem 20rem 10rem; /* Increased side gaps: larger than mobile */
+  align-items: flex-start;
+  padding: clamp(1rem, 2.5vw, 2rem) clamp(2rem, 9vw, 9rem) 10rem;
 }
 
 .article-preview-container.device-mobile {
-  align-items: flex-start; /* Prevent top clipping */
-  padding: 1rem 6rem 10rem; /* Reduced side gaps: smaller than tablet, fixed center gap issue */
+  align-items: flex-start;
+  padding: clamp(1rem, 3vw, 1.8rem) clamp(1.2rem, 5vw, 3rem) 10rem;
 }
 
 /* --- Neutral Full-screen Bezel Shell --- */
@@ -735,28 +735,24 @@ body {
 }
 
 .workspace-grid.device-tablet .device-shell {
-  /* Optical center fix: horizontal only to avoid scroll clipping */
-  transform: translateX(-80px);
+  transform: translateX(-2vw);
 }
 
 .workspace-grid.device-mobile .device-shell {
-  /* Combined optical center fix: horizontal only */
-  transform: translateX(-30px);
+  transform: translateX(-1vw);
 }
 
 .shell-mobile {
-  /* Aligned with raphael-publish-upstream benchmark (520x1080) */
-  width: 520px; 
-  height: 1080px; 
-  border-radius: 56px;
+  width: min(100%, 460px);
+  height: min(100%, 960px);
+  border-radius: 48px;
 }
 
 .shell-tablet {
-  /* Increased to be clearly larger than mobile (520x1080) */
-  width: 820px; 
-  height: 1180px;
-  border-radius: 40px;
-  padding: 16px;
+  width: min(100%, 760px);
+  height: min(100%, 1080px);
+  border-radius: 36px;
+  padding: 14px;
 }
 
 .device-screen {
@@ -815,7 +811,7 @@ body {
 }
 
 .workspace-grid.device-tablet .device-screen .article-preview {
-  padding: 4rem 8rem 6rem; /* Enhanced internal centering for tablet readability */
+  padding: clamp(2.2rem, 4vw, 3.2rem) clamp(1.8rem, 5vw, 4rem) 6rem;
 }
 
 .article-preview.device-desktop {
@@ -1026,16 +1022,15 @@ body {
   }
   /* Restore intended gaps for device containers in small windows */
   .article-preview-container.device-tablet {
-    padding: 1rem 15vw 10rem; /* Dynamic and larger side gaps for small window */
+    padding: 1rem clamp(1.6rem, 8vw, 4rem) 10rem;
     justify-content: center;
   }
   .article-preview-container.device-mobile {
-    padding: 1rem 2rem 10rem;
+    padding: 1rem clamp(1rem, 5vw, 2rem) 10rem;
   }
 
   .workspace-grid.device-tablet .device-shell {
-    /* Horizontal shift only to avoid vertical scroll conflict */
-    transform: translateX(-140px);
+    transform: translateX(-1.5vw);
   }
   .theme-topbar {
     flex-direction: column;
