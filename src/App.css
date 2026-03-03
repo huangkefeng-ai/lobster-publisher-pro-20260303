@@ -740,12 +740,11 @@ body {
 }
 
 .workspace-grid.device-tablet .device-shell {
-  /* Optical centering with slight left bias for tablet preview */
-  transform: translateX(-2.6vw);
+  transform: translateX(0);
 }
 
 .workspace-grid.device-mobile .device-shell {
-  transform: translateX(-1.4vw);
+  transform: translateX(0);
 }
 
 .shell-mobile {
@@ -1036,10 +1035,10 @@ body {
   }
 
   .workspace-grid.device-tablet .device-shell {
-    transform: translateX(-2vw);
+    transform: translateX(0);
   }
   .workspace-grid.device-mobile .device-shell {
-    transform: translateX(-1.2vw);
+    transform: translateX(0);
   }
   .theme-topbar {
     flex-direction: column;
@@ -1074,11 +1073,11 @@ body {
   }
 
   .workspace-grid.device-tablet .device-shell {
-    transform: translateX(-1.2vw);
+    transform: translateX(0);
   }
 
   .workspace-grid.device-mobile .device-shell {
-    transform: translateX(-0.8vw);
+    transform: translateX(0);
   }
 
   .shell-tablet {
