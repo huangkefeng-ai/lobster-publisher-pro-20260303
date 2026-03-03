@@ -703,10 +703,14 @@ body {
   padding: 0; /* Remove all gutters in desktop mode */
 }
 
-.article-preview-container.device-tablet,
-.article-preview-container.device-mobile {
+.article-preview-container.device-tablet {
   align-items: flex-start; /* Prevent top clipping */
   padding: 5rem 2rem; /* Side spacing ONLY for device frame modes */
+}
+
+.article-preview-container.device-mobile {
+  align-items: flex-start; /* Prevent top clipping */
+  padding: 5rem 6rem; /* Increased side gaps for mobile frame */
 }
 
 /* --- Neutral Full-screen Bezel Shell --- */
