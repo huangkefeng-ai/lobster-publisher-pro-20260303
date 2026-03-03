@@ -15,6 +15,8 @@ import { processImageFile } from '../../images';
 interface EditorPaneProps {
   markdown: string;
   onMarkdownChange: (markdown: string) => void;
+  onScroll?: () => void;
+  textareaRef?: React.RefObject<HTMLTextAreaElement | null>;
 }
 
 const TOOLBAR_SNIPPETS: Array<{ label: string; snippet: string }> = [
@@ -32,8 +34,9 @@ function escapeMarkdownAltText(value: string): string {
     .replace(/\]/g, '\\]');
 }
 
-export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+export function EditorPane({ markdown, onMarkdownChange, onScroll, textareaRef: externalRef }: EditorPaneProps) {
+  const internalRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = (externalRef || internalRef) as React.RefObject<HTMLTextAreaElement | null>;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -237,7 +240,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
           </div>
         )}
         <textarea
-          ref={textareaRef}
+          ref={textareaRef as React.RefObject<HTMLTextAreaElement>}
           className={`editor-textarea ${markdown.length === 0 ? 'empty-state' : ''}`}
           aria-label="Markdown 编辑器"
           placeholder="在此输入或粘贴 Markdown 内容...
@@ -250,6 +253,7 @@ export function EditorPane({ markdown, onMarkdownChange }: EditorPaneProps) {
           onKeyDown={handleKeyDown}
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
+          onScroll={onScroll}
           spellCheck
           disabled={isUploading}
         />

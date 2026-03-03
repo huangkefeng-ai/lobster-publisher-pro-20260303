@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { htmlExportPipeline } from '../../pipeline';
 import { PublishErrorCode } from '../../core';
 import type { ThemeDefinition } from '../../theme';
@@ -11,6 +11,8 @@ interface ArticlePreviewProps {
   theme: ThemeDefinition;
   device: DeviceType;
   onDeviceChange: (device: DeviceType) => void;
+  onScroll?: () => void;
+  previewRef?: React.RefObject<HTMLElement | null>;
 }
 
 const Icons = {
@@ -25,8 +27,15 @@ const Icons = {
   )
 };
 
-export function ArticlePreview({ markdown, theme, device, onDeviceChange }: ArticlePreviewProps) {
+export function ArticlePreview({ markdown, theme, device, onDeviceChange, onScroll, previewRef: externalRef }: ArticlePreviewProps) {
   const htmlResult = useMemo(() => htmlExportPipeline(markdown, theme), [markdown, theme]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const articleRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!externalRef) return;
+    externalRef.current = device === 'desktop' ? containerRef.current : articleRef.current;
+  }, [device, externalRef, htmlResult]);
 
   let content = null;
   if (!htmlResult.ok) {
@@ -39,8 +48,13 @@ export function ArticlePreview({ markdown, theme, device, onDeviceChange }: Arti
     content = <div dangerouslySetInnerHTML={{ __html: htmlResult.value.html }} />;
   }
 
-  const renderArticle = () => (
-    <article className={`article-preview device-${device}`} style={toThemeCssVariables(theme)}>
+  const renderArticle = (scrollHandler?: () => void) => (
+    <article 
+      ref={articleRef}
+      className={`article-preview device-${device}`} 
+      style={toThemeCssVariables(theme)}
+      onScroll={scrollHandler}
+    >
       {content}
     </article>
   );
@@ -82,13 +96,17 @@ export function ArticlePreview({ markdown, theme, device, onDeviceChange }: Arti
           </button>
         </div>
       </header>
-      <div className={`article-preview-container device-${device}`}>
+      <div 
+        ref={containerRef}
+        className={`article-preview-container device-${device}`}
+        onScroll={device === 'desktop' ? onScroll : undefined}
+      >
         {device === 'desktop' ? (
           renderArticle()
         ) : (
           <div className={`device-shell shell-${device}`}>
             <div className="device-screen">
-              {renderArticle()}
+              {renderArticle(onScroll)}
               <div className="device-home-indicator" />
             </div>
           </div>

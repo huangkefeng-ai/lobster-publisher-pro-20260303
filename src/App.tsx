@@ -29,6 +29,39 @@ function App() {
   const [actionStatus, setActionStatus] = useState<string | null>(null);
   const [themeQuery, setThemeQuery] = useState('');
 
+  const editorScrollRef = useRef<HTMLTextAreaElement | null>(null);
+  const previewScrollRef = useRef<HTMLElement | null>(null);
+  const isSyncingRef = useRef(false);
+
+  const syncScroll = (source: 'editor' | 'preview') => {
+    if (isSyncingRef.current) return;
+
+    const editor = editorScrollRef.current;
+    const preview = previewScrollRef.current;
+    if (!editor || !preview) return;
+
+    isSyncingRef.current = true;
+
+    const editorRange = editor.scrollHeight - editor.clientHeight;
+    const previewRange = preview.scrollHeight - preview.clientHeight;
+
+    if (source === 'editor') {
+      const scrollRatio = editorRange > 0 ? editor.scrollTop / editorRange : 0;
+      preview.scrollTop = previewRange > 0 ? scrollRatio * previewRange : 0;
+    } else {
+      const scrollRatio = previewRange > 0 ? preview.scrollTop / previewRange : 0;
+      editor.scrollTop = editorRange > 0 ? scrollRatio * editorRange : 0;
+    }
+
+    // Use a small timeout to release the lock and avoid jitter
+    setTimeout(() => {
+      isSyncingRef.current = false;
+    }, 50);
+  };
+
+  const handleEditorScroll = () => syncScroll('editor');
+  const handlePreviewScroll = () => syncScroll('preview');
+
   const statusTimerRef = useRef(0);
 
   function setTimedStatus(msg: string) {
@@ -181,12 +214,16 @@ function App() {
             <EditorPane
               markdown={editorState.markdown}
               onMarkdownChange={(markdown) => dispatch({ type: 'set_markdown', markdown })}
+              onScroll={handleEditorScroll}
+              textareaRef={editorScrollRef}
             />
             <ArticlePreview 
               markdown={previewMarkdown} 
               theme={selectedTheme} 
               device={device}
               onDeviceChange={setDevice}
+              onScroll={handlePreviewScroll}
+              previewRef={previewScrollRef}
             />
           </section>
         </div>
