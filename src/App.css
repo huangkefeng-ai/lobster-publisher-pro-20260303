@@ -692,11 +692,20 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* CRITICAL: Prevent top clipping when shell is taller than viewport */
   flex: 1;
   overflow: auto;
-  padding: 5rem 2rem; /* Vertical padding increased for better visual balance with larger shells */
   background: #f1f5f9;
+}
+
+.article-preview-container.device-desktop {
+  align-items: stretch;
+  padding: 0; /* No extra gaps in desktop mode */
+}
+
+.article-preview-container.device-tablet,
+.article-preview-container.device-mobile {
+  align-items: flex-start; /* Prevent top clipping */
+  padding: 5rem 2rem; /* Keep symmetrical side/top gaps for device frame */
 }
 
 /* --- Neutral Full-screen Bezel Shell --- */
@@ -714,7 +723,7 @@ body {
   flex-shrink: 0;
   max-width: calc(100% - 2rem);
   box-sizing: border-box;
-  margin: 0 auto; /* Ensure centering when align-items is flex-start */
+  margin: 0 auto; /* Center when container uses flex-start */
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -790,11 +799,11 @@ body {
 
 .article-preview.device-desktop {
   width: 100%;
-  max-width: 900px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-  border: 1px solid var(--theme-border, #e2e8f0);
-  margin: auto; /* Desktop remains centered vertically if possible */
+  max-width: none; /* Desktop uses full available width */
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  padding: 4rem; /* Content spacing in full-width mode */
 }
 
 .article-preview h1,
