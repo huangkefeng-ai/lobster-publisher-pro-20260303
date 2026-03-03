@@ -82,7 +82,7 @@ export function ArticlePreview({ markdown, theme, device, onDeviceChange }: Arti
           </button>
         </div>
       </header>
-      <div className="article-preview-container">
+      <div className={`article-preview-container device-${device}`}>
         {device === 'desktop' ? (
           renderArticle()
         ) : (
