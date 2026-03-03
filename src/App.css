@@ -701,7 +701,8 @@ body {
   align-items: flex-start;
   flex: 1;
   overflow: auto;
-  padding: 1.5rem 1rem;
+  padding: 3rem; /* 增加四周边距，让两侧空格变大 */
+  background: #f1f5f9; /* 保持跟外面颜色统一 */
 }
 
 .article-preview {
