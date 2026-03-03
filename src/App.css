@@ -506,14 +506,14 @@ body {
 .workspace-grid.device-desktop .preview-panel { flex: 1; }
 .workspace-grid.device-tablet .editor-panel { flex: 0.95; }
 .workspace-grid.device-tablet .preview-panel { flex: 1.05; }
-.workspace-grid.device-mobile .editor-panel { flex: 1; }
-.workspace-grid.device-mobile .preview-panel { flex: 1; }
+.workspace-grid.device-mobile .editor-panel { flex: 1.2; }
+.workspace-grid.device-mobile .preview-panel { flex: 0.8; }
 
 @media (min-width: 1440px) {
   .workspace-grid.device-tablet .editor-panel { flex: 0.9; }
   .workspace-grid.device-tablet .preview-panel { flex: 1.1; }
-  .workspace-grid.device-mobile .editor-panel { flex: 1.35; }
-  .workspace-grid.device-mobile .preview-panel { flex: 0.65; }
+  .workspace-grid.device-mobile .editor-panel { flex: 1.15; }
+  .workspace-grid.device-mobile .preview-panel { flex: 0.85; }
 }
 
 .panel {
@@ -744,7 +744,7 @@ body {
 }
 
 .workspace-grid.device-mobile .device-shell {
-  transform: translateX(0);
+  transform: translateX(-0.8vw);
 }
 
 .shell-mobile {
@@ -1038,7 +1038,7 @@ body {
     transform: translateX(0);
   }
   .workspace-grid.device-mobile .device-shell {
-    transform: translateX(0);
+    transform: translateX(-0.6vw);
   }
   .theme-topbar {
     flex-direction: column;
@@ -1077,7 +1077,7 @@ body {
   }
 
   .workspace-grid.device-mobile .device-shell {
-    transform: translateX(0);
+    transform: translateX(-0.4vw);
   }
 
   .shell-tablet {
