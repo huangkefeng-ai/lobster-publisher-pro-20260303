@@ -87,6 +87,14 @@ export function ArticlePreview({ markdown, theme, device, onDeviceChange }: Arti
           renderArticle()
         ) : (
           <div className={`device-shell shell-${device}`}>
+            <div className="device-chrome">
+              {device === 'mobile' && <div className="device-notch" />}
+              <div className="device-button-group">
+                <div className="device-button-v-up" />
+                <div className="device-button-v-down" />
+              </div>
+              <div className="device-button-power" />
+            </div>
             <div className="device-screen">
               {renderArticle()}
             </div>
