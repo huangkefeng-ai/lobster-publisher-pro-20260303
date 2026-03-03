@@ -701,74 +701,35 @@ body {
 
 /* --- Device Shell Chrome --- */
 .device-shell {
-  background: #111827; /* Darker, more premium shell */
+  background: #0f172a; /* Neutral slate-900 shell */
   border-radius: 40px;
-  padding: 12px;
+  padding: 10px; /* Thinner bezel for full-screen feel */
   box-shadow: 
     0 25px 50px -12px rgba(0, 0, 0, 0.35),
-    0 0 0 4px #374151; /* Subtle outer rim */
+    0 0 0 1px #334155; /* Neutral outer rim */
   display: flex;
   flex-direction: column;
   position: relative;
-  flex-shrink: 0; /* Don't shrink to break identity */
-  max-width: calc(100% - 2rem); /* Force side gaps if screen is narrow */
+  flex-shrink: 0;
+  max-width: calc(100% - 2rem);
 }
 
 .shell-mobile {
-  width: 375px; /* Standard iPhone width */
-  height: 812px;
-  border-radius: 48px;
+  width: 400px; /* Slightly wider for better readability as per feedback */
+  height: 840px;
+  border-radius: 44px;
 }
 
 .shell-tablet {
-  width: 768px; /* Standard iPad width */
-  height: 1024px;
-  border-radius: 32px;
-}
-
-.device-notch {
-  position: absolute;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 24px;
-  background: #111827;
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
-  z-index: 10;
-}
-
-.device-button-group {
-  position: absolute;
-  left: -4px;
-  top: 100px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.device-button-v-up, .device-button-v-down {
-  width: 4px;
-  height: 40px;
-  background: #374151;
-  border-radius: 2px 0 0 2px;
-}
-
-.device-button-power {
-  position: absolute;
-  right: -4px;
-  top: 150px;
-  width: 4px;
-  height: 60px;
-  background: #374151;
-  border-radius: 0 2px 2px 0;
+  width: 780px; 
+  height: 1040px;
+  border-radius: 28px;
 }
 
 .device-screen {
   flex: 1;
   background: #ffffff;
-  border-radius: 32px;
+  border-radius: 34px;
   overflow: hidden;
   position: relative;
   display: flex;
@@ -777,19 +738,20 @@ body {
 }
 
 .shell-tablet .device-screen {
-  border-radius: 16px;
+  border-radius: 18px;
 }
 
 .device-home-indicator {
   width: 100px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 3px;
   position: absolute;
-  bottom: 8px;
+  bottom: 20px; /* Moved upward as per feedback */
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
+  opacity: 0.6;
 }
 
 .article-preview {
