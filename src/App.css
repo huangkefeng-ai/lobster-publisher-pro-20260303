@@ -6,6 +6,13 @@
 
 * {
   box-sizing: border-box;
+  /* Hide scrollbars globally by default but keep scroll behavior */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
 body {
@@ -372,15 +379,6 @@ body {
   gap: 1.25rem;
 }
 
-.theme-grid-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.theme-grid-container::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
-}
-
 .theme-group-title {
   font-size: 0.85rem;
   color: #334155;
@@ -562,11 +560,6 @@ body {
   border-bottom: 1px solid #e2e8f0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-}
-
-.toolbar::-webkit-scrollbar {
-  height: 0px;
-  background: transparent;
 }
 
 .toolbar button {
