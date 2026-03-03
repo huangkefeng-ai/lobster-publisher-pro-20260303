@@ -710,7 +710,7 @@ body {
   color: var(--theme-text);
   border: 1px solid var(--theme-border, transparent);
   border-radius: 8px;
-  padding: 2rem;
+  padding: 2.5rem 3rem; /* 内部文字离边界的间距 */
   font-family: var(--theme-body-font);
   line-height: 1.8;
   box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
@@ -725,10 +725,10 @@ body {
 }
 
 .article-preview.device-mobile {
-  width: 470px;
-  max-width: 100%; /* 防止在极端屏幕尺寸下越界 */
-  flex-shrink: 0;  /* 核心修复：防止 flex 容器强行压缩它而导致排版乱掉 */
-  padding: 1.5rem;
+  width: 520px; /* 原本是 470px，现在稍微加宽让手机版阅读不那么局促 */
+  max-width: 100%;
+  flex-shrink: 0;
+  padding: 2rem 2.5rem; /* 手机端内部的文字间距也稍微调整 */
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
