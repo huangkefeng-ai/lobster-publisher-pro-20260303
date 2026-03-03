@@ -23,8 +23,8 @@ body {
 .app-shell {
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
-  max-width: 1600px;
+  margin: 0; /* Remove auto margin */
+  max-width: none; /* Desktop full-width mode: no horizontal constraints */
   height: 100vh;
   overflow: hidden;
   background: #f8fafc;
@@ -50,6 +50,7 @@ body {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   z-index: 10;
   flex-shrink: 0;
+  width: 100%; /* Ensure full-width header */
 }
 
 .hero-content h1 {
@@ -698,14 +699,14 @@ body {
 }
 
 .article-preview-container.device-desktop {
-  align-items: stretch;
-  padding: 0; /* No extra gaps in desktop mode */
+  align-items: flex-start;
+  padding: 0; /* Remove all gutters in desktop mode */
 }
 
 .article-preview-container.device-tablet,
 .article-preview-container.device-mobile {
   align-items: flex-start; /* Prevent top clipping */
-  padding: 5rem 2rem; /* Keep symmetrical side/top gaps for device frame */
+  padding: 5rem 2rem; /* Side spacing ONLY for device frame modes */
 }
 
 /* --- Neutral Full-screen Bezel Shell --- */
@@ -723,7 +724,7 @@ body {
   flex-shrink: 0;
   max-width: calc(100% - 2rem);
   box-sizing: border-box;
-  margin: 0 auto; /* Center when container uses flex-start */
+  margin: 0 auto; /* Ensure centering in flex container */
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -799,11 +800,12 @@ body {
 
 .article-preview.device-desktop {
   width: 100%;
-  max-width: none; /* Desktop uses full available width */
+  max-width: none; /* Expand to full available container width */
   border-radius: 0;
   box-shadow: none;
   border: none;
-  padding: 4rem; /* Content spacing in full-width mode */
+  padding: 4rem; /* Content breathing room */
+  margin: 0; /* Align to container start */
 }
 
 .article-preview h1,

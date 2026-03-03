@@ -30,6 +30,12 @@ function cleanupRender({ container, root }: RenderResult) {
   container.remove();
 }
 
+function rerenderThemePicker(rendered: RenderResult, element: React.ReactElement) {
+  act(() => {
+    rendered.root.render(element);
+  });
+}
+
 function openThemeDropdown(container: HTMLDivElement) {
   const trigger = container.querySelector('.theme-dropdown-trigger') as HTMLButtonElement | null;
   expect(trigger).not.toBeNull();
@@ -149,6 +155,54 @@ describe('ThemePicker', () => {
 
     const groupTitles = rendered.container.querySelectorAll('.theme-group-title');
     expect(groupTitles[0].textContent).toBe('常用（推荐）');
+
+    cleanupRender(rendered);
+  });
+
+  it('falls back to all tab when active family disappears after props update', () => {
+    const alphaTheme = {
+      ...THEME_REGISTRY[0],
+      id: 'alpha-theme',
+      name: 'Alpha Theme',
+      family: 'alpha',
+    };
+    const betaTheme = {
+      ...THEME_REGISTRY[1],
+      id: 'beta-theme',
+      name: 'Beta Theme',
+      family: 'beta',
+    };
+    const initialThemes = [alphaTheme, betaTheme];
+
+    const rendered = renderThemePicker(
+      <ThemePicker
+        selectedThemeId={alphaTheme.id}
+        themes={initialThemes}
+        onSelectTheme={() => {}}
+      />,
+    );
+
+    openThemeDropdown(rendered.container);
+    const betaFilter = Array.from(rendered.container.querySelectorAll('.filter-chip')).find(
+      (chip) => chip.textContent?.trim() === 'beta',
+    ) as HTMLButtonElement | undefined;
+    expect(betaFilter).not.toBeUndefined();
+    act(() => {
+      betaFilter?.click();
+    });
+
+    rerenderThemePicker(
+      rendered,
+      <ThemePicker
+        selectedThemeId={alphaTheme.id}
+        themes={[alphaTheme]}
+        onSelectTheme={() => {}}
+      />,
+    );
+
+    const visibleCards = rendered.container.querySelectorAll('.theme-card');
+    expect(visibleCards).toHaveLength(1);
+    expect(visibleCards[0].textContent).toContain(alphaTheme.name);
 
     cleanupRender(rendered);
   });

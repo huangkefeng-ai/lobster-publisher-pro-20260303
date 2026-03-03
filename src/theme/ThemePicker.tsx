@@ -65,6 +65,7 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
     });
   }, [groupedThemes]);
   const selectedTheme = themes.find((t) => t.id === selectedThemeId);
+  const displayTab = activeTab !== 'all' && !families.includes(activeTab) ? 'all' : activeTab;
 
   return (
     <div className="theme-topbar" aria-labelledby="theme-gallery-heading" ref={dropdownRef}>
@@ -135,7 +136,7 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
           {themes.length > 0 && !themeQuery && (
             <div className="theme-filters">
               <button
-                className={`filter-chip ${activeTab === 'all' ? 'active' : ''}`}
+                className={`filter-chip ${displayTab === 'all' ? 'active' : ''}`}
                 onClick={() => setActiveTab('all')}
                 type="button"
               >
@@ -144,7 +145,7 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
               {families.map((family) => (
                 <button
                   key={family}
-                  className={`filter-chip ${activeTab === family ? 'active' : ''}`}
+                  className={`filter-chip ${displayTab === family ? 'active' : ''}`}
                   onClick={() => setActiveTab(family)}
                   type="button"
                 >
@@ -158,7 +159,7 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
             <p className="theme-empty">没有找到匹配的主题。</p>
           ) : (
             <div className="theme-grid-container" tabIndex={-1}>
-              {activeTab === 'all' || themeQuery ? (
+              {displayTab === 'all' || themeQuery ? (
                 families.map((family) => (
                   <div key={family} className="theme-group">
                     <h4 className="theme-group-title">{FAMILY_LABELS[family] || family}</h4>
@@ -179,7 +180,7 @@ export function ThemePicker({ selectedThemeId, themes, onSelectTheme, themeQuery
                 ))
               ) : (
                 <div className="theme-grid">
-                  {groupedThemes[activeTab]?.map((theme) => (
+                  {groupedThemes[displayTab]?.map((theme) => (
                     <ThemeCard
                       key={theme.id}
                       theme={theme}
