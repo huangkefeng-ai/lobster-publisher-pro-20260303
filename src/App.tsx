@@ -14,6 +14,18 @@ import { ArticlePreview, type DeviceType } from './preview';
 import { ThemePicker, filterThemes, getThemeById, THEME_REGISTRY } from './theme';
 import { copyWechatHtmlToClipboard } from './wechat';
 
+const Icons = {
+  Github: () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+  ),
+  Sun: () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+  ),
+  Moon: () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+  )
+};
+
 function App() {
   const initialDraft = useMemo(() => loadEditorDraft(), []);
   const initialMarkdown = initialDraft?.markdown ?? DEFAULT_MARKDOWN;
@@ -26,8 +38,10 @@ function App() {
   const [selectedThemeId, setSelectedThemeId] = useState(initialThemeId);
   const [previewMarkdown, setPreviewMarkdown] = useState(initialMarkdown);
   const [device, setDevice] = useState<DeviceType>('desktop');
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [actionStatus, setActionStatus] = useState<string | null>(null);
   const [themeQuery, setThemeQuery] = useState('');
+
   const statusTimerRef = useRef(0);
 
   function setTimedStatus(msg: string) {
@@ -66,6 +80,14 @@ function App() {
   }, [editorState.markdown, updatePreview]);
 
   useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
+  useEffect(() => {
     return () => {
       persistDraft.cancel();
       updatePreview.cancel();
@@ -77,6 +99,10 @@ function App() {
       window.clearTimeout(statusTimerRef.current);
     };
   }, []);
+
+  const toggleThemeMode = () => {
+    setIsDarkMode((prev) => !prev);
+  };
 
   async function handleCopyWechatHtml() {
     try {
@@ -150,9 +176,26 @@ function App() {
             className="btn-secondary"
             type="button"
             onClick={handlePrintPdf}
-            aria-label="打开打印对话框以保存 PDF"
+            aria-label="打开打印对话框以保存为 PDF"
           >
-            打印 / 导出 PDF
+            保存为 PDF
+          </button>
+          <a
+            href="https://github.com/huangkefeng-ai/lobster-publisher-pro-20260303"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="header-icon-link"
+            title="查看 GitHub 仓库"
+          >
+            <Icons.Github />
+          </a>
+          <button
+            className="header-icon-btn"
+            type="button"
+            onClick={toggleThemeMode}
+            title={isDarkMode ? '切换到白天模式' : '切换到夜间模式'}
+          >
+            {isDarkMode ? <Icons.Sun /> : <Icons.Moon />}
           </button>
         </div>
       </header>
