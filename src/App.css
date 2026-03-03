@@ -707,7 +707,7 @@ body {
 
 .article-preview-container.device-tablet {
   align-items: flex-start;
-  padding: clamp(1rem, 2.5vw, 2rem) clamp(2rem, 9vw, 9rem) 10rem;
+  padding: clamp(1rem, 2.5vw, 2rem) clamp(2.8rem, 11vw, 11rem) 10rem;
 }
 
 .article-preview-container.device-mobile {
@@ -735,7 +735,7 @@ body {
 }
 
 .workspace-grid.device-tablet .device-shell {
-  transform: translateX(-2vw);
+  transform: translateX(-2.8vw);
 }
 
 .workspace-grid.device-mobile .device-shell {
@@ -749,8 +749,8 @@ body {
 }
 
 .shell-tablet {
-  width: min(100%, 760px);
-  height: min(100%, 1080px);
+  width: min(100%, 800px);
+  height: min(100%, 1120px);
   border-radius: 36px;
   padding: 14px;
 }
@@ -1022,7 +1022,7 @@ body {
   }
   /* Restore intended gaps for device containers in small windows */
   .article-preview-container.device-tablet {
-    padding: 1rem clamp(1.6rem, 8vw, 4rem) 10rem;
+    padding: 1rem clamp(2rem, 9vw, 5rem) 10rem;
     justify-content: center;
   }
   .article-preview-container.device-mobile {
@@ -1030,7 +1030,7 @@ body {
   }
 
   .workspace-grid.device-tablet .device-shell {
-    transform: translateX(-1.5vw);
+    transform: translateX(-2vw);
   }
   .theme-topbar {
     flex-direction: column;
