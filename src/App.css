@@ -713,10 +713,7 @@ body {
   line-height: 1.8;
   box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  width: 100%;
-  max-width: 900px;
-  height: fit-content;
-  min-height: 100%;
+  box-sizing: border-box; /* 核心修复：防止 padding 撑破固定宽度 */
   margin: 0 auto;
 }
 
