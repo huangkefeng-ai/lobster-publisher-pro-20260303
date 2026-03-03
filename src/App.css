@@ -698,6 +698,7 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   flex: 1;
   overflow: auto;
   padding: 1.5rem 1rem;
@@ -713,22 +714,27 @@ body {
   line-height: 1.8;
   box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-sizing: border-box; /* 核心修复：防止 padding 撑破固定宽度 */
+  box-sizing: border-box; /* 防止 padding 撑破固定宽度 */
   margin: 0 auto;
+
+  /* 核心修复：确保超出内容自动换行，且强制不能超越父容器 */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .article-preview.device-mobile {
   width: 470px;
-  max-width: 470px;
-  min-width: 470px;
+  max-width: 100%; /* 防止在极端屏幕尺寸下越界 */
+  flex-shrink: 0;  /* 核心修复：防止 flex 容器强行压缩它而导致排版乱掉 */
   padding: 1.5rem;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
 .article-preview.device-tablet {
   width: 777px;
-  max-width: 470px;
-  min-width: 777px;
+  max-width: 100%; /* 防止在极端屏幕尺寸下越界 */
+  flex-shrink: 0;  /* 核心修复 */
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
@@ -925,7 +931,7 @@ body {
   .article-preview.device-mobile,
   .article-preview.device-desktop {
     width: 100%;
-    max-width: 470px;
+    max-width: 100%;
     min-width: 0;
     margin: 0;
   }
