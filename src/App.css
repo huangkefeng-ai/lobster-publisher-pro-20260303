@@ -692,66 +692,70 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center; /* Center both horizontally and vertically */
+  align-items: center;
   flex: 1;
   overflow: auto;
-  padding: 4rem; /* Increased padding to ensure clear side/top gaps */
+  padding: 3rem; /* Balanced padding for frame centering */
   background: #f1f5f9;
 }
 
-/* --- Device Shell Chrome --- */
+/* --- Neutral Full-screen Bezel Shell --- */
 .device-shell {
-  background: #0f172a; /* Neutral slate-900 shell */
+  background: #0f172a; /* Neutral slate-900 bezel */
   border-radius: 40px;
-  padding: 10px; /* Thinner bezel for full-screen feel */
+  padding: 8px; /* Ultra-slim bezel for full-screen feel */
   box-shadow: 
-    0 25px 50px -12px rgba(0, 0, 0, 0.35),
-    0 0 0 1px #334155; /* Neutral outer rim */
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
   position: relative;
   flex-shrink: 0;
   max-width: calc(100% - 2rem);
+  box-sizing: border-box;
 }
 
 .shell-mobile {
-  width: 400px; /* Slightly wider for better readability as per feedback */
+  width: 420px; /* Enhanced width for text readability */
   height: 840px;
-  border-radius: 44px;
+  border-radius: 48px;
 }
 
 .shell-tablet {
-  width: 780px; 
-  height: 1040px;
-  border-radius: 28px;
+  width: 820px; 
+  height: 1080px;
+  border-radius: 32px;
 }
 
 .device-screen {
   flex: 1;
   background: #ffffff;
-  border-radius: 34px;
+  border-radius: 40px; /* Match shell curvature for full-screen look */
   overflow: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
   z-index: 5;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
 }
 
 .shell-tablet .device-screen {
-  border-radius: 18px;
+  border-radius: 24px;
 }
 
+/* Gesture indicator line (inside screen for full-screen bezel look) */
 .device-home-indicator {
-  width: 100px;
+  width: 140px;
   height: 5px;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.15); /* Darker on white background for visibility */
+  border-radius: 10px;
   position: absolute;
-  bottom: 20px; /* Moved upward as per feedback */
+  bottom: 12px; /* Slightly raised from the very bottom for better visual balance */
   left: 50%;
   transform: translateX(-50%);
-  z-index: 10;
-  opacity: 0.6;
+  z-index: 100;
+  pointer-events: none;
 }
 
 .article-preview {
@@ -775,7 +779,7 @@ body {
   height: 100%;
   box-shadow: none;
   border-radius: 0;
-  padding: 2.5rem 1.5rem; /* Standardized mobile side spacing for content */
+  padding: 2.5rem 1.75rem 4rem; /* Bottom padding for home indicator clearance */
 }
 
 .article-preview.device-desktop {

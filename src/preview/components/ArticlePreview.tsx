@@ -89,8 +89,8 @@ export function ArticlePreview({ markdown, theme, device, onDeviceChange }: Arti
           <div className={`device-shell shell-${device}`}>
             <div className="device-screen">
               {renderArticle()}
+              <div className="device-home-indicator" />
             </div>
-            <div className="device-home-indicator" />
           </div>
         )}
       </div>
