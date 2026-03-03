@@ -664,6 +664,11 @@ body {
   overflow: hidden;
 }
 
+.workspace-grid.device-tablet .preview-panel,
+.workspace-grid.device-mobile .preview-panel {
+  overflow: auto;
+}
+
 .preview-controls {
   display: flex;
   gap: 0.25rem;
@@ -745,13 +750,13 @@ body {
 
 .shell-mobile {
   width: min(100%, 460px);
-  height: min(100%, 960px);
+  height: min(calc(100vh - 220px), 960px);
   border-radius: 48px;
 }
 
 .shell-tablet {
   width: min(100%, 800px);
-  height: min(100%, 1120px);
+  height: min(calc(100vh - 220px), 1120px);
   border-radius: 36px;
   padding: 14px;
 }
@@ -1053,5 +1058,30 @@ body {
   .action-row button {
     flex: 1;
     text-align: center;
+  }
+}
+
+@media (max-height: 900px) {
+  .article-preview-container.device-tablet {
+    padding: 0.8rem clamp(1.2rem, 6vw, 4rem) 6rem;
+  }
+
+  .article-preview-container.device-mobile {
+    padding: 0.8rem clamp(0.8rem, 4vw, 2rem) 6rem;
+  }
+
+  .workspace-grid.device-tablet .device-shell,
+  .workspace-grid.device-mobile .device-shell {
+    transform: translateX(0);
+  }
+
+  .shell-tablet {
+    width: min(100%, 680px);
+    height: min(calc(100vh - 180px), 980px);
+  }
+
+  .shell-mobile {
+    width: min(100%, 420px);
+    height: min(calc(100vh - 180px), 860px);
   }
 }
