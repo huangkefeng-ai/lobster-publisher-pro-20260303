@@ -735,7 +735,8 @@ body {
 }
 
 .workspace-grid.device-tablet .device-shell {
-  transform: translateX(-2.8vw);
+  /* Optical centering with slight left bias for tablet preview */
+  transform: translateX(-2.2vw);
 }
 
 .workspace-grid.device-mobile .device-shell {
@@ -1030,7 +1031,7 @@ body {
   }
 
   .workspace-grid.device-tablet .device-shell {
-    transform: translateX(-2vw);
+    transform: translateX(-1.6vw);
   }
   .theme-topbar {
     flex-direction: column;
