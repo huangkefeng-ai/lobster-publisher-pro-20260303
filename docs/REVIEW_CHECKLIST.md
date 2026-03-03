@@ -258,6 +258,16 @@ Use this checklist when reviewing PRs and before merging to `main`.
 | Copy-to-WeChat | ✅ Implemented | `src/App.tsx`, `src/wechat/clipboard.ts` |
 | Responsive preview | ✅ Implemented | Layout is responsive via CSS Grid / Flexbox |
 | Export | ✅ Implemented | `src/App.tsx`, `src/export/htmlExporter.ts`, `src/export/pdfExporter.ts` |
+
+---
+
+## Verification Refresh (2026-03-03)
+
+| Gate | Result | Notes |
+|------|--------|-------|
+| `npm run test` | PASS | 200 tests across 23 files (Vitest) |
+| `npm run build` | PASS | Vite build succeeded, gzip: JS 132.82 KB / CSS 3.73 KB |
+| `npm run lint` | PASS | ESLint clean |
 | Code highlight | ✅ Implemented | `src/core/highlight.ts`, `src/core/renderer.ts` |
 | Quote style | ✅ Implemented | `src/wechat/inlineStyles.ts` |
 | Table support | ✅ Implemented | `src/wechat/inlineStyles.ts`, `src/core/renderer.ts`, `src/core/parser.ts` |
