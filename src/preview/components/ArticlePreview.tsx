@@ -13,6 +13,18 @@ interface ArticlePreviewProps {
   onDeviceChange: (device: DeviceType) => void;
 }
 
+const Icons = {
+  Desktop: () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+  ),
+  Tablet: () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+  ),
+  Mobile: () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+  )
+};
+
 export function ArticlePreview({ markdown, theme, device, onDeviceChange }: ArticlePreviewProps) {
   const htmlResult = useMemo(() => htmlExportPipeline(markdown, theme), [markdown, theme]);
 
@@ -27,6 +39,12 @@ export function ArticlePreview({ markdown, theme, device, onDeviceChange }: Arti
     content = <div dangerouslySetInnerHTML={{ __html: htmlResult.value.html }} />;
   }
 
+  const renderArticle = () => (
+    <article className={`article-preview device-${device}`} style={toThemeCssVariables(theme)}>
+      {content}
+    </article>
+  );
+
   return (
     <section className="panel preview-panel" aria-labelledby="preview-heading">
       <header className="panel-header" style={{ width: '100%' }}>
@@ -37,31 +55,44 @@ export function ArticlePreview({ markdown, theme, device, onDeviceChange }: Arti
             className={device === 'desktop' ? 'active' : ''} 
             onClick={() => onDeviceChange('desktop')}
             aria-pressed={device === 'desktop'}
+            aria-label="切换到电脑预览"
+            title="电脑预览"
           >
-            PC
+            <Icons.Desktop />
           </button>
           <button 
             type="button" 
             className={device === 'tablet' ? 'active' : ''} 
             onClick={() => onDeviceChange('tablet')}
             aria-pressed={device === 'tablet'}
+            aria-label="切换到平板预览"
+            title="平板预览"
           >
-            平板
+            <Icons.Tablet />
           </button>
           <button 
             type="button" 
             className={device === 'mobile' ? 'active' : ''} 
             onClick={() => onDeviceChange('mobile')}
             aria-pressed={device === 'mobile'}
+            aria-label="切换到手机预览"
+            title="手机预览"
           >
-            手机
+            <Icons.Mobile />
           </button>
         </div>
       </header>
       <div className="article-preview-container">
-        <article className={`article-preview device-${device}`} style={toThemeCssVariables(theme)}>
-          {content}
-        </article>
+        {device === 'desktop' ? (
+          renderArticle()
+        ) : (
+          <div className={`device-shell shell-${device}`}>
+            <div className="device-screen">
+              {renderArticle()}
+            </div>
+            <div className="device-home-indicator" />
+          </div>
+        )}
       </div>
     </section>
   );

@@ -111,11 +111,14 @@ describe('App', () => {
     const workspaceGrid = rendered.container.querySelector('.workspace-grid');
     expect(workspaceGrid?.classList.contains('device-desktop')).toBe(true);
 
-    // Find by text to be robust
-    const buttons = Array.from(rendered.container.querySelectorAll('button'));
-    const btnMobile = buttons.find(b => b.textContent === '手机');
-    const btnTablet = buttons.find(b => b.textContent === '平板');
-    const btnPC = buttons.find(b => b.textContent === 'PC');
+    // Find by aria-label to be robust
+    const btnMobile = rendered.container.querySelector('button[aria-label="切换到手机预览"]') as HTMLButtonElement | null;
+    const btnTablet = rendered.container.querySelector('button[aria-label="切换到平板预览"]') as HTMLButtonElement | null;
+    const btnPC = rendered.container.querySelector('button[aria-label="切换到电脑预览"]') as HTMLButtonElement | null;
+
+    expect(btnMobile).toBeTruthy();
+    expect(btnTablet).toBeTruthy();
+    expect(btnPC).toBeTruthy();
 
     await act(async () => {
       btnMobile?.click();

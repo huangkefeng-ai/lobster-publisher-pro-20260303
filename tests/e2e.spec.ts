@@ -72,4 +72,33 @@ test.describe('Lobster Publisher Pro E2E', () => {
     await expect(errorText).toHaveText('图片处理失败，请尝试其他图片。');
   });
 
+  test('should switch between device preview modes without breaking', async ({ page }) => {
+    const textarea = page.locator('textarea.editor-textarea');
+    await textarea.fill('# Device Test\n\nChecking responsiveness.');
+
+    const workspaceGrid = page.locator('.workspace-grid');
+
+    // Default should be desktop
+    await expect(workspaceGrid).toHaveClass(/device-desktop/);
+    await expect(page.locator('.article-preview')).toBeVisible();
+
+    // Switch to Mobile
+    await page.getByLabel('切换到手机预览').click();
+    await expect(workspaceGrid).toHaveClass(/device-mobile/);
+    await expect(page.locator('.shell-mobile')).toBeVisible();
+    await expect(page.locator('.shell-mobile .article-preview')).toBeVisible();
+
+    // Switch to Tablet
+    await page.getByLabel('切换到平板预览').click();
+    await expect(workspaceGrid).toHaveClass(/device-tablet/);
+    await expect(page.locator('.shell-tablet')).toBeVisible();
+    await expect(page.locator('.shell-tablet .article-preview')).toBeVisible();
+
+    // Switch back to Desktop
+    await page.getByLabel('切换到电脑预览').click();
+    await expect(workspaceGrid).toHaveClass(/device-desktop/);
+    await expect(page.locator('.article-preview')).toBeVisible();
+    await expect(page.locator('.device-shell')).not.toBeVisible();
+  });
+
 });
