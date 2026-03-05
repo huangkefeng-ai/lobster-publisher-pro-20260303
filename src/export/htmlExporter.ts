@@ -25,8 +25,17 @@ export function toThemedHtml(markdown: string, theme: ThemeDefinition): string {
 body { margin: 0; padding: 20px; background: ${t(theme.tokens.background)}; color: ${t(theme.tokens.text)}; font-family: ${t(theme.tokens.bodyFont)}; }
 h1, h2, h3 { color: ${t(theme.tokens.heading)}; font-family: ${t(theme.tokens.headingFont)}; }
 blockquote { border-left: 4px solid ${t(theme.tokens.quoteBorder)}; background: ${t(theme.tokens.quoteBackground)}; margin: 1rem 0; padding: 0.75rem 0.85rem; }
-pre { background: ${t(theme.tokens.codeBackground)}; padding: 0.65rem; border-radius: 8px; overflow-x: auto; }
+.code-block { border: 1px solid ${t(theme.tokens.border)}; border-radius: 10px; overflow: hidden; margin: 1rem 0; background: ${t(theme.tokens.codeBackground)}; }
+.code-block-header { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem; border-bottom: 1px solid ${t(theme.tokens.border)}; }
+.traffic-dots { display: inline-flex; gap: 6px; }
+.traffic-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.traffic-dot.red { background: #ff5f57; }
+.traffic-dot.yellow { background: #febc2e; }
+.traffic-dot.green { background: #28c840; }
+.code-block-lang { font-size: 12px; opacity: .7; text-transform: lowercase; }
+pre { background: ${t(theme.tokens.codeBackground)}; padding: 0.65rem; border-radius: 0; overflow-x: auto; margin: 0; }
 a { color: ${t(theme.tokens.accent)}; }
+strong, b { color: ${t(theme.tokens.accent)}; }
 </style>
 </head>
 <body>

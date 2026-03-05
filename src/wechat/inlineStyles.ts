@@ -56,6 +56,8 @@ export function applyWechatInlineStyles(html: string, theme: ThemeDefinition): s
     h3: { color: theme.tokens.heading, 'font-family': theme.tokens.headingFont, 'font-size': '20px', 'line-height': '1.4', margin: '1.2em 0 0.45em' },
     p: { margin: '0.9em 0' },
     a: { color: theme.tokens.accent, 'text-decoration': 'none', 'word-break': 'break-word' },
+    strong: { color: theme.tokens.accent, 'font-weight': '700' },
+    b: { color: theme.tokens.accent, 'font-weight': '700' },
     blockquote: {
       margin: '1em 0',
       padding: '0.75em 0.9em',
@@ -122,6 +124,57 @@ export function applyWechatInlineStyles(html: string, theme: ThemeDefinition): s
     if (style) {
       mergeInlineStyle(element, style);
     }
+  }
+
+  // Handle code block macOS-style header
+  const codeBlocks = container.querySelectorAll('div.code-block');
+  for (const block of Array.from(codeBlocks)) {
+    mergeInlineStyle(block as Element, {
+      border: `1px solid ${theme.tokens.border}`,
+      'border-radius': '10px',
+      overflow: 'hidden',
+      margin: '1em 0',
+      'background-color': theme.tokens.codeBackground,
+    });
+  }
+
+  const codeHeaders = container.querySelectorAll('div.code-block-header');
+  for (const header of Array.from(codeHeaders)) {
+    mergeInlineStyle(header as Element, {
+      display: 'flex',
+      'align-items': 'center',
+      'justify-content': 'space-between',
+      padding: '0.45em 0.7em',
+      'border-bottom': `1px solid ${theme.tokens.border}`,
+      'background-color': theme.tokens.codeBackground,
+    });
+  }
+
+  const trafficDots = container.querySelectorAll('.traffic-dot');
+  for (const dot of Array.from(trafficDots)) {
+    const el = dot as Element;
+    const cls = el.getAttribute('class') ?? '';
+    let color = '#ff5f57';
+    if (cls.includes('yellow')) color = '#febc2e';
+    if (cls.includes('green')) color = '#28c840';
+    mergeInlineStyle(el, {
+      display: 'inline-block',
+      width: '10px',
+      height: '10px',
+      'border-radius': '50%',
+      'background-color': color,
+      margin: '0 3px 0 0',
+    });
+  }
+
+  const codeLangLabels = container.querySelectorAll('.code-block-lang');
+  for (const label of Array.from(codeLangLabels)) {
+    mergeInlineStyle(label as Element, {
+      'font-size': '12px',
+      color: theme.tokens.text,
+      opacity: '0.75',
+      'text-transform': 'lowercase',
+    });
   }
 
   // Handle multi-image grid

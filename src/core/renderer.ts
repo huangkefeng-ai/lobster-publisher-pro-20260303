@@ -15,8 +15,10 @@ function escapeAttr(value: string): string {
 const codeRenderer: RendererObject = {
   code({ text, lang }: Tokens.Code): string {
     const highlighted = highlightCode(text, lang ?? '');
-    const langAttr = lang ? ` data-lang="${escapeAttr(lang)}"` : '';
-    return `<pre${langAttr}><code>${highlighted}</code></pre>\n`;
+    const langLabel = (lang ?? '').trim();
+    const langAttr = langLabel ? ` data-lang="${escapeAttr(langLabel)}"` : '';
+    const langText = langLabel || 'code';
+    return `<div class="code-block"${langAttr}><div class="code-block-header"><span class="traffic-dots"><span class="traffic-dot red"></span><span class="traffic-dot yellow"></span><span class="traffic-dot green"></span></span><span class="code-block-lang">${escapeAttr(langText)}</span></div><pre${langAttr}><code>${highlighted}</code></pre></div>\n`;
   },
   paragraph({ tokens }: Tokens.Paragraph): string | false {
     if (tokens && tokens.length > 1) {

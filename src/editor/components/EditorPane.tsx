@@ -40,7 +40,7 @@ export function EditorPane({ markdown, onMarkdownChange, onScroll, textareaRef: 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const wordCount = useMemo(() => computeDocumentStats(markdown).wordCount, [markdown]);
+  const charCount = useMemo(() => computeDocumentStats(markdown).charCount, [markdown]);
   const pasteStatusTimerRef = useRef<number | null>(null);
 
   const [pasteStatus, setPasteStatus] = useState<{ status: 'success' | 'error', message: string } | null>(null);
@@ -201,7 +201,7 @@ export function EditorPane({ markdown, onMarkdownChange, onScroll, textareaRef: 
     <section className="panel editor-panel">
       <header className="panel-header">
         <h2>Markdown 编辑器</h2>
-        <p>{wordCount} 字 {isUploading && '· 处理图片中...'}</p>
+        <p>{charCount} 字 {isUploading && '· 处理图片中...'}</p>
         {uploadError ? <p className="error-text" role="alert">{uploadError}</p> : null}
       </header>
       <div className="toolbar" role="toolbar" aria-label="编辑器片段">

@@ -38,6 +38,164 @@ body {
   }
 }
 
+.app-shell.ui-dark {
+  background: #000000;
+  color: #f1f5f9;
+}
+
+.app-shell.ui-dark .hero {
+  background: #020202;
+  border-bottom-color: #111111;
+}
+
+.app-shell.ui-dark .hero-content h1 { color: #f8fafc; }
+.app-shell.ui-dark .hero-content p { color: #94a3b8; }
+
+.app-shell.ui-dark .repo-link,
+.app-shell.ui-dark .btn-secondary,
+.app-shell.ui-dark .icon-toggle-btn {
+  background: #0b1220;
+  color: #e2e8f0;
+  border-color: #1f2937 !important;
+}
+
+.app-shell.ui-dark .repo-link:hover,
+.app-shell.ui-dark .btn-secondary:hover,
+.app-shell.ui-dark .icon-toggle-btn:hover {
+  background: #111827;
+}
+
+.app-shell.ui-dark .editor-panel,
+.app-shell.ui-dark .theme-topbar,
+.app-shell.ui-dark .theme-dropdown-panel,
+.app-shell.ui-dark .theme-card {
+  background: #050505;
+  border-color: #1a1a1a;
+}
+
+.app-shell.ui-dark .panel-header h2,
+.app-shell.ui-dark .panel-header p,
+.app-shell.ui-dark .toolbar button,
+.app-shell.ui-dark .theme-topbar-label,
+.app-shell.ui-dark .theme-name,
+.app-shell.ui-dark .theme-description,
+.app-shell.ui-dark .theme-dropdown-title,
+.app-shell.ui-dark .theme-group-title,
+.app-shell.ui-dark .editor-hint,
+.app-shell.ui-dark .tips,
+.app-shell.ui-dark .theme-count-badge,
+.app-shell.ui-dark .filter-chip,
+.app-shell.ui-dark .theme-quick-chip {
+  color: #f1f5f9;
+}
+
+.app-shell.ui-dark textarea {
+  background: #000000;
+  color: #f8fafc;
+  border-color: #1a1a1a;
+}
+
+.app-shell.ui-dark .toolbar,
+.app-shell.ui-dark .editor-container,
+.app-shell.ui-dark .theme-filters,
+.app-shell.ui-dark .theme-grid-container {
+  background: #050505;
+}
+
+.app-shell.ui-dark .filter-chip,
+.app-shell.ui-dark .theme-quick-chip,
+.app-shell.ui-dark .toolbar button {
+  background: #0b0b0b;
+  border-color: #1f1f1f;
+}
+
+.app-shell.ui-dark .filter-chip.active,
+.app-shell.ui-dark .theme-quick-chip.active,
+.app-shell.ui-dark .preview-controls button.active {
+  background: #111111;
+  border-color: #2a2a2a;
+}
+
+/* 左侧编辑区（黑夜）统一黑色层级 */
+.app-shell.ui-dark .main-workspace,
+.app-shell.ui-dark .workspace-grid,
+.app-shell.ui-dark .editor-panel {
+  background: #000000;
+}
+
+.app-shell.ui-dark .panel-header,
+.app-shell.ui-dark .toolbar,
+.app-shell.ui-dark .editor-container,
+.app-shell.ui-dark .editor-hint,
+.app-shell.ui-dark .theme-topbar,
+.app-shell.ui-dark .theme-topbar-left,
+.app-shell.ui-dark .theme-topbar-right,
+.app-shell.ui-dark .theme-dropdown-panel,
+.app-shell.ui-dark .theme-grid-container {
+  background: #050505 !important;
+  border-color: #1a1a1a !important;
+}
+
+.app-shell.ui-dark .theme-quick-chips {
+  background: #0b0b0b;
+}
+
+.app-shell.ui-dark .theme-quick-chip {
+  color: #e2e8f0;
+}
+
+.app-shell.ui-dark .theme-quick-chip.active {
+  background: #111111;
+  color: #ffffff;
+}
+
+.app-shell.ui-dark .theme-topbar-swatch,
+.app-shell.ui-dark .theme-dropdown-trigger,
+.app-shell.ui-dark .filter-chip,
+.app-shell.ui-dark .toolbar button,
+.app-shell.ui-dark .theme-card,
+.app-shell.ui-dark .theme-search {
+  background: #0b0b0b !important;
+  color: #f1f5f9 !important;
+  border-color: #242424 !important;
+}
+
+.app-shell.ui-dark .theme-dropdown-trigger:hover,
+.app-shell.ui-dark .filter-chip:hover,
+.app-shell.ui-dark .toolbar button:hover,
+.app-shell.ui-dark .theme-card:hover {
+  background: #131313 !important;
+}
+
+.app-shell.ui-dark .editor-textarea,
+.app-shell.ui-dark .editor-textarea.empty-state {
+  background: #000000 !important;
+  color: #f8fafc !important;
+}
+
+.app-shell.ui-dark .editor-textarea:focus {
+  box-shadow: inset 2px 0 0 0 #3b82f6;
+}
+
+/* 预览区固定保持白天风格 */
+.app-shell.ui-dark .preview-panel,
+.app-shell.ui-dark .preview-panel .panel-header,
+.app-shell.ui-dark .article-preview-container {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.app-shell.ui-dark .preview-panel .panel-header h2 {
+  color: #0f172a !important;
+}
+
+.app-shell.ui-dark .preview-panel .preview-controls button {
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
+  background: #ffffff !important;
+}
+
 .hero {
   display: flex;
   justify-content: space-between;
@@ -84,6 +242,41 @@ body {
   font-weight: 500;
   transition: all 0.2s;
   border: none;
+}
+
+.repo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0f172a;
+  text-decoration: none;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+}
+
+.repo-link:hover {
+  background: #f8fafc;
+}
+
+.icon-toggle-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon-toggle-btn:hover {
+  background: #f8fafc;
 }
 
 .btn-primary {
@@ -861,6 +1054,11 @@ body {
   transition: border-color 0.2s;
 }
 
+.article-preview strong,
+.article-preview b {
+  color: var(--theme-accent);
+}
+
 .article-preview a:hover {
   border-bottom-color: var(--theme-accent);
 }
@@ -879,14 +1077,55 @@ body {
   font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
 }
 
+.article-preview .code-block {
+  border: 1px solid var(--theme-border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 1rem 0;
+  background: var(--theme-code-bg);
+}
+
+.article-preview .code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--theme-border);
+  background: color-mix(in srgb, var(--theme-code-bg) 90%, #000 10%);
+}
+
+.article-preview .traffic-dots {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.article-preview .traffic-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.article-preview .traffic-dot.red { background: #ff5f57; }
+.article-preview .traffic-dot.yellow { background: #febc2e; }
+.article-preview .traffic-dot.green { background: #28c840; }
+
+.article-preview .code-block-lang {
+  font-size: 12px;
+  color: var(--theme-text);
+  opacity: 0.7;
+  text-transform: lowercase;
+}
+
 .article-preview pre {
   background: var(--theme-code-bg);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 1rem;
   overflow-x: auto;
   font-size: 0.9em;
   line-height: 1.5;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: none;
+  margin: 0;
 }
 
 .article-preview code {

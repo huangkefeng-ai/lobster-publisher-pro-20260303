@@ -30,8 +30,8 @@ describe('computeDocumentStats', () => {
     expect(stats.wordCount).toBe(4); // 2 latin + 2 CJK
   });
 
-  it('counts multiple lines', () => {
-    const stats = computeDocumentStats('Line one\nLine two\nLine three');
+  it('counts multiple non-empty lines', () => {
+    const stats = computeDocumentStats('Line one\n\nLine two\n   \nLine three');
     expect(stats.lineCount).toBe(3);
   });
 
